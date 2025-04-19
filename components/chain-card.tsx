@@ -29,7 +29,7 @@ export const ChainCard = ({ data }: { data: ChainUpgradeStatus }) => {
             ) : (
               <AlertTriangle className="mr-1 h-4 w-4" />
             )}
-            {upgradeFound ? "Yes" : "No"}
+            {upgradeFound ? "Planned" : "No Upgrade"}
           </Badge>
         </div>
 
