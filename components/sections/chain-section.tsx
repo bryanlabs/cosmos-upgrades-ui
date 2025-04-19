@@ -33,16 +33,6 @@ export const ChainSection = () => {
   const filteredMainnets = filterData(mainnetsData);
   const filteredTestnets = filterData(testnetsData);
 
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="text-center text-red-500">
@@ -70,6 +60,14 @@ export const ChainSection = () => {
     </div>
   );
 
+  const renderSkeletonGrid = () => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
+      ))}
+    </div>
+  );
+
   return (
     <Tabs
       defaultValue="mainnet"
@@ -90,13 +88,18 @@ export const ChainSection = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="max-w-2xl"
+          disabled={isLoading}
         />
       </div>
       <TabsContent value="mainnet">
-        {renderGridContent(filteredMainnets, "Mainnet")}
+        {isLoading
+          ? renderSkeletonGrid()
+          : renderGridContent(filteredMainnets, "Mainnet")}
       </TabsContent>
       <TabsContent value="testnet">
-        {renderGridContent(filteredTestnets, "Testnet")}
+        {isLoading
+          ? renderSkeletonGrid()
+          : renderGridContent(filteredTestnets, "Testnet")}
       </TabsContent>
     </Tabs>
   );
