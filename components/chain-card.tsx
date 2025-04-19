@@ -3,12 +3,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link as LinkIcon, AlertTriangle, CheckCircle } from "lucide-react";
 import { formatDateTime } from "@/utils/date";
+import { useState, useEffect } from "react";
 
 const formatNumber = (num: number | null | undefined) =>
   num ? num.toLocaleString() : "-";
 
 export const ChainCard = ({ data }: { data: ChainUpgradeStatus }) => {
   const upgradeFound = data.upgrade_found;
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <Card className="w-full shadow-sm hover:shadow-md transition-shadow duration-200">
@@ -47,7 +53,11 @@ export const ChainCard = ({ data }: { data: ChainUpgradeStatus }) => {
               </span>
 
               <span className="text-muted-foreground pt-4 col-span-2 text-sm">
-                Est. Upgrade in {formatDateTime(data.estimated_upgrade_time)}
+                {isClient
+                  ? `Est. Upgrade in ${formatDateTime(
+                      data.estimated_upgrade_time
+                    )}`
+                  : "Est. Upgrade time calculating..."}
               </span>
             </>
           )}
