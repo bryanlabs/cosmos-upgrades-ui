@@ -1,8 +1,8 @@
-import { ChainUpgradeStatus } from "@/types/network";
+import { ChainUpgradeStatus } from "@/types/chain";
 import { useQuery } from "@tanstack/react-query";
 
 // Assuming the API returns an array of ChainUpgradeStatus objects
-type NetworkDataResponse = ChainUpgradeStatus[];
+type ChainDataResponse = ChainUpgradeStatus[];
 
 const MAINNETS_URL = "/api/cosmos-upgrades/mainnets";
 const TESTNETS_URL = "/api/cosmos-upgrades/testnets";
@@ -10,9 +10,9 @@ const TESTNETS_URL = "/api/cosmos-upgrades/testnets";
 /**
  * Fetches data from a given URL and expects an array response.
  * @param url The URL to fetch data from.
- * @returns A promise that resolves to an array of NetworkDataItem.
+ * @returns A promise that resolves to an array of ChainDataItem.
  */
-const fetchNetworkData = async (url: string): Promise<NetworkDataResponse> => {
+const fetchChainData = async (url: string): Promise<ChainDataResponse> => {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -21,13 +21,13 @@ const fetchNetworkData = async (url: string): Promise<NetworkDataResponse> => {
 
   // Assuming the API returns an array directly
   if (Array.isArray(result)) {
-    return result as NetworkDataResponse; // Type assertion
+    return result as ChainDataResponse; // Type assertion
   } else {
     // Handle cases where the API might return an object containing the array
     // Example: if result is { data: [...] }
     console.warn("API response was not an array:", result);
     if (result && typeof result === "object" && Array.isArray(result.data)) {
-      return result.data as NetworkDataResponse; // Type assertion
+      return result.data as ChainDataResponse; // Type assertion
     }
     // Or if the result itself is the object we need (less likely for a list endpoint)
     // else if (result && typeof result === 'object' && !Array.isArray(result)) {
@@ -44,9 +44,9 @@ const fetchNetworkData = async (url: string): Promise<NetworkDataResponse> => {
  * Hook to fetch mainnet data using React Query.
  */
 export function useMainnetsData() {
-  return useQuery<NetworkDataResponse, Error>({
+  return useQuery<ChainDataResponse, Error>({
     queryKey: ["mainnets"],
-    queryFn: () => fetchNetworkData(MAINNETS_URL),
+    queryFn: () => fetchChainData(MAINNETS_URL),
   });
 }
 
@@ -54,8 +54,8 @@ export function useMainnetsData() {
  * Hook to fetch testnet data using React Query.
  */
 export function useTestnetsData() {
-  return useQuery<NetworkDataResponse, Error>({
+  return useQuery<ChainDataResponse, Error>({
     queryKey: ["testnets"],
-    queryFn: () => fetchNetworkData(TESTNETS_URL),
+    queryFn: () => fetchChainData(TESTNETS_URL),
   });
 }
