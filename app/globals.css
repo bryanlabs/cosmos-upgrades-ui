@@ -120,3 +120,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+header {
+  @apply bg-primary text-primary-foreground shadow-md;
+}
+
+footer {
+  @apply bg-secondary text-secondary-foreground text-center;
+}

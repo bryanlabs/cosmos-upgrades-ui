@@ -1,0 +1,28 @@
+{
+    "type": "testnet",
+    "network": "alloratestnet",
+    "rpc_server": "https://allora-rpc.testnet.allora.network",
+    "rest_server": "https://allora-api.testnet.allora.network",
+    "latest_block_height": 3527829,
+    "upgrade_found": true,
+    "upgrade_name": "v0.11.0",
+    "source": "current_upgrade_plan",
+    "upgrade_block_height": 3564135,
+    "estimated_upgrade_time": "2025-04-22T18:12:12.547967",
+    "upgrade_plan": {
+      "height": 3564135,
+      "binaries": [],
+      "name": "v0.11.0",
+      "upgraded_client_state": null
+    },
+    "version": "v0.11.0",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/allora/images/allora.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/allora/images/allora.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer.testnet.allora.network"
+    }
+  }

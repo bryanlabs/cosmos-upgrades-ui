@@ -6,7 +6,7 @@ import { ChainCard } from "@/components/chain-card";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChainUpgradeStatus } from "@/types/chain";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const ChainSection = () => {
   const {
@@ -19,19 +19,44 @@ export const ChainSection = () => {
     isLoading: isLoadingTestnets,
     error: errorTestnets,
   } = useTestnetsData();
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("mainnet");
+  const [filterByUpgrade, setFilterByUpgrade] = useState<"all" | "upgrades">(
+    "all"
+  );
 
   const isLoading = isLoadingMainnets || isLoadingTestnets;
   const error = errorMainnets || errorTestnets;
 
   const filterData = (data: ChainUpgradeStatus[] | undefined) =>
-    data?.filter((chain) =>
-      chain.network.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    data
+      ?.filter((chain) =>
+        filterByUpgrade === "upgrades" ? chain.upgrade_found : true
+      )
+      .filter((chain) =>
+        chain.network.toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
-  const filteredMainnets = filterData(mainnetsData);
-  const filteredTestnets = filterData(testnetsData);
+  const filteredData = [
+    ...(filterData(mainnetsData) || []),
+    ...(filterData(testnetsData) || []),
+  ];
+
+  const renderGridContent = (data: ChainUpgradeStatus[] | undefined) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
+      {data?.map((chain) => (
+        <ChainCard key={chain.network} data={chain} />
+      ))}
+    </div>
+  );
+
+  const renderSkeletonGrid = () => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
+      ))}
+    </div>
+  );
 
   if (error) {
     return (
@@ -41,66 +66,33 @@ export const ChainSection = () => {
     );
   }
 
-  const renderGridContent = (
-    data: ChainUpgradeStatus[] | undefined,
-    networkType: "Mainnet" | "Testnet"
-  ) => (
-    <div className="space-y-6 pt-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {data?.map((chain) => (
-          <ChainCard key={chain.network} data={chain} />
-        ))}
-      </div>
-      {data?.length === 0 && (
-        <div className="text-center text-muted-foreground col-span-full pt-4">
-          No {networkType.toLowerCase()} chains found matching &quot;
-          {searchTerm}&quot;.
-        </div>
-      )}
-    </div>
-  );
-
-  const renderSkeletonGrid = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
-      {Array.from({ length: 6 }).map((_, index) => (
-        <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
-      ))}
-    </div>
-  );
-
   return (
-    <Tabs
-      defaultValue="mainnet"
-      className="space-y-4"
-      onValueChange={setActiveTab}
-      value={activeTab}
-    >
+    <div className="space-y-4">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <TabsList>
-          <TabsTrigger value="mainnet">Mainnets</TabsTrigger>
-          <TabsTrigger value="testnet">Testnets</TabsTrigger>
-        </TabsList>
+        <Select
+          value={filterByUpgrade}
+          onValueChange={(value) =>
+            setFilterByUpgrade(value as "all" | "upgrades")
+          }
+        >
+          <SelectTrigger className="max-w-xs">
+            <SelectValue placeholder="Filter by Upgrade Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Chains</SelectItem>
+            <SelectItem value="upgrades">Chains with Upgrades</SelectItem>
+          </SelectContent>
+        </Select>
         <Input
           type="text"
-          placeholder={`Search ${
-            activeTab === "mainnet" ? "Mainnet" : "Testnet"
-          } Chains...`}
+          placeholder="Search Chains..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="max-w-2xl"
           disabled={isLoading}
         />
       </div>
-      <TabsContent value="mainnet">
-        {isLoading
-          ? renderSkeletonGrid()
-          : renderGridContent(filteredMainnets, "Mainnet")}
-      </TabsContent>
-      <TabsContent value="testnet">
-        {isLoading
-          ? renderSkeletonGrid()
-          : renderGridContent(filteredTestnets, "Testnet")}
-      </TabsContent>
-    </Tabs>
+      {isLoading ? renderSkeletonGrid() : renderGridContent(filteredData)}
+    </div>
   );
 };
