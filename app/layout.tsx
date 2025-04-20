@@ -25,41 +25,43 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>
-          <header className="bg-primary text-primary-foreground py-4">
-            <div
-              className="container mx-auto grid grid-cols-3 items-center px-4"
-            >
-              <div className="flex items-center">
-                <Image
-Oh my gosh, it's so cool                  src="/images/bryanlabs-banner.png"
-                  alt="BryanLabs Banner"
-                  width={200}
-                  height={50}
-                  priority
-                />
+    <>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <Providers>
+            <header className="bg-primary text-primary-foreground py-4">
+              <div className="container mx-auto grid grid-cols-3 items-center px-4">
+                <div className="flex items-center">
+                  <Image
+                    src="/images/bryanlabs-banner.png"
+                    alt="BryanLabs Banner"
+                    width={200}
+                    height={50}
+                    priority
+                  />
+                </div>
+                <div></div> {/* Empty cell for spacing */}
+                <div className="flex justify-end">
+                  <Image
+                    src="/images/cosmosupgrades.png"
+                    alt="Cosmos Upgrades Logo"
+                    width={150}
+                    height={50}
+                  />
+                </div>
               </div>
-              <div></div> {/* Empty cell for spacing */}
-              <div className="flex justify-end">
-                <Image
-                  src="/images/cosmosupgrades.png"
-                  alt="Cosmos Upgrades Logo"
-                  width={150}
-                  height={50}
-                />
+            </header>
+            <main className="container mx-auto px-4 py-8">{children}</main>
+            <footer className="bg-secondary text-secondary-foreground py-4">
+              <div className="container mx-auto flex items-center justify-center px-4">
+                Developed by BryanLabs
               </div>
-            </div>
-          </header>
-          <main className="container mx-auto px-4 py-8">{children}</main>
-          <footer className="bg-secondary text-secondary-foreground py-4">
-            <div className="container mx-auto flex items-center justify-center px-4"></div>
-          </footer>
-        </Providers>
-      </body>
-    </html>
+            </footer>
+          </Providers>
+        </body>
+      </html>
+    </>
   );
 }
