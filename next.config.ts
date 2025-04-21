@@ -1,7 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "raw.githubusercontent.com",
+        port: "",
+        pathname: "/cosmos/chain-registry/master/**", // Allow any path within the chain-registry master branch
+      },
+    ],
+  },
   async rewrites() {
     return [
       {
