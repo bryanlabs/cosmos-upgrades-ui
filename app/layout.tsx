@@ -36,7 +36,7 @@ export default function RootLayout({
             <div>
               <Image
                 src="/cosmosupgrades.webp"
-                alt="Logo 1"
+                alt="cosmos upgrades logo"
                 width={70}
                 height={70}
               />
@@ -45,7 +45,7 @@ export default function RootLayout({
             <div>
               <Image
                 src="/bryanlabs_logo_trans.png"
-                alt="Logo 2"
+                alt="bryan labs logo"
                 width={70}
                 height={70}
               />
