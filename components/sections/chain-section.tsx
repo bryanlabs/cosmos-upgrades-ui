@@ -1,12 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useMainnetsData, useTestnetsData } from "@/hooks/useChainData";
 import { ChainCard } from "@/components/chain-card";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChainUpgradeStatus } from "@/types/chain";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const ChainSection = () => {
   const {
@@ -20,18 +26,36 @@ export const ChainSection = () => {
     error: errorTestnets,
   } = useTestnetsData();
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState("mainnet");
+  const [filterType, setFilterType] = useState<"all" | "upgraded">("all");
 
   const isLoading = isLoadingMainnets || isLoadingTestnets;
   const error = errorMainnets || errorTestnets;
 
-  const filterData = (data: ChainUpgradeStatus[] | undefined) =>
-    data?.filter((chain) =>
-      chain.network.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  // Combine mainnets and testnets, ensure arrays exist
+  const allChains = useMemo(() => {
+    const mainnets = mainnetsData || [];
+    const testnets = testnetsData || [];
+    return [...mainnets, ...testnets];
+  }, [mainnetsData, testnetsData]);
 
-  const filteredMainnets = filterData(mainnetsData);
-  const filteredTestnets = filterData(testnetsData);
+  // Filter combined data based on search term and filter type
+  const filteredChains = useMemo(() => {
+    let chains = allChains ?? [];
+
+    // Filter by search term first
+    if (searchTerm) {
+      chains = chains.filter((chain) =>
+        chain.network.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Then filter by type
+    if (filterType === "upgraded") {
+      chains = chains.filter((chain) => chain.upgrade_found);
+    }
+
+    return chains;
+  }, [allChains, searchTerm, filterType]);
 
   if (error) {
     return (
@@ -41,10 +65,7 @@ export const ChainSection = () => {
     );
   }
 
-  const renderGridContent = (
-    data: ChainUpgradeStatus[] | undefined,
-    networkType: "Mainnet" | "Testnet"
-  ) => (
+  const renderGridContent = (data: ChainUpgradeStatus[] | undefined) => (
     <div className="space-y-6 pt-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {data?.map((chain) => (
@@ -53,7 +74,7 @@ export const ChainSection = () => {
       </div>
       {data?.length === 0 && (
         <div className="text-center text-muted-foreground col-span-full pt-4">
-          No {networkType.toLowerCase()} chains found matching &quot;
+          No chains found matching &quot;
           {searchTerm}&quot;.
         </div>
       )}
@@ -69,38 +90,35 @@ export const ChainSection = () => {
   );
 
   return (
-    <Tabs
-      defaultValue="mainnet"
-      className="space-y-4"
-      onValueChange={setActiveTab}
-      value={activeTab}
-    >
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <TabsList>
-          <TabsTrigger value="mainnet">Mainnets</TabsTrigger>
-          <TabsTrigger value="testnet">Testnets</TabsTrigger>
-        </TabsList>
+    <div className="space-y-4">
+      {/* Controls: Search bar and Filter Select */}
+      <div className="flex gap-2 justify-between">
+        {/* Filter Select Dropdown */}
+        <Select
+          value={filterType}
+          onValueChange={(value: "all" | "upgraded") => setFilterType(value)}
+          disabled={isLoading}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter Chains" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Chains</SelectItem>
+            <SelectItem value="upgraded">Chains with Upgrades</SelectItem>
+          </SelectContent>
+        </Select>
+        {/* Search Input */}
         <Input
           type="text"
-          placeholder={`Search ${
-            activeTab === "mainnet" ? "Mainnet" : "Testnet"
-          } Chains...`}
+          placeholder="Search Chains..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-2xl"
+          className="max-w-sm"
           disabled={isLoading}
         />
       </div>
-      <TabsContent value="mainnet">
-        {isLoading
-          ? renderSkeletonGrid()
-          : renderGridContent(filteredMainnets, "Mainnet")}
-      </TabsContent>
-      <TabsContent value="testnet">
-        {isLoading
-          ? renderSkeletonGrid()
-          : renderGridContent(filteredTestnets, "Testnet")}
-      </TabsContent>
-    </Tabs>
+      {/* Render single grid with combined data */}
+      {isLoading ? renderSkeletonGrid() : renderGridContent(filteredChains)}
+    </div>
   );
 };
