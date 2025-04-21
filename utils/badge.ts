@@ -43,7 +43,7 @@ export const getBadgeProps = (
   }
   return {
     text: "No Upgrade",
-    variant: "destructive",
+    variant: "outline",
     link: null,
   };
 };
