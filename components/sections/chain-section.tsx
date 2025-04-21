@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useMainnetsData, useTestnetsData } from "@/hooks/useChainData";
+import { useAllChainData } from "@/hooks/useChainData";
 import { ChainCard } from "@/components/chain-card";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,46 +15,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ChainUpgradeStatus } from "@/types/chain";
 
 export const ChainSection = () => {
-  const {
-    data: mainnetsData,
-    isLoading: isLoadingMainnets,
-    error: errorMainnets,
-  } = useMainnetsData();
-  const {
-    data: testnetsData,
-    isLoading: isLoadingTestnets,
-    error: errorTestnets,
-  } = useTestnetsData();
+  const { data: allChains, isLoading, error } = useAllChainData();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<"all" | "upgraded">("all");
 
-  const isLoading = isLoadingMainnets || isLoadingTestnets;
-  const error = errorMainnets || errorTestnets;
-
-  // Combine mainnets and testnets, ensure arrays exist
-  const allChains = useMemo(() => {
-    const mainnets = mainnetsData || [];
-    const testnets = testnetsData || [];
-    return [...mainnets, ...testnets];
-  }, [mainnetsData, testnetsData]);
-
-  // Filter combined data based on search term and filter type
   const filteredChains = useMemo(() => {
-    let chains = allChains ?? [];
-
-    // Filter by search term first
-    if (searchTerm) {
-      chains = chains.filter((chain) =>
-        chain.network.toLowerCase().includes(searchTerm.toLowerCase())
+    return (allChains ?? [])
+      .filter((chain) =>
+        searchTerm
+          ? chain.network.toLowerCase().includes(searchTerm.toLowerCase())
+          : true
+      )
+      .filter((chain) =>
+        filterType === "upgraded" ? chain.upgrade_found : true
       );
-    }
-
-    // Then filter by type
-    if (filterType === "upgraded") {
-      chains = chains.filter((chain) => chain.upgrade_found);
-    }
-
-    return chains;
   }, [allChains, searchTerm, filterType]);
 
   if (error) {
@@ -91,9 +65,7 @@ export const ChainSection = () => {
 
   return (
     <div className="space-y-4">
-      {/* Controls: Search bar and Filter Select */}
       <div className="flex gap-2 justify-between">
-        {/* Filter Select Dropdown */}
         <Select
           value={filterType}
           onValueChange={(value: "all" | "upgraded") => setFilterType(value)}
@@ -107,7 +79,6 @@ export const ChainSection = () => {
             <SelectItem value="upgraded">Chains with Upgrades</SelectItem>
           </SelectContent>
         </Select>
-        {/* Search Input */}
         <Input
           type="text"
           placeholder="Search Chains..."
@@ -117,7 +88,6 @@ export const ChainSection = () => {
           disabled={isLoading}
         />
       </div>
-      {/* Render single grid with combined data */}
       {isLoading ? renderSkeletonGrid() : renderGridContent(filteredChains)}
     </div>
   );
