@@ -1,5 +1,6 @@
 import { ChainUpgradeStatus } from "@/types/chain";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries, UseQueryResult } from "@tanstack/react-query";
+import { useMemo } from "react";
 
 // Assuming the API returns an array of ChainUpgradeStatus objects
 type ChainDataResponse = ChainUpgradeStatus[];
@@ -33,7 +34,6 @@ const fetchChainData = async (url: string): Promise<ChainDataResponse> => {
     // else if (result && typeof result === 'object' && !Array.isArray(result)) {
     // Adapt this if the structure is different, e.g., Object.values(result)
     // For now, stick to expecting an array or { data: [...] }
-    // }
     else {
       throw new Error("Unexpected API response format");
     }
@@ -58,4 +58,49 @@ export function useTestnetsData() {
     queryKey: ["testnets"],
     queryFn: () => fetchChainData(TESTNETS_URL),
   });
+}
+
+/**
+ * Hook to fetch both mainnet and testnet data using React Query
+ * and combine them.
+ */
+export function useAllChainData() {
+  const results = useQueries<
+    [
+      UseQueryResult<ChainDataResponse, Error>,
+      UseQueryResult<ChainDataResponse, Error>
+    ]
+  >({
+    queries: [
+      {
+        queryKey: ["mainnets"],
+        queryFn: () => fetchChainData(MAINNETS_URL),
+      },
+      {
+        queryKey: ["testnets"],
+        queryFn: () => fetchChainData(TESTNETS_URL),
+      },
+    ],
+  });
+
+  const [mainnetsResult, testnetsResult] = results;
+
+  // Combine data using useMemo
+  const allChains = useMemo(() => {
+    const mainnets = mainnetsResult.data || [];
+    const testnets = testnetsResult.data || [];
+    return [...mainnets, ...testnets];
+  }, [mainnetsResult.data, testnetsResult.data]);
+
+  // Consolidate loading state
+  const isLoading = mainnetsResult.isLoading || testnetsResult.isLoading;
+
+  // Consolidate error state (return the first error encountered)
+  const error = mainnetsResult.error || testnetsResult.error;
+
+  return {
+    data: allChains,
+    isLoading,
+    error,
+  };
 }
