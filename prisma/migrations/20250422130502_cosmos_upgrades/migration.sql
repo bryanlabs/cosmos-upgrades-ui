@@ -5,8 +5,16 @@ CREATE TABLE "User" (
     "email" TEXT,
     "emailVerified" DATETIME,
     "image" TEXT,
-    "favoriteChainIds" TEXT NOT NULL,
     "walletAddress" TEXT
+);
+
+-- CreateTable
+CREATE TABLE "FavoriteChain" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "chainId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "addedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "FavoriteChain_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
