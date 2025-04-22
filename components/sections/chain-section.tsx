@@ -25,6 +25,9 @@ export const ChainSection = () => {
   const { isConnected, data: account } = useAccount();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<"all" | "upgraded">("all");
+  const [networkTypeFilter, setNetworkTypeFilter] = useState<
+    "all" | "mainnet" | "testnet"
+  >("all");
   const [favoriteChains, setFavoriteChains] = useState<string[]>([]);
   const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
   const [updatingFavoriteChainId, setUpdatingFavoriteChainId] = useState<
@@ -115,6 +118,7 @@ export const ChainSection = () => {
   );
 
   const filteredAndSortedChains = useMemo(() => {
+    const favoritesSet = new Set(favoriteChains);
     return (allChains ?? [])
       .filter((chain) =>
         searchTerm
@@ -124,6 +128,9 @@ export const ChainSection = () => {
       .filter((chain) =>
         filterType === "upgraded" ? chain.upgrade_found : true
       )
+      .filter((chain) =>
+        networkTypeFilter === "all" ? true : chain.type === networkTypeFilter
+      )
       .sort((a, b) => {
         const aIsFavorite = favoritesSet.has(a.network);
         const bIsFavorite = favoritesSet.has(b.network);
@@ -131,7 +138,7 @@ export const ChainSection = () => {
         if (!aIsFavorite && bIsFavorite) return 1;
         return a.network.localeCompare(b.network);
       });
-  }, [allChains, searchTerm, filterType, favoritesSet]);
+  }, [allChains, searchTerm, filterType, networkTypeFilter, favoritesSet]);
 
   if (error) {
     return (
@@ -175,26 +182,44 @@ export const ChainSection = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap gap-2 justify-between items-center">
-        <Select
-          value={filterType}
-          onValueChange={(value: "all" | "upgraded") => setFilterType(value)}
-          disabled={isLoadingChains}
-        >
-          <SelectTrigger className="w-full sm:w-[180px]">
-            <SelectValue placeholder="Filter Chains" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Chains</SelectItem>
-            <SelectItem value="upgraded">Chains with Upgrades</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-start sm:justify-between items-center">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto">
+          <Select
+            value={filterType}
+            onValueChange={(value: "all" | "upgraded") => setFilterType(value)}
+            disabled={isLoadingChains}
+          >
+            <SelectTrigger className="w-full sm:w-[150px]">
+              <SelectValue placeholder="Filter Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="upgraded">Has Upgrade</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select
+            value={networkTypeFilter}
+            onValueChange={(value: "all" | "mainnet" | "testnet") =>
+              setNetworkTypeFilter(value)
+            }
+            disabled={isLoadingChains}
+          >
+            <SelectTrigger className="w-full sm:w-[150px]">
+              <SelectValue placeholder="Filter Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Networks</SelectItem>
+              <SelectItem value="mainnet">Mainnet Only</SelectItem>
+              <SelectItem value="testnet">Testnet Only</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <Input
           type="text"
           placeholder="Search Chains..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full sm:max-w-xs md:max-w-sm"
+          className="w-full sm:w-auto sm:max-w-xs md:max-w-sm"
           disabled={isLoadingChains}
         />
       </div>
