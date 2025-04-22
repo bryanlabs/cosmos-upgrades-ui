@@ -7,26 +7,48 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LinkIcon } from "lucide-react";
+import { LinkIcon, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 import type React from "react";
 import { formatDateTime } from "@/utils/date";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { getBadgeProps } from "@/utils/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 const formatNumber = (num: number | null | undefined) =>
   num ? num.toLocaleString() : "-";
 
-export const ChainCard = ({ data }: { data: ChainUpgradeStatus }) => {
+interface ChainCardProps {
+  data: ChainUpgradeStatus;
+  isFavorite: boolean;
+  isUpdatingFavorite: boolean;
+  isConnected: boolean;
+  onToggleFavorite: (chainId: string) => void;
+}
+
+export const ChainCard = ({
+  data,
+  isFavorite,
+  isUpdatingFavorite,
+  isConnected,
+  onToggleFavorite,
+}: ChainCardProps) => {
   const [isClient, setIsClient] = useState(false);
+
+  const chainId = data.network;
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   const logoUrl = data.logo_urls?.png || data.logo_urls?.svg;
-
   const badgeProps = getBadgeProps(data);
   const {
     text: statusBadgeText,
@@ -42,6 +64,14 @@ export const ChainCard = ({ data }: { data: ChainUpgradeStatus }) => {
       {statusBadgeText}
     </Badge>
   );
+
+  const handleStarClick = () => {
+    if (isConnected) {
+      onToggleFavorite(chainId);
+    } else {
+      console.log("Connect wallet to manage favorites");
+    }
+  };
 
   return (
     <Card className="w-full shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col h-full">
@@ -80,7 +110,7 @@ export const ChainCard = ({ data }: { data: ChainUpgradeStatus }) => {
           </CardTitle>
         </div>
 
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 flex items-center gap-2">
           <Badge
             className={`capitalize text-xs px-2 py-0.5 border ${
               data.type === "mainnet"
@@ -90,6 +120,39 @@ export const ChainCard = ({ data }: { data: ChainUpgradeStatus }) => {
           >
             {data.type}
           </Badge>
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleStarClick}
+                  className="h-6 w-6 rounded-full"
+                >
+                  <Star
+                    className={`h-4 w-4 ${
+                      isUpdatingFavorite
+                        ? "text-muted-foreground animate-pulse"
+                        : isFavorite
+                        ? "text-yellow-400 fill-yellow-400"
+                        : "text-muted-foreground hover:text-yellow-400"
+                    } transition-colors`}
+                  />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {!isConnected ? (
+                  <p>Connect wallet to manage favorites</p>
+                ) : isUpdatingFavorite ? (
+                  <p>Updating...</p>
+                ) : (
+                  <p>
+                    {isFavorite ? "Remove from favorites" : "Add to favorites"}
+                  </p>
+                )}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </CardHeader>
       <CardContent className="space-y-3 pt-2 flex-grow">
@@ -138,7 +201,6 @@ export const ChainCard = ({ data }: { data: ChainUpgradeStatus }) => {
         )}
       </CardContent>
 
-      {/* Explorer Link in Footer */}
       {data.explorer_url?.url && (
         <CardFooter className="px-6">
           <a
