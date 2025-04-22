@@ -47,9 +47,9 @@ export function SignInDialog({ children }: { children: React.ReactNode }) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Sign In</DialogTitle>
+          <DialogTitle>Connect Wallet</DialogTitle>
           <DialogDescription>
-            Choose a provider to sign in to your account.
+            Choose a wallet to connect to your account.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
