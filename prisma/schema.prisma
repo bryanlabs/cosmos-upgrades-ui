@@ -15,7 +15,7 @@ model User {
   email          String?         @unique
   emailVerified  DateTime?
   image          String?
-  favoriteChains FavoriteChain[] // Store as comma-separated string for SQLite compatibility
+  favoriteChains FavoriteChain[]
   accounts       Account[]
   sessions       Session[]
   walletAddress  String?         @unique // ← Add this for Cosmos wallet
@@ -23,11 +23,11 @@ model User {
 
 // This is needed for SQLite compatibility
 model FavoriteChain {
-  id      String  @id @default(cuid())
-  chainId String
-  name    String
-  User    User?   @relation(fields: [userId], references: [id])
-  userId  String?
+  id      String   @id @default(cuid())
+  chainId String // from the API, e.g. "cosmoshub-4"
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  addedAt DateTime @default(now())
 }
 
 model Account {
