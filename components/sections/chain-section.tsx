@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useAllChainData } from "@/hooks/useChainData";
 import { ChainCard } from "@/components/chain-card";
 import { Input } from "@/components/ui/input";
@@ -13,13 +13,108 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChainUpgradeStatus } from "@/types/chain";
+import { useAccount } from "graz";
+import { toast } from "sonner";
 
 export const ChainSection = () => {
-  const { data: allChains, isLoading, error } = useAllChainData();
+  const {
+    data: allChains,
+    isLoading: isLoadingChains,
+    error,
+  } = useAllChainData();
+  const { isConnected, data: account } = useAccount();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<"all" | "upgraded">("all");
+  const [favoriteChains, setFavoriteChains] = useState<string[]>([]);
+  const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
+  const [updatingFavoriteChainId, setUpdatingFavoriteChainId] = useState<
+    string | null
+  >(null);
 
-  const filteredChains = useMemo(() => {
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (isConnected && account?.bech32Address) {
+        setIsLoadingFavorites(true);
+        try {
+          const response = await fetch(
+            `/api/user/${account.bech32Address}/favorites`
+          );
+          if (!response.ok) {
+            console.error("Failed to fetch favorites", await response.text());
+            setFavoriteChains([]);
+            return;
+          }
+          const favorites = await response.json();
+          setFavoriteChains(Array.isArray(favorites) ? favorites : []);
+        } catch (err) {
+          console.error("Error fetching favorite chains:", err);
+          setFavoriteChains([]);
+        } finally {
+          setIsLoadingFavorites(false);
+        }
+      } else {
+        setFavoriteChains([]);
+        setIsLoadingFavorites(false);
+      }
+    };
+
+    fetchFavorites();
+  }, [isConnected, account?.bech32Address]);
+
+  const favoritesSet = useMemo(() => new Set(favoriteChains), [favoriteChains]);
+
+  const handleToggleFavorite = useCallback(
+    async (chainId: string) => {
+      if (!isConnected || !account?.bech32Address) {
+        toast.info("Please connect your wallet to manage favorites.");
+        return;
+      }
+
+      const isCurrentlyFavorite = favoritesSet.has(chainId);
+      const method = isCurrentlyFavorite ? "DELETE" : "POST";
+      const optimisticAction = isCurrentlyFavorite ? "Removing" : "Adding";
+      const successAction = isCurrentlyFavorite ? "removed from" : "added to";
+
+      setUpdatingFavoriteChainId(chainId);
+
+      try {
+        const response = await fetch(
+          `/api/user/${account.bech32Address}/favorites`,
+          {
+            method: method,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ chainId }),
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            result.error ||
+              `Failed to ${method === "POST" ? "add" : "remove"} favorite`
+          );
+        }
+
+        setFavoriteChains(Array.isArray(result) ? result : []);
+        toast.success(`${chainId} ${successAction} favorites!`);
+      } catch (err) {
+        console.error(`Error ${optimisticAction.toLowerCase()} favorite:`, err);
+        toast.error(
+          `Failed to ${method === "POST" ? "add" : "remove"} ${chainId}. ${
+            err instanceof Error ? err.message : ""
+          }`
+        );
+      } finally {
+        setUpdatingFavoriteChainId(null);
+      }
+    },
+    [isConnected, account?.bech32Address, favoritesSet]
+  );
+
+  const filteredAndSortedChains = useMemo(() => {
     return (allChains ?? [])
       .filter((chain) =>
         searchTerm
@@ -28,8 +123,15 @@ export const ChainSection = () => {
       )
       .filter((chain) =>
         filterType === "upgraded" ? chain.upgrade_found : true
-      );
-  }, [allChains, searchTerm, filterType]);
+      )
+      .sort((a, b) => {
+        const aIsFavorite = favoritesSet.has(a.network);
+        const bIsFavorite = favoritesSet.has(b.network);
+        if (aIsFavorite && !bIsFavorite) return -1;
+        if (!aIsFavorite && bIsFavorite) return 1;
+        return a.network.localeCompare(b.network);
+      });
+  }, [allChains, searchTerm, filterType, favoritesSet]);
 
   if (error) {
     return (
@@ -39,39 +141,47 @@ export const ChainSection = () => {
     );
   }
 
+  const isLoading = isLoadingChains || (isConnected && isLoadingFavorites);
+
   const renderGridContent = (data: ChainUpgradeStatus[] | undefined) => (
     <div className="space-y-6 pt-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {data?.map((chain) => (
-          <ChainCard key={chain.network} data={chain} />
+          <ChainCard
+            key={chain.network}
+            data={chain}
+            isFavorite={favoritesSet.has(chain.network)}
+            onToggleFavorite={handleToggleFavorite}
+            isUpdatingFavorite={updatingFavoriteChainId === chain.network}
+            isConnected={isConnected}
+          />
         ))}
       </div>
-      {data?.length === 0 && (
+      {data?.length === 0 && !isLoading && (
         <div className="text-center text-muted-foreground col-span-full pt-4">
-          No chains found matching &quot;
-          {searchTerm}&quot;.
+          No chains found matching your criteria.
         </div>
       )}
     </div>
   );
 
   const renderSkeletonGrid = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-4">
       {Array.from({ length: 8 }).map((_, index) => (
-        <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
+        <Skeleton key={index} className="h-[220px] w-full rounded-lg" />
       ))}
     </div>
   );
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2 justify-between">
+      <div className="flex flex-wrap gap-2 justify-between items-center">
         <Select
           value={filterType}
           onValueChange={(value: "all" | "upgraded") => setFilterType(value)}
-          disabled={isLoading}
+          disabled={isLoadingChains}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Filter Chains" />
           </SelectTrigger>
           <SelectContent>
@@ -84,11 +194,13 @@ export const ChainSection = () => {
           placeholder="Search Chains..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
-          disabled={isLoading}
+          className="w-full sm:max-w-xs md:max-w-sm"
+          disabled={isLoadingChains}
         />
       </div>
-      {isLoading ? renderSkeletonGrid() : renderGridContent(filteredChains)}
+      {isLoading
+        ? renderSkeletonGrid()
+        : renderGridContent(filteredAndSortedChains)}
     </div>
   );
 };
