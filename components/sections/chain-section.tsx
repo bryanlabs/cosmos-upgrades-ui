@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ChainUpgradeStatus } from "@/types/chain";
 import { useAccount } from "graz";
 import { toast } from "sonner";
+import { ChainDetailDialog } from "@/components/chain-detail-dialog";
 
 export const ChainSection = () => {
   const {
@@ -36,6 +37,27 @@ export const ChainSection = () => {
   const [updatingFavoriteChainId, setUpdatingFavoriteChainId] = useState<
     string | null
   >(null);
+
+  // State for dialog
+  const [selectedChain, setSelectedChain] = useState<ChainUpgradeStatus | null>(
+    null
+  );
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  // Handler to open dialog
+  const handleCardClick = (chain: ChainUpgradeStatus) => {
+    setSelectedChain(chain);
+    setIsDialogOpen(true);
+  };
+
+  // Handler for dialog state change (needed by Radix Dialog)
+  const handleOpenChange = (open: boolean) => {
+    setIsDialogOpen(open);
+    // Reset selected chain when dialog closes
+    if (!open) {
+      setSelectedChain(null);
+    }
+  };
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -162,14 +184,19 @@ export const ChainSection = () => {
     <div className="space-y-6 pt-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {data?.map((chain) => (
-          <ChainCard
+          <div
             key={chain.network}
-            data={chain}
-            isFavorite={favoritesSet.has(chain.network)}
-            onToggleFavorite={handleToggleFavorite}
-            isUpdatingFavorite={updatingFavoriteChainId === chain.network}
-            isConnected={isConnected}
-          />
+            onClick={() => handleCardClick(chain)}
+            className="cursor-pointer"
+          >
+            <ChainCard
+              data={chain}
+              isFavorite={favoritesSet.has(chain.network)}
+              onToggleFavorite={handleToggleFavorite}
+              isUpdatingFavorite={updatingFavoriteChainId === chain.network}
+              isConnected={isConnected}
+            />
+          </div>
         ))}
       </div>
       {data?.length === 0 && (
@@ -198,12 +225,12 @@ export const ChainSection = () => {
             onValueChange={(value: "all" | "upgraded") => setFilterType(value)}
             disabled={isLoadingChains}
           >
-            <SelectTrigger className="w-full sm:w-[150px]">
-              <SelectValue placeholder="Filter Status" />
+            <SelectTrigger className="w-full sm:w-[120px]">
+              <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="upgraded">Has Upgrade</SelectItem>
+              <SelectItem value="upgraded">Upgraded</SelectItem>
             </SelectContent>
           </Select>
           <Select
@@ -213,8 +240,8 @@ export const ChainSection = () => {
             }
             disabled={isLoadingChains}
           >
-            <SelectTrigger className="w-full sm:w-[150px]">
-              <SelectValue placeholder="Filter Network" />
+            <SelectTrigger className="w-full sm:w-[120px]">
+              <SelectValue placeholder="Network" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Networks</SelectItem>
@@ -222,32 +249,41 @@ export const ChainSection = () => {
               <SelectItem value="testnet">Testnet</SelectItem>
             </SelectContent>
           </Select>
-          <Select
-            value={favoriteFilter}
-            onValueChange={(value: "all" | "favorites") =>
-              setFavoriteFilter(value)
-            }
-            disabled={isLoadingChains || !isConnected}
-          >
-            <SelectTrigger className="w-full sm:w-[150px]">
-              <SelectValue placeholder="Filter Favorites" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Chains</SelectItem>
-              <SelectItem value="favorites">Favorites</SelectItem>
-            </SelectContent>
-          </Select>
+          {isConnected && (
+            <Select
+              value={favoriteFilter}
+              onValueChange={(value: "all" | "favorites") =>
+                setFavoriteFilter(value)
+              }
+              disabled={isLoadingChains || isLoadingFavorites}
+            >
+              <SelectTrigger className="w-full sm:w-[120px]">
+                <SelectValue placeholder="Favorites" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Chains</SelectItem>
+                <SelectItem value="favorites">Favorites</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
         </div>
-        <Input
-          type="text"
-          placeholder="Search Chains..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full sm:w-auto sm:max-w-xs md:max-w-sm"
-          disabled={isLoadingChains}
-        />
+        <div className="w-full sm:w-auto sm:ml-auto">
+          <Input
+            type="search"
+            placeholder="Search chains..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full sm:w-[250px]"
+            disabled={isLoadingChains}
+          />
+        </div>
       </div>
       {isLoading ? renderSkeletonGrid() : renderGridContent(filteredChains)}
+      <ChainDetailDialog
+        chain={selectedChain}
+        isOpen={isDialogOpen}
+        onOpenChange={handleOpenChange}
+      />
     </div>
   );
 };
