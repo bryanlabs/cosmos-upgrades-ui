@@ -28,6 +28,9 @@ export const ChainSection = () => {
   const [networkTypeFilter, setNetworkTypeFilter] = useState<
     "all" | "mainnet" | "testnet"
   >("all");
+  const [favoriteFilter, setFavoriteFilter] = useState<"all" | "favorites">(
+    "all"
+  );
   const [favoriteChains, setFavoriteChains] = useState<string[]>([]);
   const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
   const [updatingFavoriteChainId, setUpdatingFavoriteChainId] = useState<
@@ -117,8 +120,7 @@ export const ChainSection = () => {
     [isConnected, account?.bech32Address, favoritesSet]
   );
 
-  const filteredAndSortedChains = useMemo(() => {
-    const favoritesSet = new Set(favoriteChains);
+  const filteredChains = useMemo(() => {
     return (allChains ?? [])
       .filter((chain) =>
         searchTerm
@@ -131,14 +133,20 @@ export const ChainSection = () => {
       .filter((chain) =>
         networkTypeFilter === "all" ? true : chain.type === networkTypeFilter
       )
-      .sort((a, b) => {
-        const aIsFavorite = favoritesSet.has(a.network);
-        const bIsFavorite = favoritesSet.has(b.network);
-        if (aIsFavorite && !bIsFavorite) return -1;
-        if (!aIsFavorite && bIsFavorite) return 1;
-        return a.network.localeCompare(b.network);
-      });
-  }, [allChains, searchTerm, filterType, networkTypeFilter, favoritesSet]);
+      .filter((chain) =>
+        favoriteFilter === "favorites"
+          ? isConnected && favoritesSet.has(chain.network)
+          : true
+      );
+  }, [
+    allChains,
+    searchTerm,
+    filterType,
+    networkTypeFilter,
+    favoritesSet,
+    favoriteFilter,
+    isConnected,
+  ]);
 
   if (error) {
     return (
@@ -164,18 +172,19 @@ export const ChainSection = () => {
           />
         ))}
       </div>
-      {data?.length === 0 && !isLoading && (
+      {data?.length === 0 && (
         <div className="text-center text-muted-foreground col-span-full pt-4">
-          No chains found matching your criteria.
+          No chains found matching &quot;
+          {searchTerm}&quot;.
         </div>
       )}
     </div>
   );
 
   const renderSkeletonGrid = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {Array.from({ length: 8 }).map((_, index) => (
-        <Skeleton key={index} className="h-[220px] w-full rounded-lg" />
+        <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
       ))}
     </div>
   );
@@ -205,12 +214,27 @@ export const ChainSection = () => {
             disabled={isLoadingChains}
           >
             <SelectTrigger className="w-full sm:w-[150px]">
-              <SelectValue placeholder="Filter Type" />
+              <SelectValue placeholder="Filter Network" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Networks</SelectItem>
-              <SelectItem value="mainnet">Mainnet Only</SelectItem>
-              <SelectItem value="testnet">Testnet Only</SelectItem>
+              <SelectItem value="mainnet">Mainnet</SelectItem>
+              <SelectItem value="testnet">Testnet</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select
+            value={favoriteFilter}
+            onValueChange={(value: "all" | "favorites") =>
+              setFavoriteFilter(value)
+            }
+            disabled={isLoadingChains || !isConnected}
+          >
+            <SelectTrigger className="w-full sm:w-[150px]">
+              <SelectValue placeholder="Filter Favorites" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Chains</SelectItem>
+              <SelectItem value="favorites">Favorites</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -223,9 +247,7 @@ export const ChainSection = () => {
           disabled={isLoadingChains}
         />
       </div>
-      {isLoading
-        ? renderSkeletonGrid()
-        : renderGridContent(filteredAndSortedChains)}
+      {isLoading ? renderSkeletonGrid() : renderGridContent(filteredChains)}
     </div>
   );
 };
