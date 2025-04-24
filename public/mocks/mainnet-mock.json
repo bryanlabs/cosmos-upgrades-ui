@@ -1,0 +1,3527 @@
+[
+  {
+    "type": "mainnet",
+    "network": "coreum",
+    "rpc_server": "https://full-node.mainnet-1.coreum.dev:26657",
+    "rest_server": "https://full-node.mainnet-1.coreum.dev:1317",
+    "latest_block_height": 39348000,
+    "upgrade_found": true,
+    "upgrade_name": "v5",
+    "source": "active_upgrade_proposals",
+    "upgrade_block_height": 39810000,
+    "estimated_upgrade_time": "2025-04-30T15:33:50.031706",
+    "upgrade_plan": null,
+    "version": "v5",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/coreum/images/coreum.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/coreum"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "elys",
+    "rpc_server": "https://elys-rpc.publicnode.com:443",
+    "rest_server": "https://elys-api.polkachu.com",
+    "latest_block_height": 3056394,
+    "upgrade_found": true,
+    "upgrade_name": "v3",
+    "source": "active_upgrade_proposals",
+    "upgrade_block_height": 3139000,
+    "estimated_upgrade_time": "2025-04-28T03:54:36.186677",
+    "upgrade_plan": null,
+    "version": "v3.0.0",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/elys/images/elys.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "NodeStake",
+      "url": "https://explorer.nodestake.org/elys"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "lava",
+    "rpc_server": "https://lava.tendermintrpc.lava.build",
+    "rest_server": "https://lava.rest.lava.build",
+    "latest_block_height": 2636466,
+    "upgrade_found": true,
+    "upgrade_name": "v5.3.0",
+    "source": "active_upgrade_proposals",
+    "upgrade_block_height": 2656300,
+    "estimated_upgrade_time": "2025-04-27T21:28:58.069727",
+    "upgrade_plan": null,
+    "version": "v5.3.0",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/lava/images/lava.png",
+      "svg": null
+    },
+    "explorer_url": { "kind": "guru", "url": "https://lava.explorers.guru/" }
+  },
+  {
+    "type": "mainnet",
+    "network": "sge",
+    "rpc_server": "https://rpc.sge.roomit.xyz/",
+    "rest_server": "https://api-sge.nodeist.net/",
+    "latest_block_height": 8690638,
+    "upgrade_found": true,
+    "upgrade_name": "v1.8.1",
+    "source": "active_upgrade_proposals",
+    "upgrade_block_height": 8702453,
+    "estimated_upgrade_time": "2025-04-25T11:40:06.429203",
+    "upgrade_plan": null,
+    "version": "v1.8.1",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sge/images/sge.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sge/images/sge.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://blockexplorer.sgenetwork.io/sge"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "aaronetwork",
+    "rpc_server": "https://aaronetwork_mainnet_rpc.chain.whenmoonwhenlambo.money",
+    "rest_server": "https://mainnet-api.aaronetwork.xyz",
+    "latest_block_height": 2209897,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Aaron Network",
+      "url": "https://explorer.aaronetwork.xyz"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "acrechain",
+    "rpc_server": "https://rpc-acre.synergynodes.com",
+    "rest_server": "https://acred-rest.staketab.org",
+    "latest_block_height": 13705672,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/acrechain/images/acre.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/acrechain/images/acre.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer.nodestake.top/acre"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "agoric",
+    "rpc_server": "https://agoric-rpc.polkachu.com",
+    "rest_server": "https://agoric.api.kjnodes.com",
+    "latest_block_height": 19357272,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/agoric/images/Agoric-logo-color.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/agoric/images/Agoric-logo-color.svg"
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/agoric"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "aioz",
+    "rpc_server": null,
+    "rest_server": null,
+    "latest_block_height": null,
+    "upgrade_found": false,
+    "upgrade_name": null,
+    "source": null,
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": null,
+    "error": "insufficient data in Cosmos chain registry, no RPC servers returned latest block height for aioz. Consider a PR to cosmos/chain-registry",
+    "logo_urls": null,
+    "explorer_url": null
+  },
+  {
+    "type": "mainnet",
+    "network": "akash",
+    "rpc_server": "https://rpc.lavenderfive.com:443/akash",
+    "rest_server": "https://rest.lavenderfive.com:443/akash",
+    "latest_block_height": 21224646,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/akash/images/akt.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/akash/images/akt.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/akash"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "allora",
+    "rpc_server": "https://allora-rpc.mainnet.allora.network",
+    "rest_server": "https://allora-api.mainnet.allora.network",
+    "latest_block_height": 2285920,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/allora/images/allora.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/allora/images/allora.svg"
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "mainnet",
+    "network": "althea",
+    "rpc_server": "https://rpc.lavenderfive.com:443/althea",
+    "rest_server": "https://rest.lavenderfive.com:443/althea",
+    "latest_block_height": 5460101,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/althea/images/althea.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/althea"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "andromeda1",
+    "rpc_server": "https://andromeda-rpc.stakerhouse.com:443",
+    "rest_server": "https://nibiru.api.kjnodes.com",
+    "latest_block_height": 7528410,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/andromeda/images/andromeda-logo.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "\ud83d\udd25STAVR\ud83d\udd25 Explorer",
+      "url": "https://explorer.stavr.tech/Andromeda-Mainnet"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "archway",
+    "rpc_server": "https://rpc.mainnet.archway.io",
+    "rest_server": "https://archway.api.kjnodes.com",
+    "latest_block_height": 9697330,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/archway.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/archway/images/archway.svg"
+    },
+    "explorer_url": {
+      "kind": "Mintscan",
+      "url": "https://mintscan.io/archway/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "arkeo",
+    "rpc_server": "https://rpc-seed.arkeo.network",
+    "rest_server": "https://rest-seed.arkeo.network",
+    "latest_block_height": 316543,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "stakevillage",
+      "url": "https://exp.stakevillage.net/arkeo-mainnet"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "arkh",
+    "rpc_server": "https://arkhadian-mainnet-rpc.bonynode.online/",
+    "rest_server": "https://arkhadian-mainnet-api.bonynode.online/",
+    "latest_block_height": 22063785,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/arkh/images/arkh.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/arkh/images/arkh.svg"
+    },
+    "explorer_url": {
+      "kind": "BonyNode Explorer",
+      "url": "https://explorer.bonynode.online/arkhadian"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "assetmantle",
+    "rpc_server": "https://assetmantle-rpc.polkachu.com",
+    "rest_server": "https://assetmantle-rest.stakerhouse.com",
+    "latest_block_height": 16442748,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/assetmantle/images/mntl.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/assetmantle/images/mntl.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/asset-mantle"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "atomone",
+    "rpc_server": "https://atomone-rpc.allinbits.com:443",
+    "rest_server": "https://atomone-api.cogwheel.zone",
+    "latest_block_height": 2813118,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/atomone/images/atomone.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/atomone/images/atomone.svg"
+    },
+    "explorer_url": {
+      "kind": "Nodes Hub \ud83d\udee1\ufe0f 100% Slash Protected \ud83d\udee1\ufe0f",
+      "url": "https://explorer.nodeshub.online/atomone/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "aura",
+    "rpc_server": "https://aura-rpc.ramuchi.tech",
+    "rest_server": "https://m-aura.api.utsa.tech",
+    "latest_block_height": 11545304,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/aura/images/Aura-logo-2.2.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/aura/images/Aura-logo-2.2.svg"
+    },
+    "explorer_url": { "kind": "aurascan", "url": "https://aurascan.io" }
+  },
+  {
+    "type": "mainnet",
+    "network": "aura1",
+    "rpc_server": "https://aura-rpc.ramuchi.tech",
+    "rest_server": "https://aura.api.m.stavr.tech",
+    "latest_block_height": 11545305,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": { "kind": "aurascan", "url": "https://aurascan.io" }
+  },
+  {
+    "type": "mainnet",
+    "network": "axelar",
+    "rpc_server": "https://axelar-rpc.pops.one:443",
+    "rest_server": "https://lcd-axelar.imperator.co:443",
+    "latest_block_height": 17771521,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/axl.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/axelar/images/axl.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/axelar"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "babylon",
+    "rpc_server": "https://babylon-archive.nodes.guru/rpc",
+    "rest_server": "https://babylon-archive.nodes.guru/api",
+    "latest_block_height": 140778,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": null,
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/babylon/images/logo.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/babylon"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "bandchain",
+    "rpc_server": "https://rpc-band-01.stakeflow.io",
+    "rest_server": "https://band.api.m.stavr.tech",
+    "latest_block_height": 39832340,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bandchain/images/band.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bandchain/images/band.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/band"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "beezee",
+    "rpc_server": "https://rpc.getbze.com",
+    "rest_server": "https://rest.getbze.com",
+    "latest_block_height": 16950688,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/beezee/images/bze.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/beezee/images/bze.svg"
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/beezee"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "bitbadges",
+    "rpc_server": "https://bitbadges_mainnet_rpc.chain.whenmoonwhenlambo.money",
+    "rest_server": "http://134.122.12.165:1317",
+    "latest_block_height": 3456201,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bitbadges/images/bitbadgeslogo.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/bitbadges"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "bitcanna",
+    "rpc_server": "https://bitcanna.rpc.m.anode.team/",
+    "rest_server": "https://bcna-api.ibs.team/",
+    "latest_block_height": 19019194,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bitcanna/images/bcna.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bitcanna/images/bcna.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/bitcanna/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "bitsong",
+    "rpc_server": "https://rpc.explorebitsong.com",
+    "rest_server": "https://lcd.explorebitsong.com/",
+    "latest_block_height": 22028578,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bitsong/images/btsg.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bitsong/images/btsg.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/bitsong"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "blockx",
+    "rpc_server": "https://blockx_mainnet_rpc.chain.whenmoonwhenlambo.money",
+    "rest_server": "https://blockx_mainnet_api.chain.whenmoonwhenlambo.money",
+    "latest_block_height": 23430538,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Nodeist Explorer",
+      "url": "https://explorer.ist/blockx/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "bluzelle",
+    "rpc_server": "https://bluzelle_mainnet_rpc.chain.whenmoonwhenlambo.money",
+    "rest_server": "https://bluzelle_mainnet_api.chain.whenmoonwhenlambo.money",
+    "latest_block_height": 11196579,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bluzelle/images/bluzelle.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bluzelle/images/bluzelle.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://ping.explorer.net.bluzelle.com/bluzelle"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "bostrom",
+    "rpc_server": "https://rpc.cyber.bronbro.io:443",
+    "rest_server": "https://lcd.bostrom.cybernode.ai",
+    "latest_block_height": 18333765,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bostrom/images/boot.svg"
+    },
+    "explorer_url": { "kind": "cyb", "url": "https://cyb.ai/" }
+  },
+  {
+    "type": "mainnet",
+    "network": "bouachain",
+    "rpc_server": "https://rpc.bouachain.com",
+    "rest_server": "https://lcd.bouachain.com",
+    "latest_block_height": 16437256,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bouachain/images/bouachain.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/bouachain/images/bouachain.svg"
+    },
+    "explorer_url": { "kind": "bouachain", "url": "https://bouascan.com" }
+  },
+  {
+    "type": "mainnet",
+    "network": "canto",
+    "rpc_server": "https://canto.gravitychain.io:26657",
+    "rest_server": "https://canto-api.polkachu.com",
+    "latest_block_height": 14729588,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/canto/images/canto.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/canto/images/canto.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://cosmos-explorers.neobase.one/canto"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "carbon",
+    "rpc_server": "https://tm-api.carbon.network",
+    "rest_server": "https://api.carbon.network",
+    "latest_block_height": 74018285,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/carbon/images/swth.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/carbon/images/swth.svg"
+    },
+    "explorer_url": {
+      "kind": "carbonscan",
+      "url": "https://scan.carbon.network"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "celestia",
+    "rpc_server": "https://rpc.celestia.nodestake.org",
+    "rest_server": "https://api.celestia.nodestake.org",
+    "latest_block_height": 5082786,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/celestia/images/celestia.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/celestia/images/celestia.svg"
+    },
+    "explorer_url": {
+      "kind": "Mintscan",
+      "url": "https://mintscan.io/celestia"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "chain4energy",
+    "rpc_server": "https://rpc.c4e.io/",
+    "rest_server": "https://c4e.api.m.stavr.tech",
+    "latest_block_height": 13481976,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/chain4energy/images/c4e.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "DTEAM | Explorer",
+      "url": "https://explorer.mainnet.dteam.tech/chain4energy"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "cheqd",
+    "rpc_server": "https://cheqd.rpc.m.stavr.tech:443",
+    "rest_server": "https://cheqd.api.m.stavr.tech",
+    "latest_block_height": 18518394,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cheqd/images/cheq.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cheqd/images/cheq.svg"
+    },
+    "explorer_url": { "kind": "bigdipper", "url": "https://explorer.cheqd.io" }
+  },
+  {
+    "type": "mainnet",
+    "network": "chihuahua",
+    "rpc_server": "https://chihuahua-rpc.polkachu.com",
+    "rest_server": "https://chihuahua-api.polkachu.com",
+    "latest_block_height": 17715424,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/chihuahua/images/huahua.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/chihuahua/images/huahua.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://mintscan.io/chihuahua"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "comdex",
+    "rpc_server": "https://comdex.rpc.m.stavr.tech",
+    "rest_server": "https://comdex-rest.publicnode.com",
+    "latest_block_height": 18028042,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/comdex/images/cmdx.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/comdex/images/cmdx.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/comdex"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "commercionetwork",
+    "rpc_server": "https://rpc-mainnet.commercio.network",
+    "rest_server": "https://lcd-mainnet.commercio.network",
+    "latest_block_height": 18787599,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/commercionetwork/images/com.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/commercionetwork/images/com.svg"
+    },
+    "explorer_url": {
+      "kind": "almerico",
+      "url": "https://mainnet.commercio.network"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "composable",
+    "rpc_server": "https://picasso-rpc.stake-town.com",
+    "rest_server": "https://picasso-api.cogwheel.zone:443",
+    "latest_block_height": 10417916,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": null,
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/composable/images/pica.svg"
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/composable"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "conscious",
+    "rpc_server": "https://conscious_mainnet_rpc.chain.whenmoonwhenlambo.money/",
+    "rest_server": "https://conscious_mainnet_api.chain.whenmoonwhenlambo.money/",
+    "latest_block_height": 16411454,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/conscious/images/cvn.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/conscious/images/cvn.svg"
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/conscious"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "cosmoshub",
+    "rpc_server": "https://cosmos-rpc.quickapi.com:443",
+    "rest_server": "https://cosmoshub.lava.build:443",
+    "latest_block_height": 25427758,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/cosmos",
+      "validator_page": "https://www.mintscan.io/cosmos/validators/${validatorAddress}",
+      "proposal_page": "https://www.mintscan.io/cosmos/proposals/${proposalId}",
+      "block_page": "https://www.mintscan.io/cosmos/blocks/${blockHeight}"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "coss",
+    "rpc_server": "https://coss-rpc.cias.network",
+    "rest_server": "https://coss-rest.coss.ink",
+    "latest_block_height": 3814877,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/coss/images/coss.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/coss/images/coss.svg"
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "mainnet",
+    "network": "crescent",
+    "rpc_server": "https://crescent-rpc.polkachu.com",
+    "rest_server": "https://crescent-api.polkachu.com",
+    "latest_block_height": 17888994,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/crescent/images/cre.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/crescent/images/cre.svg"
+    },
+    "explorer_url": {
+      "kind": "ezstaking",
+      "url": "https://ezstaking.app/crescent"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "cronos",
+    "rpc_server": "https://cronos-rpc.publicnode.com:443",
+    "rest_server": "https://cronos-rest.publicnode.com",
+    "latest_block_height": 19192559,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cronos/images/cronos.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cronos/images/cro.svg"
+    },
+    "explorer_url": {
+      "kind": "crypto.org",
+      "url": "https://cronos.org/explorer"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "cryptoorgchain",
+    "rpc_server": "https://rpc.mainnet.crypto.org/",
+    "rest_server": "https://cro-chain-rest.publicnode.com",
+    "latest_block_height": 23271011,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cryptoorgchain/images/cronos.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/crypto-org"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "decentr",
+    "rpc_server": "https://rpc.decentr.chaintools.tech/",
+    "rest_server": "https://decentr-api.ibs.team/",
+    "latest_block_height": 19369863,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/decentr/images/dec.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/decentr/images/dec.svg"
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/decentr"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "desmos",
+    "rpc_server": "https://desmos-rpc.staketab.org:443",
+    "rest_server": "https://api.mainnet.desmos.network",
+    "latest_block_height": 19571178,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/desmos/images/dsm.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/desmos/images/dsm.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/desmos"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "dhealth",
+    "rpc_server": "https://rpc.dhealth.nodestake.org",
+    "rest_server": "https://api.dhealth.nodestake.org",
+    "latest_block_height": 5998870,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dhealth/images/dhp.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dhealth/images/dhp.svg"
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/dhealth"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "doravota",
+    "rpc_server": "https://m-dora.rpc.utsa.tech",
+    "rest_server": "https://dora-rest.publicnode.com",
+    "latest_block_height": 9486250,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Dora Vota Ping Pub",
+      "url": "https://vota-explorer.dorafactory.org"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "dungeon",
+    "rpc_server": "https://dungeon-wallet.rpc.quasarstaking.ai",
+    "rest_server": "https://dungeon_mainnet_api.chain.whenmoonwhenlambo.money",
+    "latest_block_height": 1022915,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dungeon/images/DGN.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "\ud83d\ude80 WHEN MOON \ud83c\udf15 WHEN LAMBO \ud83d\udd25",
+      "url": "https://explorer.whenmoonwhenlambo.money/dungeon"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "dungeon1",
+    "rpc_server": "https://dungeon-wallet.rpc.quasarstaking.ai",
+    "rest_server": "https://dungeon-wallet.api.quasarstaking.ai",
+    "latest_block_height": 1022915,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "\ud83d\ude80 WHEN MOON \ud83c\udf15 WHEN LAMBO \ud83d\udd25",
+      "url": "https://explorer.whenmoonwhenlambo.money/dungeon"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "dydx",
+    "rpc_server": "https://rpc-dydx.ecostake.com:443",
+    "rest_server": "https://dydx-mainnet-lcd.autostake.com:443",
+    "latest_block_height": 43170523,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dydx/images/dydx.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dydx/images/dydx.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/dydx"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "dymension",
+    "rpc_server": "https://m-dymension.rpc.utsa.tech",
+    "rest_server": "https://dymension-api.kynraze.com",
+    "latest_block_height": 6822300,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dymension/images/dymension-logo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dymension/images/dymension-logo.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/dymension"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "dyson",
+    "rpc_server": "https://dyson-rpc.cogwheel.zone:443",
+    "rest_server": "https://dyson-api.cogwheel.zone:443",
+    "latest_block_height": 37748018,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dyson/images/dyson.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dyson/images/dyson.svg"
+    },
+    "explorer_url": {
+      "kind": "dysonprotocol",
+      "url": "https://explorer.dys.dysonprotocol.com/dyson/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "emoney",
+    "rpc_server": "https://emoney.validator.network",
+    "rest_server": "https://emoney.validator.network/api/",
+    "latest_block_height": 4114736,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/emoney/images/ngm.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/emoney/images/ngm.svg"
+    },
+    "explorer_url": {
+      "kind": "ezstaking",
+      "url": "https://ezstaking.app/emoney"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "empowerchain",
+    "rpc_server": "https://empower.rpc.liveraven.net",
+    "rest_server": "https://rest-empowerchain.ecostake.com:443",
+    "latest_block_height": 10339481,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/empowerchain"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "epix",
+    "rpc_server": "https://epix.rpc.silknodes.io/",
+    "rest_server": "https://epix.api.silknodes.io",
+    "latest_block_height": 21926,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/epix/images/epix.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/epix/images/epix.svg"
+    },
+    "explorer_url": {
+      "kind": "Silk Nodes Explorer",
+      "url": "https://explorer.silknodes.io/epix"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "evmos",
+    "rpc_server": "https://evmos-rpc.publicnode.com:443",
+    "rest_server": "https://evmos-rest.publicnode.com",
+    "latest_block_height": 28564119,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/evmos/images/evmos.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/evmos/images/evmos.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/evmos"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "fetchhub",
+    "rpc_server": "https://rpc-fetchhub.fetch.ai:443",
+    "rest_server": "https://rest-fetchhub.fetch.ai",
+    "latest_block_height": 21613404,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/fetchhub/images/fet.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/fetchhub/images/fet.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/fetchai"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "finschia",
+    "rpc_server": "https://finschia-rpc.finschia.io",
+    "rest_server": "https://finschia-api.finschia.io",
+    "latest_block_height": 72972918,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/finschia/images/fnsa.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/finschia/images/fnsa.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/finschia"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "firmachain",
+    "rpc_server": "https://firmachain_mainnet_rpc.chain.whenmoonwhenlambo.money",
+    "rest_server": "https://api.firmachain.chaintools.tech/",
+    "latest_block_height": 17573383,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/firmachain/images/fct.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/firmachain/images/fct.svg"
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/firmachain"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "fxcore",
+    "rpc_server": "https://functionx.rpc.nodeshub.online:443",
+    "rest_server": "https://functionx.api.nodeshub.online:443",
+    "latest_block_height": 20474538,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "TC Network",
+      "url": "https://explorer.tcnetwork.io/fx"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "gateway",
+    "rpc_server": "http://wormchain-mainnet-1-full.tm.p2p.org/",
+    "rest_server": "https://wormchain-lcd.quickapi.com/",
+    "latest_block_height": 13555730,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": null,
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/gateway/images/wormhole_icon.svg"
+    },
+    "explorer_url": {
+      "kind": "bigdipper",
+      "url": "https://bigdipper.live/wormhole"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "genesisl1",
+    "rpc_server": "https://26657.genesisl1.org",
+    "rest_server": "https://1317.genesisl1.org",
+    "latest_block_height": 10784388,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/genesisl1/images/l1.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/genesisl1/images/l1.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://exp.utsa.tech/genesis"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "ggezchain",
+    "rpc_server": "https://bc.ggez.one:8443",
+    "rest_server": "https://rest.ggez.one",
+    "latest_block_height": 2327973,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/ggezchain/images/chain.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/ggezchain/images/chain.svg"
+    },
+    "explorer_url": {
+      "kind": "bigdipper",
+      "url": "https://explorer.ggez.one/ggezchain",
+      "validator_page": "https://explorer.ggez.one/ggezchain/validators/${validatorAddress}",
+      "proposal_page": "https://explorer.ggez.one/ggezchain/proposals/${proposalId}",
+      "block_page": "https://explorer.ggez.one/ggezchain/blocks/${blockHeight}"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "gitopia",
+    "rpc_server": "https://gitopia-rpc.staketab.org:443",
+    "rest_server": "https://gitopia-api.polkachu.com:443",
+    "latest_block_height": 37118669,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/gitopia/images/gitopia.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/gitopia"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "govgen",
+    "rpc_server": "https://govgen-rpc.publicnode.com:443",
+    "rest_server": "https://api.govgen.io/",
+    "latest_block_height": 6361038,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/govgen/images/govgen.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/govgen/images/govgen.svg"
+    },
+    "explorer_url": { "kind": "ping.pub", "url": "https://explorer.govgen.io/" }
+  },
+  {
+    "type": "mainnet",
+    "network": "gravitybridge",
+    "rpc_server": "https://gravity-rpc.ibs.team",
+    "rest_server": "https://gravity-api.polkachu.com",
+    "latest_block_height": 16742964,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/gravitybridge/images/grav.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/gravitybridge/images/grav.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/gravity-bridge"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "haqq",
+    "rpc_server": "https://rpc.haqq.nodestake.org",
+    "rest_server": "https://api.haqq.nodestake.org",
+    "latest_block_height": 16510396,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/haqq/images/haqq.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/haqq/images/haqq.svg"
+    },
+    "explorer_url": {
+      "kind": "blockscout",
+      "url": "https://explorer.haqq.network"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "humans",
+    "rpc_server": "https://humans-mainnet-rpc.itrocket.net",
+    "rest_server": "https://humans-mainnet-api.itrocket.net",
+    "latest_block_height": 10388275,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/humans/images/heart-dark-mode.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/humans/images/heart-dark-mode.svg"
+    },
+    "explorer_url": { "kind": "mintscan", "url": "https://mintscan.io/humans" }
+  },
+  {
+    "type": "mainnet",
+    "network": "impacthub",
+    "rpc_server": "https://ixo-rpc.ibs.team",
+    "rest_server": "https://impacthub.ixo.world/rest/",
+    "latest_block_height": 11301572,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/impacthub/images/ixo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/impacthub/images/ixo.svg"
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/impacthub"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "initia",
+    "rpc_server": "https://rpc.initia.xyz",
+    "rest_server": "https://rest.initia.xyz",
+    "latest_block_height": 1856193,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/initia/images/INIT.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/initia/images/INIT.svg"
+    },
+    "explorer_url": {
+      "kind": "initia scan",
+      "url": "https://scan.initia.xyz/interwoven-1"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "injective",
+    "rpc_server": "https://rpc.injective.goldenratiostaking.net",
+    "rest_server": "https://api-injective-01.stakeflow.io",
+    "latest_block_height": 114856504,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/inj.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/injective/images/inj.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/injective"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "int3face",
+    "rpc_server": "https://rpc.mainnet.int3face.zone",
+    "rest_server": "https://api.mainnet.int3face.zone",
+    "latest_block_height": 3539560,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/int3face/images/int3.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer.int3face.zone"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "irisnet",
+    "rpc_server": "https://iris-rpc.publicnode.com:443",
+    "rest_server": "https://api-irisnet-01.stakeflow.io",
+    "latest_block_height": 29778718,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/irisnet/images/iris.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/irisnet/images/iris.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/iris"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "jackal",
+    "rpc_server": "http://jkl.rpc.m.stavr.tech:11127",
+    "rest_server": "https://api.jackal.nodestake.org",
+    "latest_block_height": 12566591,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/jackal/images/jkl.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/jackal/images/jkl.svg"
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/jackal"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "joltify",
+    "rpc_server": "https://rpc.joltify.io",
+    "rest_server": "https://joltify_mainnet_api.chain.whenmoonwhenlambo.money",
+    "latest_block_height": 5111061,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "big dipper",
+      "url": "https://explorer.joltify.io/joltify"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "juno",
+    "rpc_server": "https://juno-rpc.polkachu.com",
+    "rest_server": "https://juno-api.polkachu.com",
+    "latest_block_height": 25784474,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/juno.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/juno/images/juno.svg"
+    },
+    "explorer_url": { "kind": "ezstaking", "url": "https://ezstaking.app/juno" }
+  },
+  {
+    "type": "mainnet",
+    "network": "kava",
+    "rpc_server": "https://rpc.data.kava.io",
+    "rest_server": "https://kava-mainnet-lcd.autostake.com:443",
+    "latest_block_height": 14982716,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kava/images/kava.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kava/images/kava.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/kava"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "kichain",
+    "rpc_server": "https://rpc.kichain.chaintools.tech/",
+    "rest_server": "https://api.kichain.chaintools.tech/",
+    "latest_block_height": 26124280,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kichain/images/xki.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kichain/images/xki.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/ki-chain"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "kimanetwork",
+    "rpc_server": "https://rpc.kima.network/",
+    "rest_server": "https://api.kima.network",
+    "latest_block_height": 4308776,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Kima Network Explorer",
+      "url": "https://explorer.kima.network/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "konstellation",
+    "rpc_server": "https://konstellation-rpc.stakerhouse.com",
+    "rest_server": "https://konstellation-rest.stakerhouse.com",
+    "latest_block_height": 18661775,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/konstellation/images/Konstellation-dark.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "konstellation",
+      "url": "https://explorer.konstellation.tech/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "kopi",
+    "rpc_server": "https://rpc.kopi.chaintools.tech",
+    "rest_server": "https://rest.kopi.money",
+    "latest_block_height": 9735683,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": null,
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kopi/images/kopi.svg"
+    },
+    "explorer_url": {
+      "kind": "Kopi Foundation Explorer",
+      "url": "https://explorer.kopi.money/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "kujira",
+    "rpc_server": "https://kujira-rpc.polkachu.com",
+    "rest_server": "https://api-kujira.starsquid.io",
+    "latest_block_height": 31020240,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kujira/images/kujira-chain-logo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kujira/images/kuji.svg"
+    },
+    "explorer_url": { "kind": "kujira", "url": "https://finder.kujira.app" }
+  },
+  {
+    "type": "mainnet",
+    "network": "kyve",
+    "rpc_server": "http://kyve.rpc.m.stavr.tech:12357",
+    "rest_server": "https://rest-kyve.ecostake.com",
+    "latest_block_height": 11325869,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kyve/images/kyve.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/kyve/images/kyve.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/kyve"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "likecoin",
+    "rpc_server": "https://rpc-likecoin-mainnet.pikaser.net",
+    "rest_server": "https://likecoin-node.oldcat.io:443/api/",
+    "latest_block_height": 19376006,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/likecoin/images/likecoin-chain-logo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/likecoin/images/likecoin-chain-logo.svg"
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/likecoin"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "loop",
+    "rpc_server": "https://rpc.loop.pfc.zone/",
+    "rest_server": "https://api.loop.pfc.zone/",
+    "latest_block_height": 12459032,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/loop/images/loop.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/loop/images/loop.svg"
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "mainnet",
+    "network": "loyal",
+    "rpc_server": "https://loyal-rpc.polkachu.com",
+    "rest_server": "https://lcd-main.joinloyal.io/",
+    "latest_block_height": 13101639,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/loyal/images/lyl.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/loyal/images/lyl.svg"
+    },
+    "explorer_url": {
+      "kind": "Loyal explorer",
+      "url": "https://pingpub.joinloyal.io/loyal"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "lumnetwork",
+    "rpc_server": "https://lum-rpc.stakerhouse.com",
+    "rest_server": "https://lum-rest.stakerhouse.com",
+    "latest_block_height": 18091131,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/lumnetwork/images/lum.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/lumnetwork/images/lum.svg"
+    },
+    "explorer_url": { "kind": "mintscan", "url": "https://www.mintscan.io/lum" }
+  },
+  {
+    "type": "mainnet",
+    "network": "mande",
+    "rpc_server": "https://mande-mainnet-tendermint.public.blastapi.io",
+    "rest_server": "https://mande-mainnet-rest.public.blastapi.io",
+    "latest_block_height": 1517854,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/mande/images/mande.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/mande/images/mande.svg"
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "mainnet",
+    "network": "manifest",
+    "rpc_server": "https://nodes.liftedinit.app/manifest/rpc",
+    "rest_server": "https://nodes.liftedinit.app/manifest/api",
+    "latest_block_height": 540064,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/manifest/images/manifest.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/manifest/images/manifest.svg"
+    },
+    "explorer_url": {
+      "kind": "Default Explorer",
+      "url": "https://manifest.explorers.guru/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "mantrachain",
+    "rpc_server": "https://mantra-mainnet-rpc.itrocket.net:443",
+    "rest_server": "https://mantra-mainnet-api.itrocket.net",
+    "latest_block_height": 4856365,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/mantrachain/images/OM-Prim-Col.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/mantrachain/images/OM-Prim-Col.svg"
+    },
+    "explorer_url": {
+      "kind": "ITRocket",
+      "url": "https://mainnet.itrocket.net/mantra"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "mayachain",
+    "rpc_server": "https://tendermint.mayachain.info",
+    "rest_server": "https://mayanode.mayachain.info",
+    "latest_block_height": 10858611,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Maya Protocol explorer",
+      "url": "https://www.explorer.mayachain.info"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "medasdigital",
+    "rpc_server": "https://medasdigital_mainnet_rpc.chain.whenmoonwhenlambo.money",
+    "rest_server": "https://medasdigital_mainnet_api.chain.whenmoonwhenlambo.money",
+    "latest_block_height": 2403069,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/medasdigital/images/medas.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/medasdigital/images/medas.svg"
+    },
+    "explorer_url": {
+      "kind": "BigDipper",
+      "url": "https://explorer.medas-digital.io:3100/medasdigital"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "meme",
+    "rpc_server": "https://meme-rpc.polkachu.com/",
+    "rest_server": "https://meme.api.m.anode.team",
+    "latest_block_height": 16270452,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/meme/images/meme.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/meme/images/meme.svg"
+    },
+    "explorer_url": { "kind": "atomscan", "url": "https://atomscan.com/meme" }
+  },
+  {
+    "type": "mainnet",
+    "network": "migaloo",
+    "rpc_server": "https://migaloo-rpc.polkachu.com:443",
+    "rest_server": "https://migaloo-api.kleomedes.network:443",
+    "latest_block_height": 12099634,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/migaloo-light.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/migaloo-light.svg"
+    },
+    "explorer_url": {
+      "kind": "Migaloo Explorers Guru",
+      "url": "https://migaloo.explorers.guru"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "milkyway",
+    "rpc_server": "https://rpc.mainnet.milkyway.zone/",
+    "rest_server": "https://lcd.mainnet.milkyway.zone/",
+    "latest_block_height": 2195891,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/milkyway/images/milkyway.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/milkyway/images/milkyway.svg"
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "mainnet",
+    "network": "neutaro",
+    "rpc_server": "https://rpc2.neutaro.io:443",
+    "rest_server": "https://api3.neutaro.io:443",
+    "latest_block_height": 9623115,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutaro/images/neutaro.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutaro/images/neutaro.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer.neutaro.io/Neutaro"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "neutron",
+    "rpc_server": "https://rpc-solara.neutron-1.neutron.org",
+    "rest_server": "https://rest-lb.neutron.org",
+    "latest_block_height": 23071909,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/neutron-raw.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/neutron/images/neutron-raw.svg"
+    },
+    "explorer_url": {
+      "kind": "Mintscan",
+      "url": "https://www.mintscan.io/neutron"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "nibiru",
+    "rpc_server": "https://rpc.nibiru.fi",
+    "rest_server": "https://api.nibiru.nodestake.org",
+    "latest_block_height": 22073355,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nibiru/images/nibiru.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nibiru/images/nibiru.svg"
+    },
+    "explorer_url": {
+      "kind": "Nodes Guru",
+      "url": "https://nibiru.explorers.guru/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "nillion",
+    "rpc_server": "https://nillion-rpc.lavenderfive.com",
+    "rest_server": "https://api.nillion.nodestake.org",
+    "latest_block_height": 1090238,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": { "url": "https://www.mintscan.io/nillion" }
+  },
+  {
+    "type": "mainnet",
+    "network": "nim",
+    "rpc_server": "https://rpc.mainnet.nimnet.tech",
+    "rest_server": "https://rest.mainnet.nimnet.tech",
+    "latest_block_height": 934102,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nim/images/nim.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nim/images/nim.svg"
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "mainnet",
+    "network": "noble",
+    "rpc_server": "https://noble-rpc.polkachu.com",
+    "rest_server": "https://noble-rest.owallet.io",
+    "latest_block_height": 25593906,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/stake.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/noble/images/stake.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/noble"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "nolus",
+    "rpc_server": "https://rpc-nolus.architectnodes.com",
+    "rest_server": "https://nolus-api.w3coins.io",
+    "latest_block_height": 12463070,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nolus/images/nolus.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nolus/images/nolus.svg"
+    },
+    "explorer_url": {
+      "kind": "Nodes Guru Explorer",
+      "url": "https://nolus.explorers.guru"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "nyx",
+    "rpc_server": "https://rpc.nymtech.net/",
+    "rest_server": "https://api.nyx.nodes.guru/",
+    "latest_block_height": 17868788,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nyx/images/nym_token_light.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nyx/images/nym_token_light.svg"
+    },
+    "explorer_url": { "kind": "mintscan", "url": "https://www.mintscan.io/nyx" }
+  },
+  {
+    "type": "mainnet",
+    "network": "odin",
+    "rpc_server": "https://rpc.odinprotocol.io",
+    "rest_server": "https://api.odinprotocol.io",
+    "latest_block_height": 19992578,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/odin/images/odin.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/odin/images/odin.svg"
+    },
+    "explorer_url": { "kind": "Runa", "url": "https://runa.odinprotocol.io/" }
+  },
+  {
+    "type": "mainnet",
+    "network": "omniflixhub",
+    "rpc_server": "https://rpc.omniflix.nodestake.org",
+    "rest_server": "https://omniflixhub-mainnet-lcd.autostake.com:443",
+    "latest_block_height": 17245303,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/omniflixhub/images/flix.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/omniflixhub/images/flix.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/omniflix"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "onomy",
+    "rpc_server": "https://rpc-mainnet.onomy.io",
+    "rest_server": "https://rest-mainnet.onomy.io",
+    "latest_block_height": 12771136,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/onomy-protocol"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "oraichain",
+    "rpc_server": "https://rpc.orai.pfc.zone/",
+    "rest_server": "http://lcd.orai.io",
+    "latest_block_height": 58145363,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/oraichain/images/orai.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/oraichain/images/orai.svg"
+    },
+    "explorer_url": { "kind": "oraiscan", "url": "https://scan.orai.io" }
+  },
+  {
+    "type": "mainnet",
+    "network": "osmosis",
+    "rpc_server": "https://rpc.osmosis.zone/",
+    "rest_server": "https://lcd.osmosis.zone/",
+    "latest_block_height": 34249437,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/osmosis"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "panacea",
+    "rpc_server": "https://panacea_mainnet_rpc.chain.whenmoonwhenlambo.money",
+    "rest_server": "https://api.gopanacea.org",
+    "latest_block_height": 21068465,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/panacea/images/med.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/panacea/images/med.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/medibloc"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "passage",
+    "rpc_server": "https://rpc-passage.ecostake.com",
+    "rest_server": "https://rest-passage.ecostake.com",
+    "latest_block_height": 13362911,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/passage/images/pasg.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/passage"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "persistence",
+    "rpc_server": "https://rpc.core.persistence.one",
+    "rest_server": "https://persistence-api.polkachu.com",
+    "latest_block_height": 21678179,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/persistence/images/xprt.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/persistence/images/xprt.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/persistence"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "planq",
+    "rpc_server": "https://rpc.planq.nodestake.org",
+    "rest_server": "https://rest.planq.network",
+    "latest_block_height": 14260153,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/planq/images/planq.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/planq/images/planq.svg"
+    },
+    "explorer_url": {
+      "kind": "bigdipper",
+      "url": "https://explorer.planq.network"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "point",
+    "rpc_server": "https://point.rpc.m.stavr.tech:443",
+    "rest_server": "https://point.api.m.stavr.tech",
+    "latest_block_height": 50596816,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/point/images/point-logo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/point/images/point-logo.svg"
+    },
+    "explorer_url": {
+      "kind": "blockscout",
+      "url": "https://explorer.pointnetwork.io/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "provenance",
+    "rpc_server": "https://provenance-rpc.ibs.team",
+    "rest_server": "https://provenance-mainnet-lcd.autostake.com:443",
+    "latest_block_height": 23439824,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/provenance/images/prov.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/provenance/images/prov.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/provenance"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "pryzm",
+    "rpc_server": "https://rpc.pryzm.zone",
+    "rest_server": "https://pryzm-api.chainroot.io",
+    "latest_block_height": 5371538,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/pryzm/images/pryzm-logo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/pryzm/images/pryzm-logo.svg"
+    },
+    "explorer_url": {
+      "kind": "Chainscope",
+      "url": "https://chainsco.pe/pryzm",
+      "block_page": "https://chainsco.pe/pryzm/block/${blockHeight}",
+      "proposal_page": "https://chainsco.pe/pryzm/governance/proposal/${proposalId}",
+      "validator_page": "https://chainsco.pe/pryzm/validator/${validatorAddress}"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "pundix",
+    "rpc_server": "https://px-json.pundix.com",
+    "rest_server": "https://px-rest.pundix.com",
+    "latest_block_height": 20424346,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/pundix/images/pundi-x-chain-logo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/pundix/images/pundi-x-chain-logo.svg"
+    },
+    "explorer_url": {
+      "kind": "Nodes Hub \ud83d\udee1\ufe0f 100% Slash Protected \ud83d\udee1\ufe0f | Restake \u2705",
+      "url": "https://explorer.nodeshub.online/pundix/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "pylons",
+    "rpc_server": "https://rpc.nodejumper.io:443/pylons",
+    "rest_server": "https://pylons-api.noders.services",
+    "latest_block_height": 12356399,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/pylons/images/pylons.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "Nodes.guru",
+      "url": "https://pylons.explorers.guru/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "quasar",
+    "rpc_server": "https://quasar-rpc.polkachu.com",
+    "rest_server": "https://quasar-rest.publicnode.com",
+    "latest_block_height": 11580306,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/quasar/images/quasar.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/quasar"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "quicksilver",
+    "rpc_server": "https://rpc.quicksilver.zone:443",
+    "rest_server": "https://m-quicksilver.api.utsa.tech",
+    "latest_block_height": 12411239,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/quicksilver/images/qck.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/quicksilver/images/qck.svg"
+    },
+    "explorer_url": {
+      "kind": "stakeme",
+      "url": "https://explorer.quicksilver.zone"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "qwoyn",
+    "rpc_server": "https://rpc.qwoyn.bronbro.io:443",
+    "rest_server": "https://lcd.qwoyn.bronbro.io:443",
+    "latest_block_height": 10363863,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/qwoyn/images/qwoyn.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "staking-explorer.com",
+      "url": "https://staking-explorer.com/explorer/qwoyn"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "realio",
+    "rpc_server": "https://realio-rpc.genznodes.dev",
+    "rest_server": "https://realio.api.m.stavr.tech",
+    "latest_block_height": 12126313,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/realio/images/rio.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "\ud83d\udd25STAVR\ud83d\udd25 Explorer",
+      "url": "https://explorer.stavr.tech/realio-mainnet"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "rebus",
+    "rpc_server": "https://rebus.rpc.liveraven.net",
+    "rest_server": "https://api.rebuschain.com:1317/",
+    "latest_block_height": 26761294,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/rebus/images/rebus.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/rebus/images/rebus.svg"
+    },
+    "explorer_url": {
+      "kind": "explorers.guru",
+      "url": "https://rebus.explorers.guru"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "regen",
+    "rpc_server": "https://regen-rpc.publicnode.com:443",
+    "rest_server": "https://rest-regen.ecostake.com",
+    "latest_block_height": 21101807,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/regen/images/regen.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/regen/images/regen.svg"
+    },
+    "explorer_url": {
+      "kind": "ezstaking",
+      "url": "https://ezstaking.app/regen"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "rizon",
+    "rpc_server": "https://rpc.rizon.chaintools.tech/",
+    "rest_server": "https://api.rizon.chaintools.tech/",
+    "latest_block_height": 18527323,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/rizon/images/atolo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/rizon/images/atolo.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/rizon"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "routerchain",
+    "rpc_server": "https://sentry.tm.rpc.routerprotocol.com/",
+    "rest_server": "https://sentry.lcd.routerprotocol.com/",
+    "latest_block_height": 13683174,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": { "kind": "Routerscan", "url": "https://routerscan.io/" }
+  },
+  {
+    "type": "mainnet",
+    "network": "saga",
+    "rpc_server": "https://rpc.saga.goldenratiostaking.net",
+    "rest_server": "https://rest.saga.goldenratiostaking.net",
+    "latest_block_height": 5795267,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/saga/images/saga.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/saga/images/saga.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/saga"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "scorum",
+    "rpc_server": "https://scorum-blockchain-mainnet-rpc.scorum.com",
+    "rest_server": "https://scorum-blockchain-mainnet-api.scorum.com",
+    "latest_block_height": 12502469,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/scorum/images/scorum.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/scorum/images/scorum.svg"
+    },
+    "explorer_url": {
+      "kind": "ezstaking",
+      "url": "https://ezstaking.app/scorum"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "seda",
+    "rpc_server": "https://seda.rpc.kjnodes.com",
+    "rest_server": "https://lcd.mainnet.seda.xyz/",
+    "latest_block_height": 3849966,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/seda/images/seda.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/seda/images/seda.svg"
+    },
+    "explorer_url": {
+      "kind": "sedaexplorer",
+      "url": "https://explorer.seda.xyz/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "sei",
+    "rpc_server": "https://sei-rpc.brocha.in",
+    "rest_server": "https://sei-rest.brocha.in",
+    "latest_block_height": 143768190,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sei/images/sei.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sei/images/sei.svg"
+    },
+    "explorer_url": { "kind": "mintscan", "url": "https://www.mintscan.io/sei" }
+  },
+  {
+    "type": "mainnet",
+    "network": "self",
+    "rpc_server": "https://rpc.selfchain.roomit.xyz",
+    "rest_server": "https://api.selfchain.roomit.xyz",
+    "latest_block_height": 4893863,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/self/images/self.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "Self Chain",
+      "url": "https://explorer.selfchain.xyz/selfchain"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "sentinel",
+    "rpc_server": "https://rpc.sentinel.chaintools.tech/",
+    "rest_server": "https://api-sentinel.busurnode.com",
+    "latest_block_height": 21251963,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sentinel/images/dvpn.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sentinel/images/dvpn.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/sentinel"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "shareledger",
+    "rpc_server": "https://rpc.explorer.shareri.ng",
+    "rest_server": "https://lcd.explorer.shareri.ng/",
+    "latest_block_height": 21131852,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/shareledger/images/chain-logo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/shareledger/images/token.svg"
+    },
+    "explorer_url": {
+      "kind": "big dipper",
+      "url": "https://explorer.shareri.ng"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "shentu",
+    "rpc_server": "https://shentu.rpc.m.stavr.tech:443",
+    "rest_server": "https://shentu.api.m.stavr.tech",
+    "latest_block_height": 23537205,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/shentu/images/ctk.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/shentu/images/ctk.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/shentu"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "shido",
+    "rpc_server": "https://rpc.shido.256x25.tech:443",
+    "rest_server": "https://swagger.shidoscan.com",
+    "latest_block_height": 15280218,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/shido/images/shido.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/shido/images/shido.svg"
+    },
+    "explorer_url": { "kind": "shido", "url": "https://shidoscan.com" }
+  },
+  {
+    "type": "mainnet",
+    "network": "sidechain",
+    "rpc_server": "https://rpc.side.one",
+    "rest_server": "https://side-api.synergynodes.com",
+    "latest_block_height": 1355725,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sidechain/images/side.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sidechain/images/side.svg"
+    },
+    "explorer_url": {
+      "kind": "Ping Pub",
+      "url": "https://explorer.nodestake.org/side"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "sifchain",
+    "rpc_server": "https://sifchain-rpc.publicnode.com:443",
+    "rest_server": "https://sifchain.api.m.stavr.tech",
+    "latest_block_height": 22582732,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sifchain/images/rowan.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sifchain/images/rowan.svg"
+    },
+    "explorer_url": {
+      "kind": "atomscan",
+      "url": "https://atomscan.com/sifchain"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "six",
+    "rpc_server": "https://sixnet-rpc.sixprotocol.net",
+    "rest_server": "https://sixnet-api.sixprotocol.net",
+    "latest_block_height": 14428354,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": null
+  },
+  {
+    "type": "mainnet",
+    "network": "sommelier",
+    "rpc_server": "https://somm-rpc.kleomedes.network",
+    "rest_server": "https://som.api.m.stavr.tech",
+    "latest_block_height": 19723371,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sommelier/images/somm.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sommelier/images/somm.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/sommelier"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "stafihub",
+    "rpc_server": "https://public-rpc1.stafihub.io:443",
+    "rest_server": "https://public-rest-rpc1.stafihub.io",
+    "latest_block_height": 14884556,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stafihub/images/stafihub-chain-logo.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/stafi"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "stargaze",
+    "rpc_server": "https://stargaze-rpc.ibs.team",
+    "rest_server": "https://stargaze-api.ibs.team",
+    "latest_block_height": 19514858,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stargaze/images/stars.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stargaze/images/stars.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/stargaze/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "stratos",
+    "rpc_server": "https://rpc.thestratos.org",
+    "rest_server": "https://rest.thestratos.org",
+    "latest_block_height": 8290302,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stratos/images/stratos.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stratos/images/stratos.svg"
+    },
+    "explorer_url": {
+      "kind": "blockscout",
+      "url": "https://web3-explorer.thestratos.org"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "stride",
+    "rpc_server": "https://stride.rpc.kjnodes.com",
+    "rest_server": "https://api-stride-01.stakeflow.io",
+    "latest_block_height": 17868946,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/strd.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/stride/images/strd.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/stride"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "synternet",
+    "rpc_server": "https://rpc.synternet.com/",
+    "rest_server": "https://api.synternet.com/",
+    "latest_block_height": 4747270,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/synternet/images/synt.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/synternet/images/synt.svg"
+    },
+    "explorer_url": {
+      "kind": "Big Dipper",
+      "url": "https://explorer.synternet.com/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "tenet",
+    "rpc_server": "https://tenet-rpc.publicnode.com:443",
+    "rest_server": "https://app.rpc.tenet.org",
+    "latest_block_height": 17911764,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/tenet/images/tenet.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/tenet/images/tenet.svg"
+    },
+    "explorer_url": {
+      "kind": "TC Network",
+      "url": "https://explorer.tcnetwork.io/tenet"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "teritori",
+    "rpc_server": "https://teritori.rpc.m.stavr.tech",
+    "rest_server": "https://api.teritori.silentvalidator.com/",
+    "latest_block_height": 13976696,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/teritori/images/chain.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/teritori/images/chain.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/teritori"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "terpnetwork",
+    "rpc_server": "https://terp-mainnet-rpc.itrocket.net:443",
+    "rest_server": "https://terp-mainnet-api.itrocket.net:443",
+    "latest_block_height": 11686102,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terpnetwork/images/logo.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer.nodestake.top"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "terra",
+    "rpc_server": "https://terraclassic-rpc-server-01.stakely.io",
+    "rest_server": "https://terraclassic-mainnet-lcd.autostake.com:443",
+    "latest_block_height": 23018061,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/luna.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra/images/luna.svg"
+    },
+    "explorer_url": { "kind": "atomscan", "url": "https://atomscan.com/terra" }
+  },
+  {
+    "type": "mainnet",
+    "network": "terra2",
+    "rpc_server": "https://terra-rpc.stakely.io:443/",
+    "rest_server": "https://api-archive-terra.r93axnodes.cloud:443",
+    "latest_block_height": 15309522,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/terra2/images/luna.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/terra"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "titan",
+    "rpc_server": "https://titan-rpc.titanlab.io:443",
+    "rest_server": "https://titan-lcd-tokyo.titanlab.io:443",
+    "latest_block_height": 6204633,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/titan/images/chain.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/titan/images/chain.svg"
+    },
+    "explorer_url": { "kind": "ping.pub", "url": "https://tkxscan.io" }
+  },
+  {
+    "type": "mainnet",
+    "network": "umee",
+    "rpc_server": "https://umee-rpc.tienthuattoan.com",
+    "rest_server": "https://umee-api.tienthuattoan.ventures",
+    "latest_block_height": 17265418,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/umee/images/umee.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/umee/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "unification",
+    "rpc_server": "https://rpc.unification.io:443",
+    "rest_server": "https://rest.unification.io",
+    "latest_block_height": 15773827,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/unification/images/fund.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/unification/images/fund.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer.unification.io/u"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "ununifi",
+    "rpc_server": "http://a.lcd.ununifi.cauchye.net:26657",
+    "rest_server": "https://a.lcd.ununifi.cauchye.net:1318",
+    "latest_block_height": 15935004,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/ununifi/images/ununifi.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/ununifi/images/ununifi.svg"
+    },
+    "explorer_url": {
+      "kind": "UnUniFi Explorer",
+      "url": "https://ununifi.io/explorer"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "vector",
+    "rpc_server": "https://archive-rpc-1.playonvector.com:443",
+    "rest_server": "https://archive-api-1.playonvector.com:443",
+    "latest_block_height": 1750700,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": null,
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/vector/images/vector-light-logo.svg"
+    },
+    "explorer_url": {
+      "kind": "Vector",
+      "url": "https://explorer.playonvector.com/"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "xion",
+    "rpc_server": "https://rpc-burnt.imperator.co:443",
+    "rest_server": "https://lcd-burnt.imperator.co",
+    "latest_block_height": 7129341,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/xion"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "xpla",
+    "rpc_server": "https://xpla-rpc.publicnode.com:443",
+    "rest_server": "https://dimension-lcd.xpla.dev",
+    "latest_block_height": 13941340,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xpla/images/xpla.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xpla/images/xpla.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/xpla"
+    }
+  },
+  {
+    "type": "mainnet",
+    "network": "zenrock",
+    "rpc_server": "https://rpc.diamond.zenrocklabs.io/",
+    "rest_server": "https://zenrock.api.m.stavr.tech",
+    "latest_block_height": 2420044,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/zenrock/images/zenrock.png",
+      "svg": null
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "mainnet",
+    "network": "zetachain",
+    "rpc_server": "https://rpc.zetachain.nodestake.org",
+    "rest_server": "https://zetachain.blockpi.network/lcd/v1/public",
+    "latest_block_height": 8029064,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "ZetaScan",
+      "url": "https://explorer.zetachain.com/"
+    }
+  }
+]

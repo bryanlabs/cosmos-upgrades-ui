@@ -5,8 +5,13 @@ import { useMemo } from "react";
 // Assuming the API returns an array of ChainUpgradeStatus objects
 type ChainDataResponse = ChainUpgradeStatus[];
 
-const MAINNETS_URL = "/api/cosmos-upgrades/mainnets";
-const TESTNETS_URL = "/api/cosmos-upgrades/testnets";
+const MOCK_ENABLED = process.env.NEXT_PUBLIC_MOCK_ENABLED === "true";
+const MAINNETS_URL = MOCK_ENABLED
+  ? "/mocks/mainnet-mock.json"
+  : "/api/cosmos-upgrades/mainnets";
+const TESTNETS_URL = MOCK_ENABLED
+  ? "/mocks/testnet-mock.json"
+  : "/api/cosmos-upgrades/testnets";
 
 /**
  * Fetches data from a given URL and expects an array response.
