@@ -1,0 +1,14 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id             Int    @id @default(autoincrement())
+  wallet         String @unique
+  favoriteChains String // comma separated list of chain ids, it's not an array because sqlite doesn't support it
+}

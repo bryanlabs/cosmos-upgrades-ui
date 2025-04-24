@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import Image from "next/image";
+import SignInButton from "@/components/signin-button";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,34 +31,26 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
-        {/* Header Section */}
-        <header className="bg-black text-white p-4">
-          <div className="container mx-auto flex justify-between items-center">
-            {/* Placeholder for Logo 1 */}
-            <div>
-              <Image
-                src="/cosmosupgrades.webp"
-                alt="cosmos upgrades logo"
-                width={70}
-                height={70}
-              />
+        <Providers>
+          {/* Header Section */}
+          <header className="bg-black text-white p-4">
+            <div className="container mx-auto flex justify-between items-center">
+              {/* Placeholder for Logo 1 */}
+              <Link href="/">
+                <Image
+                  src="/cosmosupgrades.webp"
+                  alt="cosmos upgrades logo"
+                  width={70}
+                  height={70}
+                />
+              </Link>
+              <SignInButton />
             </div>
-            {/* Placeholder for Logo 2 */}
-            <div>
-              <Image
-                src="/bryanlabs_logo_trans.png"
-                alt="bryan labs logo"
-                width={70}
-                height={70}
-              />
-            </div>
-          </div>
-        </header>
+          </header>
 
-        {/* Main Content Area */}
-        <main className="flex-grow">
-          <Providers>{children}</Providers>
-        </main>
+          {/* Main Content Area */}
+          <main className="flex-grow">{children}</main>
+        </Providers>
       </body>
     </html>
   );
