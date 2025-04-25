@@ -8,28 +8,20 @@ datasource db {
 }
 
 model User {
-  id             Int         @id @default(autoincrement())
-  wallet         String      @unique
+  id             Int       @id @default(autoincrement())
+  wallet         String    @unique
   favoriteChains String // comma separated list of chain ids, it's not an array because sqlite doesn't support it
-  chainLinks     ChainLink[] // relation to links the user made for chains
+  webHooks       WebHook[] // relation to links the user made for chains
 }
 
-model Chain {
-  id    String      @id // e.g. "osmosis", "cosmoshub", etc.
-  name  String
-  links ChainLink[] // reverse relation to links for this chain
-}
-
-model ChainLink {
+model WebHook {
   id      Int    @id @default(autoincrement())
   userId  Int
   chainId String
   label   String
   url     String
 
-  user  User  @relation(fields: [userId], references: [id])
-  chain Chain @relation(fields: [chainId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
-  @@index([chainId])
 }
