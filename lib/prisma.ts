@@ -161,11 +161,20 @@ async function addWebHook(
   userId: number,
   chainId: string,
   label: string,
-  url: string
+  url: string,
+  notificationType: string,
+  notifyBeforeUpgrade?: string
 ) {
   try {
     return await prisma.webHook.create({
-      data: { userId, chainId, label, url },
+      data: {
+        userId,
+        chainId,
+        label,
+        url,
+        notificationType,
+        notifyBeforeUpgrade,
+      },
     });
   } catch (error) {
     console.error(
