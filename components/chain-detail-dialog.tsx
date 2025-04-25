@@ -399,9 +399,18 @@ export const ChainDetailDialog = ({
                               <SlackIcon size={16} />
                             )}
                           </span>
-                          <span className="text-xs text-muted-foreground truncate">
-                            {webhook.url}
-                          </span>
+                          <div className="flex flex-col flex-1 min-w-0">
+                            <span className="text-xs text-muted-foreground truncate">
+                              {webhook.url}
+                            </span>
+                            <span className="text-xs text-muted-foreground/80 capitalize">
+                              Notifies on:{" "}
+                              {webhook.notificationType.replace(/-/g, " ")}
+                              {webhook.notificationType === "before-upgrade" &&
+                                webhook.notifyBeforeUpgrade &&
+                                ` (${webhook.notifyBeforeUpgrade})`}
+                            </span>
+                          </div>
                         </div>
                         <Button
                           variant="ghost"
