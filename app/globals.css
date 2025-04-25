@@ -120,3 +120,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* TODO: REMOVE THIS AFTER DEMO */
+#__nextjs-dev-overlay {
+  display: none !important;
+}
