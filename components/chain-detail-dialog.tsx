@@ -29,18 +29,7 @@ import {
 import { useAccount } from "graz";
 import { toast } from "sonner";
 import { DiscordIcon, SlackIcon } from "./icons/index";
-
-interface Webhook {
-  id: string;
-  url: string;
-  label: string;
-}
-
-interface User {
-  id: number;
-  wallet: string;
-  favoriteChains: string;
-}
+import { User, Webhook } from "@/types/user";
 
 interface ChainDetailDialogProps {
   chain: ChainUpgradeStatus | null;
