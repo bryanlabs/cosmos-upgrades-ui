@@ -108,240 +108,166 @@ async function getAllUsers() {
 }
 
 // Function to get chain links for a specific user and chainId
-async function getChainLinksByUserAndChain(userId: number, chainId: string) {
+async function getWebHooksByUserAndChain(userId: number, chainId: string) {
   if (!userId || !chainId) {
-    throw new Error(
-      "userId and chainId are required to fetch specific chain links."
-    );
+    throw new Error("userId and chainId are required to fetch webhooks.");
   }
-  // Basic validation for userId type
   if (typeof userId !== "number" || isNaN(userId)) {
     throw new Error("Invalid userId provided. Must be a number.");
   }
 
   try {
-    const links = await prisma.chainLink.findMany({
-      where: {
-        userId: userId,
-        chainId: String(chainId),
-      },
-      orderBy: {
-        // Optional: order by creation time or ID
-        id: "desc",
-      },
+    return await prisma.webHook.findMany({
+      where: { userId, chainId },
+      orderBy: { id: "desc" },
     });
-    return links;
   } catch (error) {
     console.error(
-      `Error fetching chain links for userId ${userId} and chainId ${chainId}:`,
+      `Error fetching webhooks for userId ${userId}, chainId ${chainId}:`,
       error
     );
-    // Re-throw the error to be handled by the calling API route or function
     throw new Error(
-      `Failed to fetch chain links for user/chain. Reason: ${
+      `Failed to fetch webhooks. Reason: ${
         error instanceof Error ? error.message : "Unknown error"
       }`
     );
   }
 }
 
-// Function to get chain links for a specific chainId (Re-added)
-async function getChainLinksByChainId(chainId: string) {
-  if (!chainId) {
-    throw new Error("chainId is required to fetch chain links.");
-  }
+// ✅ Get WebHooks by chainId
+async function getWebHooksByChainId(chainId: string) {
+  if (!chainId) throw new Error("chainId is required to fetch webhooks.");
 
   try {
-    const links = await prisma.chainLink.findMany({
-      where: {
-        chainId: String(chainId),
-      },
+    return await prisma.webHook.findMany({
+      where: { chainId },
       include: {
-        user: {
-          // Include related user data
-          select: {
-            wallet: true, // Select only the wallet address
-          },
-        },
+        user: { select: { wallet: true } },
       },
-      orderBy: {
-        // Optional: order by creation time or ID
-        id: "desc",
-      },
+      orderBy: { id: "desc" },
     });
-    return links;
   } catch (error) {
-    console.error(`Error fetching chain links for chainId ${chainId}:`, error);
+    console.error(`Error fetching webhooks for chainId ${chainId}:`, error);
     throw new Error(
-      `Failed to fetch chain links. Reason: ${
+      `Failed to fetch webhooks. Reason: ${
         error instanceof Error ? error.message : "Unknown error"
       }`
     );
   }
 }
 
-// Function to add a new chain link
-async function addChainLink(
+// ✅ Add WebHook
+async function addWebHook(
   userId: number,
   chainId: string,
   label: string,
   url: string
 ) {
-  if (!userId || !chainId || !url) {
-    throw new Error(
-      "userId, chainId, and url are required to add a chain link."
-    );
-  }
-  // Basic type validation
-  if (typeof userId !== "number" || isNaN(userId)) {
-    throw new Error("Invalid userId provided. Must be a number.");
-  }
-  if (typeof chainId !== "string") {
-    throw new Error("Invalid chainId provided. Must be a string.");
-  }
-  if (typeof url !== "string") {
-    throw new Error("Invalid url provided. Must be a string.");
-  }
-  // Basic URL format validation (can be enhanced if needed)
   try {
-    new URL(url);
-  } catch (urlValidationError) {
-    console.error("URL validation failed for:", url, urlValidationError);
-    throw new Error("Invalid URL format provided.");
-  }
-
-  try {
-    const newLink = await prisma.chainLink.create({
-      data: {
-        userId: userId,
-        chainId: chainId,
-        url: url,
-        label: label,
-      },
+    return await prisma.webHook.create({
+      data: { userId, chainId, label, url },
     });
-    return newLink;
   } catch (error) {
     console.error(
-      `Error adding chain link for userId ${userId}, chainId ${chainId}:`,
+      `Error adding webhook for userId ${userId}, chainId ${chainId}:`,
       error
     );
-    // Check for specific Prisma errors if needed, e.g., P2003 for foreign key violation
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === "P2003"
-    ) {
-      // Provide a more specific error message based on the constraint violation
-      const fieldName = error.meta?.target;
-      const fieldNameString = Array.isArray(fieldName)
-        ? fieldName.join(", ")
-        : String(fieldName);
-      throw new Error(
-        `Database constraint violation: The referenced ${fieldNameString} does not exist.`
-      );
-    }
-    // Re-throw other errors to be handled by the calling API route
     throw new Error(
-      `Failed to add chain link. Reason: ${
+      `Failed to add webhook. Reason: ${
         error instanceof Error ? error.message : "Unknown error"
       }`
     );
   }
 }
 
-// Function to update an existing chain link
-async function updateChainLink(
-  linkId: number,
+// ✅ Update WebHook
+async function updateWebHook(
+  id: number,
   data: { label?: string; url?: string }
 ) {
-  if (!linkId) {
-    throw new Error("linkId is required to update a chain link.");
-  }
-  if (!data || (data.label === undefined && data.url === undefined)) {
+  if (!id) throw new Error("id is required to update a webhook.");
+  if (!data.label && !data.url)
     throw new Error("No update data provided (label or url).");
+
+  if (data.label && typeof data.label !== "string") {
+    throw new Error("Invalid label. Must be a string.");
   }
-  // Validate data types if present
-  if (data.label !== undefined && typeof data.label !== "string") {
-    throw new Error("Invalid label provided. Must be a string.");
-  }
-  if (data.url !== undefined) {
-    if (typeof data.url !== "string") {
-      throw new Error("Invalid url provided. Must be a string.");
-    }
+
+  if (data.url) {
+    if (typeof data.url !== "string")
+      throw new Error("Invalid url. Must be a string.");
     try {
-      new URL(data.url); // Validate URL format if URL is being updated
-    } catch (urlValidationError) {
-      console.error(
-        "URL validation failed during update:",
-        data.url,
-        urlValidationError
-      ); // Log error
-      throw new Error("Invalid URL format provided.");
+      new URL(data.url);
+    } catch (e) {
+      console.error("Invalid URL format:", data.url, e);
+      throw new Error("Invalid URL format.");
     }
   }
 
   try {
-    const updatedLink = await prisma.chainLink.update({
-      where: { id: linkId },
+    return await prisma.webHook.update({
+      where: { id },
       data: {
-        // Prisma will only update fields that are present in the data object
         label: data.label,
         url: data.url,
       },
     });
-    return updatedLink;
   } catch (error) {
-    console.error(`Error updating chain link with id ${linkId}:`, error);
-    // Check for specific Prisma errors, e.g., P2025 for record not found
+    console.error(`Error updating webhook id ${id}:`, error);
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2025"
     ) {
-      throw new Error(`Chain link with ID ${linkId} not found.`);
+      throw new Error(`Webhook with ID ${id} not found.`);
     }
-    // Re-throw other errors
     throw new Error(
-      `Failed to update chain link. Reason: ${
+      `Failed to update webhook. Reason: ${
         error instanceof Error ? error.message : "Unknown error"
       }`
     );
   }
 }
 
-// Function to remove a chain link
-async function removeChainLink(linkId: number) {
-  if (!linkId) {
-    throw new Error("linkId is required to remove a chain link.");
-  }
-  if (typeof linkId !== "number" || isNaN(linkId)) {
-    throw new Error("Invalid linkId provided. Must be a number.");
+// ✅ Remove WebHook
+async function removeWebHook(id: number) {
+  if (!id) throw new Error("id is required to remove a webhook.");
+  if (typeof id !== "number" || isNaN(id)) {
+    throw new Error("Invalid id provided. Must be a number.");
   }
 
   try {
-    // delete returns the deleted record, useful for confirmation sometimes
-    const deletedLink = await prisma.chainLink.delete({
-      where: { id: linkId },
-    });
-    // Return some confirmation, perhaps the deleted record or just success status
-    // For simplicity, let's return the deleted record
-    return deletedLink;
+    return await prisma.webHook.delete({ where: { id } });
   } catch (error) {
-    console.error(`Error removing chain link with id ${linkId}:`, error);
-    // Check for specific Prisma errors, e.g., P2025 for record not found
+    console.error(`Error removing webhook id ${id}:`, error);
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
       error.code === "P2025"
     ) {
-      // Optionally, consider this not an "error" if the goal is just ensuring it's gone
-      // throw new Error(`Chain link with ID ${linkId} not found.`);
-      console.warn(
-        `Attempted to remove non-existent chain link with ID ${linkId}.`
-      );
-      // Return null or indicate not found, depending on desired API behavior
+      console.warn(`Webhook with ID ${id} not found.`);
       return null;
     }
-    // Re-throw other errors
     throw new Error(
-      `Failed to remove chain link. Reason: ${
+      `Failed to remove webhook. Reason: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
+}
+
+async function getUserByWallet(wallet: string) {
+  if (!wallet) {
+    throw new Error("Wallet address is required.");
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { wallet },
+    });
+    return user; // Returns the user object or null if not found
+  } catch (error) {
+    console.error(`Error fetching user data for wallet ${wallet}:`, error);
+    throw new Error(
+      `Failed to fetch user data. Reason: ${
         error instanceof Error ? error.message : "Unknown error"
       }`
     );
@@ -355,9 +281,10 @@ export {
   removeFavoriteChain,
   userExists,
   getAllUsers,
-  getChainLinksByUserAndChain,
-  getChainLinksByChainId,
-  addChainLink,
-  updateChainLink,
-  removeChainLink,
+  getUserByWallet,
+  getWebHooksByUserAndChain,
+  getWebHooksByChainId,
+  addWebHook,
+  updateWebHook,
+  removeWebHook,
 };
