@@ -15,11 +15,13 @@ model User {
 }
 
 model WebHook {
-  id      Int    @id @default(autoincrement())
-  userId  Int
-  chainId String
-  label   String
-  url     String
+  id                  Int     @id @default(autoincrement())
+  userId              Int
+  chainId             String
+  label               String
+  notificationType    String
+  notifyBeforeUpgrade String?
+  url                 String
 
   user User @relation(fields: [userId], references: [id])
 
