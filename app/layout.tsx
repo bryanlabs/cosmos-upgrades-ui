@@ -5,6 +5,7 @@ import Providers from "./providers";
 import Image from "next/image";
 import SignInButton from "@/components/signin-button";
 import Link from "next/link";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +51,7 @@ export default function RootLayout({
 
           {/* Main Content Area */}
           <main className="flex-grow">{children}</main>
+          <Toaster />
         </Providers>
       </body>
     </html>
