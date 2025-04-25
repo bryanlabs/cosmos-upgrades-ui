@@ -1,0 +1,1729 @@
+[
+  {
+    "type": "testnet",
+    "network": "airchainstestnet",
+    "rpc_server": "https://airchains.rpc.t.stavr.tech/",
+    "rest_server": "https://t-airchains.api.utsa.tech/",
+    "latest_block_height": 501819,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "NodesGuru",
+      "url": "https://testnet.junction.explorers.guru/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "airchainsvaranasitestnet",
+    "rpc_server": "https://rpc1.airchains.t.cosmostaking.com/",
+    "rest_server": "https://airchains-api.node9x.com/",
+    "latest_block_height": 501819,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Nodes.guru",
+      "url": "https://testnet.junction.explorers.guru/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "akashtestnet",
+    "rpc_server": "https://rpc.sandbox-01.aksh.pw:443",
+    "rest_server": "https://api.sandbox-01.aksh.pw:443",
+    "latest_block_height": 10098229,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/akash/images/akt.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/akash/images/akt.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer.sandbox-01.aksh.pw/akash"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "alloratestnet",
+    "rpc_server": "https://allora-rpc.testnet.allora.network",
+    "rest_server": "https://allora-testnet-api.polkachu.com",
+    "latest_block_height": 3583722,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/allora/images/allora.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/allora/images/allora.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer.testnet.allora.network"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "archwaytestnet",
+    "rpc_server": "https://rpc.constantine.archway.io",
+    "rest_server": "https://api.constantine.archway.io",
+    "latest_block_height": 11680221,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/archwaytestnet/images/ArchwayBrandmark.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/archwaytestnet/images/ArchwayBrandmark.svg"
+    },
+    "explorer_url": {
+      "kind": "archwayscan",
+      "url": "https://testnet.archway.explorers.guru"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "atomonetestnet",
+    "rpc_server": "https://rpc-test.atomone.vinjan.xyz",
+    "rest_server": "https://api-test.atomone.vinjan.xyz",
+    "latest_block_height": 1288231,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/atomone/images/atomone.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/atomone/images/atomone.svg"
+    },
+    "explorer_url": {
+      "kind": "Nodes Hub \ud83d\udee1\ufe0f 100% Slash Protected \ud83d\udee1\ufe0f",
+      "url": "https://testnet.explorer.nodeshub.online/atomone/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "auratestnet",
+    "rpc_server": "https://rpc.euphoria.aura.network/",
+    "rest_server": "https://lcd.euphoria.aura.network/",
+    "latest_block_height": 15742423,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/aura/images/Aura-logo-2.2.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/aura/images/Aura-logo-2.2.svg"
+    },
+    "explorer_url": {
+      "kind": "aurascan",
+      "url": "https://euphoria.aurascan.io"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "axelartestnet",
+    "rpc_server": "https://rpc-axelar-testnet.imperator.co:443",
+    "rest_server": "https://axelartest-lcd.quickapi.com/",
+    "latest_block_height": 18702042,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://mintscan.io/axelar-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "celestiatestnet3",
+    "rpc_server": "https://rpc-mocha.pops.one",
+    "rest_server": "https://api-mocha.pops.one",
+    "latest_block_height": 5846206,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Mintscan",
+      "url": "https://mintscan.io/celestia-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "chain4energytestnet",
+    "rpc_server": "https://rpc-testnet.c4e.io",
+    "rest_server": "https://lcd-testnet.c4e.io",
+    "latest_block_height": 11116455,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/chain4energytestnet/images/c4e.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "\ud83d\udd25STAVR\ud83d\udd25",
+      "url": "https://explorer.stavr.tech/C4E-Testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "cheqdtestnet",
+    "rpc_server": "https://rpc.cheqd.network",
+    "rest_server": "https://api.cheqd.network",
+    "latest_block_height": 11899433,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cheqd/images/cheq.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/cheqd/images/cheq.svg"
+    },
+    "explorer_url": {
+      "kind": "bigdipper",
+      "url": "https://testnet-explorer.cheqd.io/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "coreumtestnet",
+    "rpc_server": "https://coreum-testnet-rpc.ibs.team:443",
+    "rest_server": "https://coreum-testnet-api.ibs.team:443",
+    "latest_block_height": 44387637,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/coreum/images/coreum.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/coreum-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "cosmoshubtestnet",
+    "rpc_server": "https://cosmoshubt.tendermintrpc.lava.build:443",
+    "rest_server": "https://cosmoshubt.lava.build",
+    "latest_block_height": 11546062,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Mintscan",
+      "url": "https://mintscan.io/cosmoshub-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "cosmosicsprovidertestnet",
+    "rpc_server": "https://rpc.provider-state-sync-01.ics-testnet.polypore.xyz",
+    "rest_server": "https://rest.provider-sentry-02.ics-testnet.polypore.xyz",
+    "latest_block_height": 11546062,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Mintscan",
+      "url": "https://mintscan.io/ics-testnet-provider"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "desmostestnet",
+    "rpc_server": "https://rpc.morpheus.desmos.network",
+    "rest_server": "https://lcd.morpheus.desmos.network",
+    "latest_block_height": 22062234,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/desmos/images/dsm.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/desmos/images/dsm.svg"
+    },
+    "explorer_url": {
+      "kind": "bigdipper",
+      "url": "https://testnet.bigdipper.live/desmos"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "doravotatestnet",
+    "rpc_server": "https://vota-testnet-rpc.dorafactory.org/",
+    "rest_server": "https://vota-testnet-rest.dorafactory.org",
+    "latest_block_height": 6953680,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "dydxtestnet",
+    "rpc_server": "https://dydx-rpc-testnet.enigma-validator.com",
+    "rest_server": "https://dydx-lcd-testnet.enigma-validator.com",
+    "latest_block_height": 37895966,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dydx/images/dydx.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dydx/images/dydx.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/dydx-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "dymensiontestnet1",
+    "rpc_server": "https://rpc-dym-migration-test-2.mzonder.com",
+    "rest_server": "https://api-dym-migration-test-2.mzonder.com",
+    "latest_block_height": 6530184,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dymension/images/dymension-logo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/dymension/images/dymension-logo.svg"
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "elystestnet",
+    "rpc_server": "https://rpc.testnet.elys.network",
+    "rest_server": "https://api.testnet.elys.network",
+    "latest_block_height": 3077753,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "itrocket",
+      "url": "https://testnet.itrocket.net/elys"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "empetestnet",
+    "rpc_server": "https://rpc-archive-testnet.empe.io/",
+    "rest_server": "https://lcd-testnet.empe.io/",
+    "latest_block_height": 4620093,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "empe",
+      "url": "https://explorer-testnet.empe.io"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "epixtestnet",
+    "rpc_server": "https://rpc.testnet.epix.zone",
+    "rest_server": "https://api.testnet.epix.zone",
+    "latest_block_height": 21882,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Epix Explorer",
+      "url": "https://testnet.epix.zone/epix"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "evmostestnet",
+    "rpc_server": "https://evmos-testnet-rpc.publicnode.com:443",
+    "rest_server": "https://evmos-testnet-rest.publicnode.com",
+    "latest_block_height": 32664366,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Mintscan",
+      "url": "https://mintscan.io/evmos-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "fetchhubtestnet",
+    "rpc_server": "https://rpc-dorado.fetch.ai:443",
+    "rest_server": "https://rest-dorado.fetch.ai",
+    "latest_block_height": 17442139,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "bigdipper",
+      "url": "https://explore-dorado.fetch.ai"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "finschiatestnet",
+    "rpc_server": "https://ebony-rpc.finschia.io",
+    "rest_server": "https://ebony-api.finschia.io",
+    "latest_block_height": 55431310,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/finschia/images/fnsa.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/finschia/images/fnsa.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/finschia-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "galacticatestnet",
+    "rpc_server": "https://galactica-testnet-rpc.ibs.team:443",
+    "rest_server": "https://galactica-testnet-api.ibs.team:443",
+    "latest_block_height": 5685529,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/galactica/images/galactica.png",
+      "svg": null
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "hedgetestnet",
+    "rpc_server": "https://rpc-berberis.hedgeblock.io",
+    "rest_server": "https://lcd-berberis.hedgeblock.io",
+    "latest_block_height": 6354036,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/hedgetestnet/images/hedge.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/hedgetestnet/images/hedge.svg"
+    },
+    "explorer_url": {
+      "kind": "hedgescan",
+      "url": "https://berberis.hedgescan.io"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "humanstestnet",
+    "rpc_server": "https://humans-testnet-rpc.cosmonautstakes.com",
+    "rest_server": "https://humans-testnet-rest.cosmonautstakes.com",
+    "latest_block_height": 10761751,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "hypersigntestnet",
+    "rpc_server": "https://rpc.prajna.hypersign.id",
+    "rest_server": "https://api.prajna.hypersign.id",
+    "latest_block_height": 482967,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Hypersign",
+      "url": "https://explorer.hypersign.id/hypersign-prajna-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "impacthubdevnet",
+    "rpc_server": "https://devnet.ixo.earth/rpc/",
+    "rest_server": "https://devnet.ixo.earth/rest/",
+    "latest_block_height": 7316360,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "ixoworld",
+      "url": "https://blockscan.devnet.ixo.earth/ixo"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "impacthubtestnet",
+    "rpc_server": "https://rpc.testnet.ixo.earth/",
+    "rest_server": "https://testnet.ixo.earth/rest/",
+    "latest_block_height": 11489693,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/impacthub/images/ixo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/impacthub/images/ixo.svg"
+    },
+    "explorer_url": {
+      "kind": "ixoworld",
+      "url": "https://blockscan.testnet.ixo.earth/ixo"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "int3facetestnet",
+    "rpc_server": "https://rpc.testnet.int3face.zone",
+    "rest_server": "https://api.testnet.int3face.zone",
+    "latest_block_height": 8559111,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/int3face/images/int3face-chain-logo.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://testnet.explorer.int3face.zone"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "intentotestnet",
+    "rpc_server": "https://rpc.intento.zone",
+    "rest_server": "https://lcd.intento.zone",
+    "latest_block_height": 2430137,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "PingPub",
+      "url": "https://explorer.intento.zone"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "jackaltestnet",
+    "rpc_server": "https://testnet-rpc.jackalprotocol.com",
+    "rest_server": "https://testnet-api.jackalprotocol.com",
+    "latest_block_height": 13376113,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "\ud83d\udd25STAVR\ud83d\udd25",
+      "url": "https://explorer.stavr.tech/Jackal-Testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "junotestnet",
+    "rpc_server": "https://juno-testnet-rpc.polkachu.com",
+    "rest_server": "https://juno-testnet-api.polkachu.com",
+    "latest_block_height": 988628,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "\ud83d\udd25STAVR\ud83d\udd25",
+      "url": "https://explorer.stavr.tech/Juno-Testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "kichaintestnet",
+    "rpc_server": "https://rpc-challenge.blockchain.ki/",
+    "rest_server": "https://api-challenge.blockchain.ki/",
+    "latest_block_height": 19084376,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "kifoundation",
+      "url": "https://kichain-t-4.blockchain.ki/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "kimanetworktestnet",
+    "rpc_server": "https://rpc.sardis.kima.network/",
+    "rest_server": "https://api.sardis.kima.network/",
+    "latest_block_height": 5383667,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Kima Network",
+      "url": "https://explorer.sardis.kima.network/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "kyvedevnet",
+    "rpc_server": "https://rpc.korellia.kyve.network",
+    "rest_server": "https://api.korellia.kyve.network",
+    "latest_block_height": 16352949,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "KYVE Explorer",
+      "url": "https://explorer.kyve.network/korellia"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "kyvetestnet",
+    "rpc_server": "https://kyve-testnet-rpc.ibs.team:443",
+    "rest_server": "https://rest-kyve-test.ecostake.com",
+    "latest_block_height": 11828726,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://mintscan.io/kyve-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "lavatestnet",
+    "rpc_server": "https://lava-testnet-rpc.ibs.team:443",
+    "rest_server": "https://lava-testnet-api.ibs.team:443",
+    "latest_block_height": 3069882,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/lavatestnet/images/lava-icon.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "explorers.guru",
+      "url": "https://lava.explorers.guru/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "likecointestnet",
+    "rpc_server": "https://node.testnet.like.co/rpc/",
+    "rest_server": "https://node.testnet.like.co/",
+    "latest_block_height": 15945648,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/likecoin/images/likecoin-chain-logo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/likecoin/images/likecoin-chain-logo.svg"
+    },
+    "explorer_url": {
+      "kind": "lunie-ng",
+      "url": "https://likecoin-public-testnet-5.netlify.app/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "manifestdevnet",
+    "rpc_server": "https://nodes.liftedinit.tech/manifest/qa/rpc",
+    "rest_server": "https://nodes.liftedinit.tech/manifest/qa/api",
+    "latest_block_height": 341540,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/manifest/images/manifest.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/manifest/images/manifest.svg"
+    },
+    "explorer_url": {
+      "kind": "Default Explorer",
+      "url": "https://testnet.manifest.explorers.guru/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "manifesttestnet",
+    "rpc_server": "https://nodes.liftedinit.tech/manifest/testnet/rpc",
+    "rest_server": "https://nodes.liftedinit.tech/manifest/testnet/api",
+    "latest_block_height": 3121063,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/manifest/images/manifest.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/manifest/images/manifest.svg"
+    },
+    "explorer_url": {
+      "kind": "Default Explorer",
+      "url": "https://testnet.manifest.explorers.guru/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "mantrachaintestnet",
+    "rpc_server": "https://mantra-testnet-rpc.publicnode.com:443",
+    "rest_server": "https://api.hongbai.mantrachain.io",
+    "latest_block_height": 4957837,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "mantrachaintestnet2",
+    "rpc_server": "https://mantra-testnet-rpc.publicnode.com:443",
+    "rest_server": "https://api.dukong.mantrachain.io",
+    "latest_block_height": 4957837,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/mantrachain/images/OM-Prim-Col.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/mantrachain/images/OM-Prim-Col.svg"
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/mantra-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "migalootestnet",
+    "rpc_server": "https://migaloo-testnet-rpc.polkachu.com",
+    "rest_server": "https://migaloo-testnet-api.polkachu.com",
+    "latest_block_height": 7398409,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/migaloo-light.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/migaloo/images/migaloo-light.svg"
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "neutrontestnet",
+    "rpc_server": "https://neutron-testnet-rpc.polkachu.com/",
+    "rest_server": "https://rest-falcron.pion-1.ntrn.tech",
+    "latest_block_height": 28224244,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/neutrontestnet/images/neutron-black-logo.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/neutrontestnet/images/neutron-black-logo.svg"
+    },
+    "explorer_url": {
+      "kind": "Mintscan",
+      "url": "https://mintscan.io/neutron-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "nibirudevnet",
+    "rpc_server": "https://rpc.devnet-1.nibiru.fi",
+    "rest_server": "https://lcd.devnet-1.nibiru.fi",
+    "latest_block_height": 975407,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nibiru/images/nibiru.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nibiru/images/nibiru.svg"
+    },
+    "explorer_url": {
+      "kind": "Nibiru Foundation",
+      "url": "https://explorer.nibiru.fi/nibiru-devnet-1"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "nibirutestnet2",
+    "rpc_server": "https://rpc.testnet-2.nibiru.fi",
+    "rest_server": "https://lcd.testnet-2.nibiru.fi",
+    "latest_block_height": 1243002,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nibiru/images/nibiru.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nibiru/images/nibiru.svg"
+    },
+    "explorer_url": {
+      "kind": "Nibiru Foundation",
+      "url": "https://explorer.nibiru.fi/nibiru-testnet-2"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "nilliontestnet",
+    "rpc_server": "https://nillion-testnet-rpc.polkachu.com/",
+    "rest_server": "https://testnet-nillion-api.lavenderfive.com",
+    "latest_block_height": 13497215,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "nobletestnet",
+    "rpc_server": "https://noble-testnet-rpc.polkachu.com",
+    "rest_server": "https://noble-testnet-api.polkachu.com",
+    "latest_block_height": 28620135,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://mintscan.io/noble-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "nyxtestnet",
+    "rpc_server": "https://rpc.sandbox.nymtech.net",
+    "rest_server": "https://api.sandbox.nymtech.net",
+    "latest_block_height": 10455987,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nyxtestnet/images/nym_token_light.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/nyxtestnet/images/nym_token_light.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://sandbox-blocks.nymtech.net/sandbox"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "osmosistestnet",
+    "rpc_server": "https://osmosis-testnet-tendermint.reliableninjas.com",
+    "rest_server": "https://lcd.osmotest5.osmosis.zone/",
+    "latest_block_height": 27814636,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmosis-chain-logo.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://mintscan.io/osmosis-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "pelltestnet",
+    "rpc_server": "https://rpc-t.pell.nodestake.org",
+    "rest_server": "https://api-t.pell.nodestake.org",
+    "latest_block_height": 2056745,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "testnet.pell.explorers.guru",
+      "url": "https://testnet.pell.explorers.guru/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "persistencetestnet",
+    "rpc_server": "https://persistence-testnet-rpc.cosmonautstakes.com/",
+    "rest_server": "https://rest-testnet-persistence.architectnodes.com/",
+    "latest_block_height": 10732777,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://mintscan.io/persistence-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "persistencetestnet2",
+    "rpc_server": "https://rpc.testnet2.persistence.one/",
+    "rest_server": "https://persistence-testnet-rest.cosmonautstakes.com/",
+    "latest_block_height": 10732777,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://mintscan.io/persistence-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "planqtestnet",
+    "rpc_server": "https://planq_testnet_rpc.chain.whenmoonwhenlambo.money",
+    "rest_server": "https://planq_testnet_api.chain.whenmoonwhenlambo.money",
+    "latest_block_height": 4822325,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/planqtestnet/images/planq.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/planqtestnet/images/planq.svg"
+    },
+    "explorer_url": { "kind": "EVM", "url": "https://evm-atlas.planq.network" }
+  },
+  {
+    "type": "testnet",
+    "network": "prysmdevnet",
+    "rpc_server": "https://prysm-testnet-rpc.polkachu.com/",
+    "rest_server": "https://prysm-testnet-api.polkachu.com/",
+    "latest_block_height": 10197344,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/prysmdevnet/images/prysm.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/prysmdevnet/images/prysm.svg"
+    },
+    "explorer_url": {
+      "kind": "PingPub",
+      "url": "https://explorer.kleomedes.network/prysm"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "quicksilvertestnet",
+    "rpc_server": "https://quicksilver-testnet-rpc.ibs.team:443",
+    "rest_server": "https://quicksilver-testnet-api.polkachu.com/",
+    "latest_block_height": 3031939,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": null,
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/quicksilver/images/qck.svg"
+    },
+    "explorer_url": {
+      "kind": "\ud83d\udd25STAVR\ud83d\udd25",
+      "url": "https://explorer.stavr.tech/Quicksilver"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "qwoyntestnet",
+    "rpc_server": "https://testnet-rpc.qwoyn.studio",
+    "rest_server": "https://testnet-api.qwoyn.studio",
+    "latest_block_height": 11336684,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/qwoyntestnet/images/qwoyn.png",
+      "svg": null
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "sedatestnet",
+    "rpc_server": "https://rpc.testnet.seda.xyz/",
+    "rest_server": "https://seda-testnet-api.polkachu.com/",
+    "latest_block_height": 4511081,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/seda/images/seda.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/seda/images/seda.svg"
+    },
+    "explorer_url": {
+      "kind": "sedaexplorer",
+      "url": "https://testnet.explorer.seda.xyz/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "seitestnet2",
+    "rpc_server": "https://sei-testnet-2-rpc.brocha.in",
+    "rest_server": "https://api-testnet-sei.stingray.plus",
+    "latest_block_height": 167434737,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "celatone",
+      "url": "https://www.seiscan.app/atlantic-2"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "sgetestnet",
+    "rpc_server": "https://sge.rpc.t.stavr.tech:443",
+    "rest_server": "https://api.testnet.sgenetwork.io",
+    "latest_block_height": 8111774,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sge/images/sge.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sge/images/sge.svg"
+    },
+    "explorer_url": {
+      "kind": "Sge BlockExplorer",
+      "url": "https://blockexplorer.testnet.sgenetwork.io/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "sgetestnet4",
+    "rpc_server": "https://rpc.testnet.sgenetwork.io",
+    "rest_server": "https://api.testnet.sgenetwork.io",
+    "latest_block_height": 8111774,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sge/images/sge.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sge/images/sge.svg"
+    },
+    "explorer_url": {
+      "kind": "Sge BlockExplorer",
+      "url": "https://blockexplorer.testnet.sgenetwork.io/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "shentutestnet",
+    "rpc_server": "https://yulei-rpc.shentu.org:443",
+    "rest_server": "https://yulei-rest.shentu.org/",
+    "latest_block_height": 5824504,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/shentu/images/ctk.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/shentu/images/ctk.svg"
+    },
+    "explorer_url": {
+      "kind": "Shentu Explorer",
+      "url": "https://explorer.shentu.org/?chain=yulei-2.1"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "sixtestnet",
+    "rpc_server": "https://rpc1.fivenet.sixprotocol.net:443",
+    "rest_server": "https://api1.fivenet.sixprotocol.net:443",
+    "latest_block_height": 13128023,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "sourcetestnet",
+    "rpc_server": "https://rpc-testnet-source.sr20de.xyz",
+    "rest_server": "https://source.api.t.stavr.tech",
+    "latest_block_height": 9138611,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Nodestake",
+      "url": "https://explorer.nodestake.top/source-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "stargazetestnet",
+    "rpc_server": "https://rpc.elgafar-1.stargaze-apis.com",
+    "rest_server": "https://rest.elgafar-1.stargaze-apis.com",
+    "latest_block_height": 16663716,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://testnet-explorer.publicawesome.dev/stargaze"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "stridetestnet",
+    "rpc_server": "https://stride.testnet-1.stridenet.co",
+    "rest_server": "https://stride.testnet-1.stridenet.co/api",
+    "latest_block_height": 11909106,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "sunrisetestnet",
+    "rpc_server": "https://b-node.sunrise-test-1.cauchye.net/",
+    "rest_server": "https://a-node.sunrise-test-1.cauchye.net:1318",
+    "latest_block_height": 1974300,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sunrise/images/sunrise.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/sunrise/images/sunrise.svg"
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "swisstroniktestnet",
+    "rpc_server": "https://rpc.testnet.swisstronik.com",
+    "rest_server": "https://api.testnet.swisstronik.com",
+    "latest_block_height": 11564157,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer-cosmos.testnet.swisstronik.com/swisstronik"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "symphonytestnet",
+    "rpc_server": "https://symphony.test.rpc.nodeshub.online/",
+    "rest_server": "https://symphony-testnet-api.cogwheel.zone/",
+    "latest_block_height": 11579092,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/symphonytestnet/images/symphony_logo.png",
+      "svg": null
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "symphonytestnet3",
+    "rpc_server": "https://symphony.test.rpc.nodeshub.online/",
+    "rest_server": "https://symphony.test.api.nodeshub.online/",
+    "latest_block_height": 11579094,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/symphonytestnet/images/symphony_logo.png",
+      "svg": null
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "synternettestnet",
+    "rpc_server": "https://rpc-testnet.synternet.com/",
+    "rest_server": "https://api-testnet.synternet.com/",
+    "latest_block_height": 8055223,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "Big Dipper",
+      "url": "https://explorer-testnet.synternet.com/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "terra2testnet",
+    "rpc_server": "https://terra-testnet-rpc.polkachu.com:443",
+    "rest_server": "https://terra-testnet-api.polkachu.com:443",
+    "latest_block_height": 16357427,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "finder",
+      "url": "http://finder.terra.money/testnet/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "titantestnet",
+    "rpc_server": "https://titan-testnet-rpc-1.titanlab.io:443",
+    "rest_server": "https://titan-testnet-lcd-1.titanlab.io:443",
+    "latest_block_height": 7378265,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/titantestnet/images/chain.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/titantestnet/images/chain.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://titan-testnet-explorer-light.titanlab.io"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "unificationtestnet",
+    "rpc_server": "https://rpc-testnet.unification.io:443",
+    "rest_server": "https://rest-testnet.unification.io",
+    "latest_block_height": 18042998,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/unification/images/fund.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/unification/images/fund.svg"
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer-testnet.unification.io/u"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "uniontestnet",
+    "rpc_server": "https://rpc.testnet-9.union.build",
+    "rest_server": "https://union-testnet-api.polkachu.com",
+    "latest_block_height": 5698836,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/uniontestnet/images/union.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "ping.pub",
+      "url": "https://explorer.testnet-9.union.build/union"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "xiontestnet2",
+    "rpc_server": "https://rpc.xion-testnet-2.burnt.com:443",
+    "rest_server": "https://testnet-2-api.xion-api.com",
+    "latest_block_height": 2682665,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xion/images/burnt.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "mintscan",
+      "url": "https://www.mintscan.io/xion-testnet"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "xplatestnet",
+    "rpc_server": "https://cube-rpc.xpla.dev",
+    "rest_server": "https://cube-lcd.xpla.dev",
+    "latest_block_height": 14178528,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xpla/images/xpla.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/xpla/images/xpla.svg"
+    },
+    "explorer_url": null
+  },
+  {
+    "type": "testnet",
+    "network": "zenrocktestnet",
+    "rpc_server": "https://rpc.gardia.zenrocklabs.io/",
+    "rest_server": "https://api.gardia.zenrocklabs.io/",
+    "latest_block_height": 948742,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/zenrocktestnet/images/zenrock.png",
+      "svg": null
+    },
+    "explorer_url": {
+      "kind": "Big Dipper",
+      "url": "https://explorer.gardia.zenrocklabs.io/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "zetachaintestnet",
+    "rpc_server": "https://zetachain-athens.blockpi.network/rpc/v1/public",
+    "rest_server": "https://zetachain-athens.blockpi.network/lcd/v1/public",
+    "latest_block_height": 10023800,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": { "png": null, "svg": null },
+    "explorer_url": {
+      "kind": "ZetaScan",
+      "url": "https://athens.explorer.zetachain.com/"
+    }
+  },
+  {
+    "type": "testnet",
+    "network": "zigchaintestnet",
+    "rpc_server": "https://testnet-rpc.zigchain.com",
+    "rest_server": "https://testnet-api.zigchain.com",
+    "latest_block_height": 1302661,
+    "upgrade_found": false,
+    "upgrade_name": "",
+    "source": "",
+    "upgrade_block_height": null,
+    "estimated_upgrade_time": null,
+    "upgrade_plan": null,
+    "version": "",
+    "error": null,
+    "logo_urls": {
+      "png": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/zigchaintestnet/images/zigchain.png",
+      "svg": "https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/zigchaintestnet/images/zigchain.svg"
+    },
+    "explorer_url": null
+  }
+]
