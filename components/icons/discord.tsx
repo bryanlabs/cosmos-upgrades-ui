@@ -12,7 +12,7 @@ const DiscordIcon = ({ size = 24 }: IconProps) => {
     >
       <g
         fill="#7b7b7b"
-        fill-rule="nonzero"
+        fillRule="nonzero"
         stroke="none"
         strokeWidth="1"
         strokeLinecap="butt"
