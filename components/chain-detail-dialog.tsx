@@ -16,7 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import {
@@ -28,6 +28,19 @@ import {
 } from "@/components/ui/select";
 import { useAccount } from "graz";
 import { toast } from "sonner";
+import { DiscordIcon, SlackIcon } from "./icons/index";
+
+interface Webhook {
+  id: string;
+  url: string;
+  label: string;
+}
+
+interface User {
+  id: number;
+  wallet: string;
+  favoriteChains: string;
+}
 
 interface ChainDetailDialogProps {
   chain: ChainUpgradeStatus | null;
@@ -40,13 +53,14 @@ export const ChainDetailDialog = ({
   isOpen,
   onOpenChange,
 }: ChainDetailDialogProps) => {
-  const [webhooks, setWebhooks] = useState<
-    Array<{ url: string; label: string }>
-  >([]);
-
+  const [webhooks, setWebhooks] = useState<Webhook[]>([]);
+  const [isLoadingWebhooks, setIsLoadingWebhooks] = useState(false);
   const [newWebhookUrl, setNewWebhookUrl] = useState("");
   const [newWebhookLabel, setNewWebhookLabel] = useState("");
   const { data: account } = useAccount();
+  const [userData, setUserData] = useState<User | null>(null);
+  const userAddress = account?.bech32Address;
+  const chainNetwork = chain?.network;
 
   const logoUrl = chain?.logo_urls?.png || chain?.logo_urls?.svg;
   const badgeProps = chain ? getBadgeProps(chain) : null;
@@ -58,6 +72,176 @@ export const ChainDetailDialog = ({
   } = badgeProps || {};
 
   const upgradeFound = chain?.upgrade_found;
+
+  const getUserData = useCallback(async () => {
+    if (!userAddress) {
+      console.warn("getUserData called without userAddress.");
+      return null; // Or handle as appropriate
+    }
+    try {
+      const response = await fetch(`/api/users/${userAddress}`);
+      if (!response.ok) {
+        // Handle HTTP errors (e.g., 404 Not Found, 500 Server Error)
+        console.error(`API Error: ${response.status} ${response.statusText}`);
+        // Attempt to read error message from response body if available
+        const errorBody = await response.text(); // Use text() first to avoid JSON parse errors
+        throw new Error(
+          `Failed to fetch user data: ${response.status}. ${errorBody}`
+        );
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      // Depending on how you want to handle errors upstream, you might re-throw or return null
+      throw error; // Re-throwing for now
+    }
+  }, [userAddress]);
+
+  const fetchWebhooks = useCallback(async () => {
+    if (!isOpen || !userData?.id || !chainNetwork) {
+      setWebhooks([]);
+      return;
+    }
+    setIsLoadingWebhooks(true);
+    try {
+      const response = await fetch(
+        `/api/webhooks?userId=${encodeURIComponent(
+          userData.id
+        )}&chainId=${encodeURIComponent(chainNetwork)}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch webhooks");
+      }
+      const data: Webhook[] = await response.json();
+      setWebhooks(data);
+    } catch (error) {
+      console.error("Error fetching webhooks:", error);
+      toast.error("Failed to load webhooks.");
+      setWebhooks([]);
+    } finally {
+      setIsLoadingWebhooks(false);
+    }
+  }, [isOpen, userData?.id, chainNetwork]);
+
+  useEffect(() => {
+    fetchWebhooks();
+  }, [fetchWebhooks]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log("Fetching user data for:", userAddress);
+        const data = await getUserData();
+        console.log("User data fetched:", data);
+        setUserData(data);
+      } catch (error) {
+        console.error("Failed to fetch user data in useEffect:", error);
+        // TODO: Handle error state in the UI
+      }
+    };
+    if (userAddress) {
+      // Only fetch if userAddress is available
+      fetchData();
+    }
+  }, [getUserData, userAddress]); // Depend on userAddress instead of getUserData
+
+  const handleAddWebhook = async () => {
+    // Check if the webhook limit has been reached
+    if (webhooks.length >= 4) {
+      toast.warning("Maximum of 4 webhooks reached.");
+      return;
+    }
+
+    // Ensure userData.id exists before proceeding
+    if (!newWebhookUrl || !newWebhookLabel || !userData?.id || !chainNetwork) {
+      toast.warning(
+        "Please select a type, enter a valid webhook URL, and ensure user data is loaded."
+      );
+      return;
+    }
+
+    try {
+      new URL(newWebhookUrl);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_err) {
+      toast.error("Invalid URL format.");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/webhooks/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userData.id,
+          chainId: chainNetwork,
+          url: newWebhookUrl,
+          label: newWebhookLabel,
+        }),
+      });
+
+      if (!response.ok) {
+        let errorMessage = "Failed to add webhook";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (_parseError) {
+          errorMessage = `${response.status}: ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
+      }
+
+      toast.success("Webhook added successfully!");
+      setNewWebhookUrl("");
+      setNewWebhookLabel("");
+      fetchWebhooks();
+    } catch (error: unknown) {
+      console.error("Error adding webhook:", error);
+      if (error instanceof Error) {
+        toast.error(`Failed to add webhook: ${error.message}`);
+      } else {
+        toast.error("An unknown error occurred while adding the webhook.");
+      }
+    }
+  };
+
+  const handleRemoveWebhook = async (webhookId: string) => {
+    try {
+      const response = await fetch(`/api/webhooks`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: webhookId }),
+      });
+
+      if (!response.ok) {
+        let errorMessage = "Failed to remove webhook";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (_parseError) {
+          errorMessage = `${response.status}: ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
+      }
+
+      toast.success("Webhook removed successfully!");
+      fetchWebhooks();
+    } catch (error: unknown) {
+      console.error("Error removing webhook:", error);
+      if (error instanceof Error) {
+        toast.error(`Failed to remove webhook: ${error.message}`);
+      } else {
+        toast.error("An unknown error occurred while removing the webhook.");
+      }
+    }
+  };
 
   const StatusBadge = () => (
     <Badge variant={statusBadgeVariant} className="flex items-center gap-1">
@@ -80,79 +264,6 @@ export const ChainDetailDialog = ({
     }
   };
 
-  const handleAddWebhook = async () => {
-    const trimmedUrl = newWebhookUrl.trim();
-    const trimmedLabel = newWebhookLabel.trim();
-    const walletAddress = account?.bech32Address;
-
-    if (!trimmedLabel) {
-      toast.error("Please select a webhook type (Discord or Slack).");
-      return;
-    }
-    if (!trimmedUrl) {
-      toast.error("Please enter a webhook URL.");
-      return;
-    }
-    if (!trimmedUrl.startsWith("https://")) {
-      toast.error("Webhook URL must start with https://");
-      return;
-    }
-    if (!walletAddress) {
-      toast.error("Wallet address not found. Please connect your wallet.");
-      return;
-    }
-
-    const payload = {
-      userId: walletAddress,
-      chainId: chain?.network,
-      label: trimmedLabel,
-      url: trimmedUrl,
-    };
-
-    console.log("Sending payload:", payload);
-
-    try {
-      const response = await fetch(`/api/chain-links`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        toast.success("Webhook added successfully!");
-        setNewWebhookUrl("");
-        setNewWebhookLabel("");
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("API Error Response:", {
-          status: response.status,
-          statusText: response.statusText,
-          body: errorData,
-        });
-        toast.error(
-          `Failed to add webhook: ${
-            errorData.message || response.statusText || "Unknown error"
-          } (Status: ${response.status})`
-        );
-      }
-    } catch (error: unknown) {
-      console.error("Fetch Error:", error);
-      if (error instanceof Error) {
-        toast.error(`Error adding webhook: ${error.message}`);
-      } else {
-        toast.error("An unexpected error occurred while adding the webhook.");
-      }
-    }
-  };
-
-  const handleRemoveWebhook = (urlToRemove: string) => {
-    setWebhooks((prev) =>
-      prev.filter((webhook) => webhook.url !== urlToRemove)
-    );
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
@@ -168,7 +279,7 @@ export const ChainDetailDialog = ({
                 >
                   <Image
                     src={logoUrl}
-                    alt={`${chain.network} Logo`}
+                    alt={`${chain?.network} Logo`}
                     width={28}
                     height={28}
                     className="rounded-full flex-shrink-0"
@@ -177,7 +288,7 @@ export const ChainDetailDialog = ({
               ) : (
                 <Image
                   src={logoUrl}
-                  alt={`${chain.network} Logo`}
+                  alt={`${chain?.network} Logo`}
                   width={28}
                   height={28}
                   className="rounded-full flex-shrink-0"
@@ -322,73 +433,101 @@ export const ChainDetailDialog = ({
             </div>
           </TooltipProvider>
           <hr className="my-3" />
-          <h3 className="text-sm font-semibold mb-2">Webhooks</h3>
-          <div className="space-y-3">
-            <div className="flex flex-col sm:flex-row gap-2 items-center">
-              <Select
-                value={newWebhookLabel}
-                onValueChange={setNewWebhookLabel}
-              >
-                <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Select Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="discord">Discord</SelectItem>
-                  <SelectItem value="slack">Slack</SelectItem>
-                </SelectContent>
-              </Select>
-              <Input
-                type="url"
-                placeholder="Enter webhook URL (https://...)"
-                value={newWebhookUrl}
-                onChange={(e) => setNewWebhookUrl(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleAddWebhook();
-                }}
-                className="flex-grow"
-              />
-              <Button
-                size="icon"
-                onClick={handleAddWebhook}
-                aria-label="Add webhook"
-                className="flex-shrink-0"
-              >
-                <PlusIcon className="h-4 w-4" />
-              </Button>
-            </div>
-            {webhooks.length > 0 ? (
-              <ul className="space-y-2 pt-2 max-h-32 overflow-y-auto">
-                {webhooks.map((webhook) => (
-                  <li
-                    key={webhook.url}
-                    className="flex items-center justify-between gap-2 text-sm border rounded-md px-3 py-1.5 bg-muted/30"
+          {userAddress ? (
+            <>
+              <h3 className="text-sm font-semibold mb-2">Webhooks</h3>
+              <div className="space-y-3">
+                <div className="flex flex-col sm:flex-row gap-2 items-center">
+                  <Select
+                    value={newWebhookLabel}
+                    onValueChange={setNewWebhookLabel}
                   >
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <span className="font-medium capitalize">
-                        {webhook.label}
-                      </span>
-                      <span className="text-xs text-muted-foreground truncate">
-                        {webhook.url}
-                      </span>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7 text-muted-foreground hover:text-destructive flex-shrink-0"
-                      onClick={() => handleRemoveWebhook(webhook.url)}
-                      aria-label={`Remove webhook ${webhook.label}`}
-                    >
-                      <TrashIcon className="h-4 w-4" />
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-xs text-muted-foreground italic pt-1">
-                No webhooks added yet.
-              </p>
-            )}
-          </div>
+                    <SelectTrigger className="w-full sm:w-[180px]">
+                      <SelectValue placeholder="Select Type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="discord">
+                        <DiscordIcon /> Discord
+                      </SelectItem>
+                      <SelectItem value="slack">
+                        <SlackIcon />
+                        Slack
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    type="url"
+                    placeholder="Enter webhook URL (https://...)"
+                    value={newWebhookUrl}
+                    onChange={(e) => setNewWebhookUrl(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleAddWebhook();
+                    }}
+                    className="flex-grow"
+                    disabled={!userAddress || !chainNetwork}
+                  />
+                  <Button
+                    size="icon"
+                    onClick={handleAddWebhook}
+                    aria-label="Add webhook"
+                    className="flex-shrink-0"
+                    disabled={
+                      !newWebhookUrl ||
+                      !newWebhookLabel ||
+                      !userAddress ||
+                      !chainNetwork
+                    }
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                  </Button>
+                </div>
+                {isLoadingWebhooks ? (
+                  <p className="text-xs text-muted-foreground italic pt-1">
+                    Loading webhooks...
+                  </p>
+                ) : webhooks.length > 0 ? (
+                  <ul className="space-y-2 pt-2 max-h-32 overflow-y-auto">
+                    {webhooks.map((webhook) => (
+                      <li
+                        key={webhook.id}
+                        className="flex items-center justify-between gap-2 text-sm border rounded-md px-3 py-1.5 bg-muted/30"
+                      >
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <span className="font-medium capitalize">
+                            {webhook.label === "Discord" ? (
+                              <DiscordIcon size={16} />
+                            ) : (
+                              <SlackIcon size={16} />
+                            )}
+                          </span>
+                          <span className="text-xs text-muted-foreground truncate">
+                            {webhook.url}
+                          </span>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-muted-foreground hover:text-destructive flex-shrink-0"
+                          onClick={() => handleRemoveWebhook(webhook.id)}
+                          aria-label={`Remove webhook ${webhook.label}`}
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-xs text-muted-foreground italic pt-1">
+                    No webhooks added for this chain yet.
+                  </p>
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="text-sm text-muted-foreground italic text-center py-4">
+              Connect your wallet to manage webhooks.
+            </p>
+          )}
         </div>
       </DialogContent>
     </Dialog>
