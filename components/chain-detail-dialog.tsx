@@ -483,7 +483,7 @@ export const ChainDetailDialog = ({
                       >
                         <div className="flex items-center gap-2 flex-1 min-w-0">
                           <span className="font-medium capitalize">
-                            {webhook.label === "Discord" ? (
+                            {webhook.label === "discord" ? (
                               <DiscordIcon size={16} />
                             ) : (
                               <SlackIcon size={16} />
