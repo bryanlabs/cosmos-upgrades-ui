@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getWebHooksByUserAndChain,
   addWebHook,
-  updateWebHook,
   removeWebHook,
 } from "@/lib/prisma";
 
@@ -31,33 +30,23 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const { userId, chainId, label, url } = await req.json();
+  const { userId, chainId, label, url, notificationType, notifyBeforeUpgrade } =
+    await req.json();
 
-  if (!userId || !chainId || !label || !url) {
+  if (!userId || !chainId || !label || !url || !notificationType) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
 
   try {
-    const webhook = await addWebHook(userId, chainId, label, url);
-    return NextResponse.json(webhook);
-  } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 500 }
+    const webhook = await addWebHook(
+      userId,
+      chainId,
+      label,
+      url,
+      notificationType,
+      notifyBeforeUpgrade
     );
-  }
-}
-
-export async function PUT(req: NextRequest) {
-  const { id, label, url } = await req.json();
-
-  if (!id || (!label && !url)) {
-    return NextResponse.json({ error: "Missing update data" }, { status: 400 });
-  }
-
-  try {
-    const updated = await updateWebHook(id, { label, url });
-    return NextResponse.json(updated);
+    return NextResponse.json(webhook);
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },
