@@ -255,7 +255,7 @@ export const ChainDetailDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             {logoUrl ? (
