@@ -5,17 +5,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ChainUpgradeStatus } from "@/types/chain";
-import { formatDistanceToNowStrict } from "date-fns";
 import { Badge } from "./ui/badge";
 import { getBadgeProps } from "@/utils/badge";
 import Image from "next/image";
-import { LinkIcon, PlusIcon, TrashIcon } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { PlusIcon, TrashIcon } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
@@ -46,6 +39,8 @@ export const ChainDetailDialog = ({
   const [isLoadingWebhooks, setIsLoadingWebhooks] = useState(false);
   const [newWebhookUrl, setNewWebhookUrl] = useState("");
   const [newWebhookLabel, setNewWebhookLabel] = useState("");
+  const [newNotificationType, setNewNotificationType] = useState("");
+  const [newNotifyBeforeUpgrade, setNewNotifyBeforeUpgrade] = useState("");
   const { data: account } = useAccount();
   const [userData, setUserData] = useState<User | null>(null);
   const userAddress = account?.bech32Address;
@@ -59,8 +54,6 @@ export const ChainDetailDialog = ({
     Icon: StatusBadgeIcon,
     link: badgeLink,
   } = badgeProps || {};
-
-  const upgradeFound = chain?.upgrade_found;
 
   const getUserData = useCallback(async () => {
     if (!userAddress) {
@@ -169,6 +162,8 @@ export const ChainDetailDialog = ({
           chainId: chainNetwork,
           url: newWebhookUrl,
           label: newWebhookLabel,
+          notificationType: newNotificationType,
+          notifyBeforeUpgrade: newNotifyBeforeUpgrade,
         }),
       });
 
@@ -187,6 +182,8 @@ export const ChainDetailDialog = ({
       toast.success("Webhook added successfully!");
       setNewWebhookUrl("");
       setNewWebhookLabel("");
+      setNewNotificationType("");
+      setNewNotifyBeforeUpgrade("");
       fetchWebhooks();
     } catch (error: unknown) {
       console.error("Error adding webhook:", error);
@@ -238,20 +235,6 @@ export const ChainDetailDialog = ({
       {statusBadgeText}
     </Badge>
   );
-
-  const formatTimestamp = (timestamp: string | null | undefined): string => {
-    if (!timestamp) return "N/A";
-    try {
-      const date = new Date(timestamp);
-      if (isNaN(date.getTime())) {
-        return "Invalid Date";
-      }
-      return formatDistanceToNowStrict(date, { addSuffix: true });
-    } catch (e) {
-      console.error("Error formatting date:", e);
-      return "Invalid Date";
-    }
-  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -311,120 +294,11 @@ export const ChainDetailDialog = ({
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4 pt-4">
-          <div className="flex flex-wrap justify-between gap-4">
-            <div>
-              <p className="text-sm text-muted-foreground">Latest Block</p>
-              <p className="text-sm font-mono">
-                {chain?.latest_block_height?.toLocaleString() ?? "-"}
-              </p>
-            </div>
-            {upgradeFound && (
-              <>
-                <div>
-                  <p className="text-sm text-muted-foreground">Upgrade Name</p>
-                  <p className="text-sm font-mono">
-                    {chain.upgrade_name || "N/A"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Chain Version</p>
-                  <p className="text-sm font-mono">{chain.version || "N/A"}</p>
-                </div>
-                <div className="text-left">
-                  <p className="text-sm text-muted-foreground">
-                    Upgrade Height
-                  </p>
-                  <p className="text-sm font-mono">
-                    {chain.upgrade_block_height?.toLocaleString() ?? "N/A"}
-                  </p>
-                </div>
-              </>
-            )}
-          </div>
-          {upgradeFound && chain.estimated_upgrade_time && (
-            <p className="text-xs text-muted-foreground">
-              Est. Upgrade: {formatTimestamp(chain.estimated_upgrade_time)}
-            </p>
-          )}
-          <hr className="my-3" />
-          <TooltipProvider delayDuration={100}>
-            <div className="flex flex-col gap-2 text-sm">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  {chain?.rpc_server ? (
-                    <a
-                      href={chain?.rpc_server}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center w-full min-w-0 gap-1.5 border rounded-md px-2 py-1 text-xs text-muted-foreground hover:bg-muted/50 transition-colors overflow-hidden"
-                    >
-                      <LinkIcon className="h-3 w-3 flex-shrink-0" />
-                      <span className="truncate">{chain?.rpc_server}</span>
-                    </a>
-                  ) : (
-                    <span className="text-xs text-muted-foreground italic">
-                      RPC N/A
-                    </span>
-                  )}
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>RPC Address</p>
-                </TooltipContent>
-              </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  {chain?.rest_server ? (
-                    <a
-                      href={chain?.rest_server}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center w-full min-w-0 gap-1.5 border rounded-md px-2 py-1 text-xs text-muted-foreground hover:bg-muted/50 transition-colors overflow-hidden"
-                    >
-                      <LinkIcon className="h-3 w-3 flex-shrink-0" />
-                      <span className="truncate">{chain?.rest_server}</span>
-                    </a>
-                  ) : (
-                    <span className="text-xs text-muted-foreground italic">
-                      Rest N/A
-                    </span>
-                  )}
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Rest Address</p>
-                </TooltipContent>
-              </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  {chain?.explorer_url?.url ? (
-                    <a
-                      href={chain?.explorer_url.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center w-full min-w-0 gap-1.5 border rounded-md px-2 py-1 text-xs text-muted-foreground hover:bg-muted/50 transition-colors overflow-hidden"
-                    >
-                      <LinkIcon className="h-3 w-3 flex-shrink-0" />
-                      <span className="truncate">
-                        {chain?.explorer_url.url}
-                      </span>
-                    </a>
-                  ) : (
-                    <span className="text-xs text-muted-foreground italic">
-                      Explorer N/A
-                    </span>
-                  )}
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Block Explorer</p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
-          </TooltipProvider>
-          <hr className="my-3" />
           {userAddress ? (
             <>
-              <h3 className="text-sm font-semibold mb-2">Webhooks</h3>
+              <h3 className="text-sm font-semibold mb-2">
+                Webhooks Notifications
+              </h3>
               <div className="space-y-3">
                 <div className="flex flex-col sm:flex-row gap-2 items-center">
                   <Select
@@ -455,21 +329,57 @@ export const ChainDetailDialog = ({
                     className="flex-grow"
                     disabled={!userAddress || !chainNetwork}
                   />
-                  <Button
-                    size="icon"
-                    onClick={handleAddWebhook}
-                    aria-label="Add webhook"
-                    className="flex-shrink-0"
-                    disabled={
-                      !newWebhookUrl ||
-                      !newWebhookLabel ||
-                      !userAddress ||
-                      !chainNetwork
-                    }
-                  >
-                    <PlusIcon className="h-4 w-4" />
-                  </Button>
                 </div>
+                <Select
+                  value={newNotificationType}
+                  onValueChange={setNewNotificationType}
+                >
+                  <SelectTrigger className="w-full ">
+                    <SelectValue placeholder="Choose when to be notified." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="upgrade-proposed">
+                      Upgrade Proposed
+                    </SelectItem>
+                    <SelectItem value="upgrade-planned">
+                      Upgrade Planned
+                    </SelectItem>
+                    <SelectItem value="before-upgrade">
+                      Notify Before Upgrade
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                {newNotificationType === "before-upgrade" && (
+                  <Select
+                    value={newNotifyBeforeUpgrade}
+                    onValueChange={setNewNotifyBeforeUpgrade}
+                  >
+                    <SelectTrigger className="w-full ">
+                      <SelectValue placeholder="Choose how long before the upgrade to notify." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="15m">15 Minutes</SelectItem>
+                      <SelectItem value="60m">60 Minutes</SelectItem>
+                      <SelectItem value="8h">8 Hours</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+                <Button
+                  size="icon"
+                  onClick={handleAddWebhook}
+                  aria-label="Add webhook"
+                  className="w-full"
+                  disabled={
+                    !newWebhookUrl ||
+                    !newWebhookLabel ||
+                    !userAddress ||
+                    !chainNetwork ||
+                    !newNotificationType
+                  }
+                >
+                  Add Webhook
+                  <PlusIcon className="h-4 w-4" />
+                </Button>
                 {isLoadingWebhooks ? (
                   <p className="text-xs text-muted-foreground italic pt-1">
                     Loading webhooks...
