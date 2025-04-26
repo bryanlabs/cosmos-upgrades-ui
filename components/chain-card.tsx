@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LinkIcon, Star } from "lucide-react";
+import { LinkIcon, Star, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import type React from "react";
@@ -21,9 +21,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-
-const formatNumber = (num: number | null | undefined) =>
-  num ? num.toLocaleString() : "-";
 
 interface ChainCardProps {
   data: ChainUpgradeStatus;
@@ -42,6 +39,10 @@ export const ChainCard = ({
 }: ChainCardProps) => {
   const [isClient, setIsClient] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<string | null>(null);
+  const [copiedBlock, setCopiedBlock] = useState(false);
+  const [copiedUpgrade, setCopiedUpgrade] = useState(false);
+  const [blockTooltipOpen, setBlockTooltipOpen] = useState(false);
+  const [upgradeTooltipOpen, setUpgradeTooltipOpen] = useState(false);
 
   const chainId = data.network;
 
@@ -74,6 +75,51 @@ export const ChainCard = ({
 
     return () => clearInterval(intervalId);
   }, [isClient, data.estimated_upgrade_time, data.upgrade_found]);
+
+  const handleCopy = (
+    text: string | number | null | undefined,
+    type: "block" | "upgrade"
+  ) => {
+    if (!text) return;
+    navigator.clipboard
+      .writeText(text.toString())
+      .then(() => {
+        if (type === "block") {
+          setCopiedBlock(true);
+          setBlockTooltipOpen(true);
+          setTimeout(() => {
+            setCopiedBlock(false);
+            setBlockTooltipOpen(false);
+          }, 1500);
+        } else {
+          setCopiedUpgrade(true);
+          setUpgradeTooltipOpen(true);
+          setTimeout(() => {
+            setCopiedUpgrade(false);
+            setUpgradeTooltipOpen(false);
+          }, 1500);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+        if (type === "block") setBlockTooltipOpen(false);
+        else setUpgradeTooltipOpen(false);
+      });
+  };
+
+  const handleBlockTooltipOpenChange = (open: boolean) => {
+    if (!open && copiedBlock) {
+      return;
+    }
+    setBlockTooltipOpen(open);
+  };
+
+  const handleUpgradeTooltipOpenChange = (open: boolean) => {
+    if (!open && copiedUpgrade) {
+      return;
+    }
+    setUpgradeTooltipOpen(open);
+  };
 
   const logoUrl = data.logo_urls?.png || data.logo_urls?.svg;
   const badgeProps = getBadgeProps(data);
@@ -207,17 +253,85 @@ export const ChainCard = ({
         <div className="space-y-2 flex flex-wrap justify-between">
           <div>
             <p className="text-sm text-muted-foreground">Latest Block</p>
-            <p className="text-sm font-mono">
-              {formatNumber(data.latest_block_height)}
-            </p>
+            <div className="flex items-center gap-1">
+              {data.latest_block_height ? (
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip
+                    open={blockTooltipOpen}
+                    onOpenChange={handleBlockTooltipOpenChange}
+                  >
+                    <TooltipTrigger asChild>
+                      <span
+                        className="flex items-center gap-1 cursor-pointer group"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCopy(data.latest_block_height, "block");
+                        }}
+                      >
+                        <p className="text-sm font-mono">
+                          {data.latest_block_height}
+                        </p>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-4 w-4 text-muted-foreground group-hover:text-foreground"
+                          aria-label="Copy block height"
+                        >
+                          <Copy className="h-3 w-3" />
+                        </Button>
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="text-xs px-2 py-1">
+                      {copiedBlock ? "Copied!" : "Copy block height"}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ) : (
+                <p className="text-sm font-mono">-</p>
+              )}
+            </div>
           </div>
 
           {upgradeFound && (
             <div>
               <p className="text-sm text-muted-foreground">Upgrade Height</p>
-              <p className="text-sm font-mono">
-                {formatNumber(data.upgrade_block_height)}
-              </p>
+              <div className="flex items-center gap-1">
+                {data.upgrade_block_height ? (
+                  <TooltipProvider delayDuration={100}>
+                    <Tooltip
+                      open={upgradeTooltipOpen}
+                      onOpenChange={handleUpgradeTooltipOpenChange}
+                    >
+                      <TooltipTrigger asChild>
+                        <span
+                          className="flex items-center gap-1 cursor-pointer group"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCopy(data.upgrade_block_height, "upgrade");
+                          }}
+                        >
+                          <p className="text-sm font-mono">
+                            {data.upgrade_block_height}
+                          </p>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-4 w-4 text-muted-foreground group-hover:text-foreground"
+                            aria-label="Copy upgrade height"
+                          >
+                            <Copy className="h-3 w-3" />
+                          </Button>
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="text-xs px-2 py-1">
+                        {copiedUpgrade ? "Copied!" : "Copy upgrade height"}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ) : (
+                  <p className="text-sm font-mono">-</p>
+                )}
+              </div>
             </div>
           )}
         </div>
