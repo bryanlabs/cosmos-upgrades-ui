@@ -11,7 +11,7 @@ import { LinkIcon, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import type React from "react";
-import { formatDateTime } from "@/utils/date";
+import { formatTimeRemaining } from "@/utils/date";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { getBadgeProps } from "@/utils/badge";
@@ -41,12 +41,39 @@ export const ChainCard = ({
   onToggleFavorite,
 }: ChainCardProps) => {
   const [isClient, setIsClient] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState<string | null>(null);
 
   const chainId = data.network;
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (!isClient || !data.estimated_upgrade_time || !data.upgrade_found) {
+      setTimeRemaining(null);
+      return;
+    }
+
+    const targetDate = new Date(data.estimated_upgrade_time);
+
+    const updateCountdown = () => {
+      const now = new Date();
+      const difference = targetDate.getTime() - now.getTime();
+
+      if (difference <= 0) {
+        setTimeRemaining("Upgrade time passed");
+        clearInterval(intervalId);
+      } else {
+        setTimeRemaining(formatTimeRemaining(difference));
+      }
+    };
+
+    updateCountdown();
+    const intervalId = setInterval(updateCountdown, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [isClient, data.estimated_upgrade_time, data.upgrade_found]);
 
   const logoUrl = data.logo_urls?.png || data.logo_urls?.svg;
   const badgeProps = getBadgeProps(data);
@@ -196,9 +223,9 @@ export const ChainCard = ({
         </div>
 
         {upgradeFound && (
-          <p className="text-xs text-muted-foreground pt-1">
-            {isClient
-              ? `Est. Upgrade: ${formatDateTime(data.estimated_upgrade_time)}`
+          <p className="text-xs font-medium text-muted-foreground pt-1">
+            {timeRemaining
+              ? `Est. Upgrade in: ${timeRemaining}`
               : "Calculating..."}
           </p>
         )}
