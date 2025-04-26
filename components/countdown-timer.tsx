@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { differenceInSeconds, intervalToDuration } from "date-fns";
+import { cn } from "@/lib/utils"; // Import cn for conditional classes
 
 interface CountdownTimerProps {
   targetDate: string | null | undefined;
@@ -63,10 +64,12 @@ export const CountdownTimer = ({ targetDate }: CountdownTimerProps) => {
     </>
   );
 
+  const isLessThanOneHour = timeLeft.days === 0 && timeLeft.hours === 0;
+
   if (timeLeft.passed) {
     // Render 0s in the new horizontal style
     return (
-      <div className="flex items-baseline"> {/* Use items-baseline for alignment */}
+      <div className="flex items-baseline">
         {renderSegment(0, "d")}
         {renderSegment(0, "h")}
         {renderSegment(0, "m")}
@@ -75,9 +78,14 @@ export const CountdownTimer = ({ targetDate }: CountdownTimerProps) => {
     );
   }
 
-  // Render the time units horizontally
+  // Render the time units horizontally, add breathing animation if < 1 hour
   return (
-    <div className="flex items-baseline"> {/* Use items-baseline for alignment */}
+    <div
+      className={cn(
+        "flex items-baseline",
+        isLessThanOneHour && "animate-breathing" // Apply pulse animation conditionally
+      )}
+    >
       {timeLeft.days > 0 && renderSegment(timeLeft.days, "d")}
       {renderSegment(timeLeft.hours, "h")}
       {renderSegment(timeLeft.minutes, "m")}

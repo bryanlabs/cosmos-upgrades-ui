@@ -11,8 +11,7 @@ import { LinkIcon, Star, Rocket, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import type React from "react";
-import { formatDateTime } from "@/utils/date";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { getBadgeProps } from "@/utils/badge";
 import {
@@ -23,6 +22,7 @@ import {
 } from "./ui/tooltip";
 import { ChainDetailDialog } from "./chain-detail-dialog";
 import { CountdownTimer } from "./countdown-timer";
+import { cn } from "@/lib/utils";
 
 const formatNumber = (num: number | null | undefined) =>
   num ? num.toString() : "-";
@@ -62,6 +62,8 @@ export const ChainCard = ({
   const [cosmovisorInfo, setCosmovisorInfo] = useState<ParsedPlanInfo | null>(
     null
   );
+  const [isFlashing, setIsFlashing] = useState(false);
+  const previousDataRef = useRef<ChainUpgradeStatus>();
 
   const chainId = data.network;
 
@@ -116,6 +118,25 @@ export const ChainCard = ({
     }
   }, [data.upgrade_found, data.source, data.upgrade_plan]);
 
+  useEffect(() => {
+    const previousSource = previousDataRef.current?.source;
+    const currentSource = data.source;
+
+    if (
+      previousSource !== currentSource &&
+      currentSource === "current_upgrade_plan"
+    ) {
+      setIsFlashing(true);
+      const timer = setTimeout(() => {
+        setIsFlashing(false);
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+
+    previousDataRef.current = data;
+  }, [data]);
+
   const logoUrl = data.logo_urls?.png || data.logo_urls?.svg;
   const badgeProps = getBadgeProps(data);
   const {
@@ -150,7 +171,10 @@ export const ChainCard = ({
   return (
     <>
       <Card
-        className="w-full shadow-sm hover:shadow-lg transition-all duration-200 flex flex-col h-full rounded-xl bg-gradient-to-br from-card to-card/95 hover:-translate-y-0.5"
+        className={cn(
+          "w-full shadow-sm hover:shadow-lg transition-all duration-200 flex flex-col h-full rounded-xl bg-gradient-to-br from-card to-card/95 hover:-translate-y-0.5",
+          isFlashing && "animate-flash"
+        )}
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 gap-2">
           <div

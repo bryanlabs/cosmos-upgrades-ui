@@ -120,3 +120,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Animations */
+@layer utilities {
+  @keyframes breathing {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.03); opacity: 0.9; }
+  }
+  .animate-breathing {
+    animation: breathing 2s ease-in-out infinite;
+  }
+
+  @keyframes flash {
+    0%, 100% { background-color: hsl(var(--card)); } /* Use card background variable */
+    50% { background-color: hsl(var(--success) / 0.3); } /* Flash with success color (adjust as needed) */
+  }
+  .animate-flash {
+    animation: flash 0.5s ease-out;
+  }
+}
