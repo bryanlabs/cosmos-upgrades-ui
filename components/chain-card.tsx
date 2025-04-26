@@ -79,9 +79,7 @@ export const ChainCard = ({
     setIsDialogOpen(true);
   };
 
-  const handleHeightClick = (event: React.MouseEvent<HTMLSpanElement>) => {
-    event.stopPropagation();
-  };
+  const explorerBaseUrl = data.explorer_url?.url;
 
   return (
     <>
@@ -195,21 +193,41 @@ export const ChainCard = ({
           <div className="space-y-2 flex flex-wrap justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Latest Block</p>
-              <span onClick={handleHeightClick} className="inline-block">
+              {explorerBaseUrl && data.latest_block_height ? (
+                <a
+                  href={`${explorerBaseUrl}/block/${data.latest_block_height}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="inline-block text-sm font-mono hover:underline text-blue-600 dark:text-blue-400"
+                >
+                  {formatNumber(data.latest_block_height)}
+                </a>
+              ) : (
                 <p className="text-sm font-mono">
                   {formatNumber(data.latest_block_height)}
                 </p>
-              </span>
+              )}
             </div>
 
             {upgradeFound && (
               <div>
                 <p className="text-sm text-muted-foreground">Upgrade Height</p>
-                <span onClick={handleHeightClick} className="inline-block">
+                {explorerBaseUrl && data.upgrade_block_height ? (
+                  <a
+                    href={`${explorerBaseUrl}/block/${data.upgrade_block_height}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-block text-sm font-mono hover:underline text-blue-600 dark:text-blue-400"
+                  >
+                    {formatNumber(data.upgrade_block_height)}
+                  </a>
+                ) : (
                   <p className="text-sm font-mono">
                     {formatNumber(data.upgrade_block_height)}
                   </p>
-                </span>
+                )}
               </div>
             )}
           </div>

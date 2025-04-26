@@ -17,6 +17,9 @@ import { useAccount } from "graz";
 import { toast } from "sonner";
 import { ChainDetailDialog } from "@/components/chain-detail-dialog";
 
+// Define the new filter types
+type StatusFilterType = "all" | "upgrade-found" | "proposed" | "plan";
+
 export const ChainSection = () => {
   const {
     data: allChains,
@@ -25,10 +28,7 @@ export const ChainSection = () => {
   } = useAllChainData();
   const { isConnected, data: account } = useAccount();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<"all" | "upgraded">("all");
-  const [networkTypeFilter, setNetworkTypeFilter] = useState<
-    "all" | "mainnet" | "testnet"
-  >("all");
+  const [filterType, setFilterType] = useState<StatusFilterType>("all");
   const [favoriteFilter, setFavoriteFilter] = useState<"all" | "favorites">(
     "all"
   );
@@ -149,12 +149,27 @@ export const ChainSection = () => {
           ? chain.network.toLowerCase().includes(searchTerm.toLowerCase())
           : true
       )
-      .filter((chain) =>
-        filterType === "upgraded" ? chain.upgrade_found : true
-      )
-      .filter((chain) =>
-        networkTypeFilter === "all" ? true : chain.type === networkTypeFilter
-      )
+      // Updated filter logic based on new filterType and specific source strings
+      .filter((chain) => {
+        switch (filterType) {
+          case "upgrade-found":
+            // Correct: Show if upgrade_found is true
+            return chain.upgrade_found;
+          case "proposed":
+            // Correct: Check if upgrade is found AND source is 'active_upgrade_proposals'
+            return (
+              chain.upgrade_found && chain.source === "active_upgrade_proposals"
+            );
+          case "plan":
+            // Correct: Check if upgrade is found AND source is 'current_upgrade_plan'
+            return (
+              chain.upgrade_found && chain.source === "current_upgrade_plan"
+            );
+          case "all":
+          default:
+            return true; // Show all chains
+        }
+      })
       .filter((chain) =>
         favoriteFilter === "favorites"
           ? isConnected && favoritesSet.has(chain.network)
@@ -164,7 +179,6 @@ export const ChainSection = () => {
     allChains,
     searchTerm,
     filterType,
-    networkTypeFilter,
     favoritesSet,
     favoriteFilter,
     isConnected,
@@ -220,35 +234,23 @@ export const ChainSection = () => {
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-start sm:justify-between items-center">
         <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto">
+          {/* Updated Status Filter Select */}
           <Select
             value={filterType}
-            onValueChange={(value: "all" | "upgraded") => setFilterType(value)}
+            onValueChange={(value: StatusFilterType) => setFilterType(value)}
             disabled={isLoadingChains}
           >
-            <SelectTrigger className="w-full sm:w-[120px]">
-              <SelectValue placeholder="Status" />
+            <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectValue placeholder="Filter by Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="upgraded">Upgraded</SelectItem>
+              <SelectItem value="all">Show All</SelectItem>
+              <SelectItem value="upgrade-found">Upgrade Found</SelectItem>
+              <SelectItem value="proposed">Proposed Upgrade</SelectItem>
+              <SelectItem value="plan">On-Chain Plan</SelectItem>
             </SelectContent>
           </Select>
-          <Select
-            value={networkTypeFilter}
-            onValueChange={(value: "all" | "mainnet" | "testnet") =>
-              setNetworkTypeFilter(value)
-            }
-            disabled={isLoadingChains}
-          >
-            <SelectTrigger className="w-full sm:w-[120px]">
-              <SelectValue placeholder="Network" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Networks</SelectItem>
-              <SelectItem value="mainnet">Mainnet</SelectItem>
-              <SelectItem value="testnet">Testnet</SelectItem>
-            </SelectContent>
-          </Select>
+          {/* Keep Favorites Filter Select */}
           {isConnected && (
             <Select
               value={favoriteFilter}
@@ -257,16 +259,17 @@ export const ChainSection = () => {
               }
               disabled={isLoadingChains || isLoadingFavorites}
             >
-              <SelectTrigger className="w-full sm:w-[120px]">
-                <SelectValue placeholder="Favorites" />
+              <SelectTrigger className="w-full sm:w-[140px]">
+                <SelectValue placeholder="Filter Favorites" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Chains</SelectItem>
-                <SelectItem value="favorites">Favorites</SelectItem>
+                <SelectItem value="favorites">My Favorites</SelectItem>
               </SelectContent>
             </Select>
           )}
         </div>
+        {/* Keep Search Input */}
         <div className="w-full sm:w-auto sm:ml-auto">
           <Input
             type="search"
