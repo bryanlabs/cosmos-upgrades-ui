@@ -32,6 +32,9 @@ export const ChainSection = () => {
   const [favoriteFilter, setFavoriteFilter] = useState<"all" | "favorites">(
     "all"
   );
+  const [sortBy, setSortBy] = useState<"default" | "time_asc" | "alpha_asc">(
+    "default"
+  );
   const [favoriteChains, setFavoriteChains] = useState<string[]>([]);
   const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
   const [updatingFavoriteChainId, setUpdatingFavoriteChainId] = useState<
@@ -142,8 +145,8 @@ export const ChainSection = () => {
     [isConnected, account?.bech32Address, favoritesSet]
   );
 
-  const filteredChains = useMemo(() => {
-    return (allChains ?? [])
+  const filteredAndSortedChains = useMemo(() => {
+    const filtered = (allChains ?? [])
       .filter((chain) =>
         searchTerm
           ? chain.network.toLowerCase().includes(searchTerm.toLowerCase())
@@ -160,6 +163,36 @@ export const ChainSection = () => {
           ? isConnected && favoritesSet.has(chain.network)
           : true
       );
+
+    // Apply sorting based on sortBy state
+    if (sortBy === "alpha_asc") {
+      return filtered.sort((a, b) => a.network.localeCompare(b.network));
+    }
+
+    if (sortBy === "time_asc") {
+      return filtered.sort((a, b) => {
+        const timeA = a.estimated_upgrade_time
+          ? new Date(a.estimated_upgrade_time).getTime()
+          : Infinity;
+        const timeB = b.estimated_upgrade_time
+          ? new Date(b.estimated_upgrade_time).getTime()
+          : Infinity;
+
+        // Handle cases where one or both times are missing
+        if (timeA === Infinity && timeB === Infinity) {
+          // If both missing, sort alphabetically as fallback
+          return a.network.localeCompare(b.network);
+        }
+        if (timeA === Infinity) return 1; // Chains without time go last
+        if (timeB === Infinity) return -1; // Chains without time go last
+
+        // Sort by time (soonest first)
+        return timeA - timeB;
+      });
+    }
+
+    // Default sort (no change from filtered order)
+    return filtered;
   }, [
     allChains,
     searchTerm,
@@ -168,6 +201,7 @@ export const ChainSection = () => {
     favoritesSet,
     favoriteFilter,
     isConnected,
+    sortBy,
   ]);
 
   if (error) {
@@ -201,8 +235,7 @@ export const ChainSection = () => {
       </div>
       {data?.length === 0 && (
         <div className="text-center text-muted-foreground col-span-full pt-4">
-          No chains found matching &quot;
-          {searchTerm}&quot;.
+          No chains found matching your filters.
         </div>
       )}
     </div>
@@ -219,7 +252,7 @@ export const ChainSection = () => {
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-start sm:justify-between items-center">
-        <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto items-center">
           <Select
             value={filterType}
             onValueChange={(value: "all" | "upgraded") => setFilterType(value)}
@@ -230,7 +263,7 @@ export const ChainSection = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="upgraded">Upgraded</SelectItem>
+              <SelectItem value="upgraded">Has Upgrade</SelectItem>
             </SelectContent>
           </Select>
           <Select
@@ -240,8 +273,8 @@ export const ChainSection = () => {
             }
             disabled={isLoadingChains}
           >
-            <SelectTrigger className="w-full sm:w-[120px]">
-              <SelectValue placeholder="Network" />
+            <SelectTrigger className="w-full sm:w-[130px]">
+              <SelectValue placeholder="Network Type" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Networks</SelectItem>
@@ -266,19 +299,37 @@ export const ChainSection = () => {
               </SelectContent>
             </Select>
           )}
+          <Select
+            value={sortBy}
+            onValueChange={(value: "default" | "time_asc" | "alpha_asc") =>
+              setSortBy(value)
+            }
+            disabled={isLoadingChains}
+          >
+            <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="default">Sort: Default</SelectItem>
+              <SelectItem value="time_asc">Sort: Upgrade Time</SelectItem>
+              <SelectItem value="alpha_asc">Sort: Name (A-Z)</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <div className="w-full sm:w-auto sm:ml-auto">
+        <div className="w-full sm:w-auto sm:max-w-xs">
           <Input
             type="search"
             placeholder="Search chains..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full sm:w-[250px]"
+            className="w-full"
             disabled={isLoadingChains}
           />
         </div>
       </div>
-      {isLoading ? renderSkeletonGrid() : renderGridContent(filteredChains)}
+      {isLoading
+        ? renderSkeletonGrid()
+        : renderGridContent(filteredAndSortedChains)}
       <ChainDetailDialog
         chain={selectedChain}
         isOpen={isDialogOpen}
