@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LinkIcon, Star, Rocket } from "lucide-react";
+import { LinkIcon, Star, Rocket, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import type React from "react";
@@ -149,7 +149,9 @@ export const ChainCard = ({
 
   return (
     <>
-      <Card className="w-full shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col h-full">
+      <Card
+        className="w-full shadow-sm hover:shadow-lg transition-all duration-200 flex flex-col h-full rounded-xl bg-gradient-to-br from-card to-card/95 hover:-translate-y-0.5"
+      >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 gap-2">
           <div
             className="flex items-center gap-2 min-w-0 cursor-pointer"
@@ -198,12 +200,13 @@ export const ChainCard = ({
 
           <div className="flex-shrink-0 flex items-center gap-2">
             <Badge
-              className={`capitalize text-xs px-2 py-0.5 border ${
+              className={`capitalize text-xs px-2 py-0.5 border flex items-center gap-1 ${
                 data.type === "mainnet"
                   ? "bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-900 dark:text-sky-200 dark:border-sky-700"
                   : "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900 dark:text-amber-200 dark:border-amber-700"
               }`}
             >
+              {data.type === "mainnet" && <Globe className="h-3 w-3" />}
               {data.type}
             </Badge>
             <TooltipProvider delayDuration={100}>
@@ -364,16 +367,23 @@ export const ChainCard = ({
             </div>
           )}
           {data.explorer_url?.url && (
-            <a
-              href={data.explorer_url.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground border rounded-md px-2 py-1 w-full truncate"
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full"
+              asChild
             >
-              <LinkIcon className="h-3 w-3 flex-shrink-0" />
-              <span className="truncate">{data.explorer_url.url}</span>
-            </a>
+              <a
+                href={data.explorer_url.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center justify-center gap-1.5"
+              >
+                <LinkIcon className="h-3 w-3 flex-shrink-0" />
+                <span>Explorer</span>
+              </a>
+            </Button>
           )}
         </CardFooter>
       </Card>

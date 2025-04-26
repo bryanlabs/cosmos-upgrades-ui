@@ -1,8 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/hooks/useWallet";
-import Image from "next/image"; // Import Image component
+import Image from "next/image";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Github } from "lucide-react";
+// Import DropdownMenu components and Wallet icon
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Github, Wallet } from "lucide-react";
 
 export const Header = () => {
   const { connectWallet, disconnectWallet, address, isConnected } = useWallet();
@@ -46,21 +53,46 @@ export const Header = () => {
             </a>
           </Button>
           <ThemeToggle />
-          <Button
-            onClick={isConnected ? disconnectWallet : connectWallet}
-            variant="outline"
-            size="sm" // Make button smaller
-            className="flex items-center gap-2" // Add gap for icon
-          >
-            <Image // Add Keplr icon
-              src="/icons/keplr-icon-monochrome-dark.png" // Adjust path if needed
-              alt="Keplr"
-              width={16} // Adjust size as needed
-              height={16}
-              className="dark:invert" // Invert colors in dark mode if needed
-            />
-            {isConnected ? `Disconnect ${shortAddress}` : "Connect Wallet"}
-          </Button>
+
+          {/* Conditional Rendering for Wallet Button/Dropdown */}
+          {isConnected && address ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 rounded-full px-3"
+                >
+                  <Wallet className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-mono text-xs">{shortAddress}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={disconnectWallet}
+                  className="cursor-pointer"
+                >
+                  Disconnect
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button
+              onClick={connectWallet}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <Image
+                src="/icons/keplr-icon-monochrome-dark.png"
+                alt="Keplr"
+                width={16}
+                height={16}
+                className="dark:invert"
+              />
+              Connect Wallet
+            </Button>
+          )}
         </div>
       </div>
     </header>

@@ -240,7 +240,7 @@ export const ChainSection = () => {
             onValueChange={(value: StatusFilterType) => setFilterType(value)}
             disabled={isLoadingChains}
           >
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="rounded-full px-4 h-8">
               <SelectValue placeholder="Filter by Status" />
             </SelectTrigger>
             <SelectContent>
@@ -259,7 +259,7 @@ export const ChainSection = () => {
               }
               disabled={isLoadingChains || isLoadingFavorites}
             >
-              <SelectTrigger className="w-full sm:w-[140px]">
+              <SelectTrigger className="rounded-full px-4 h-8">
                 <SelectValue placeholder="Filter Favorites" />
               </SelectTrigger>
               <SelectContent>

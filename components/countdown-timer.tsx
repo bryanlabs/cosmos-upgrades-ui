@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { differenceInSeconds, intervalToDuration } from "date-fns";
-import { TimeUnit } from "./time-unit";
 
 interface CountdownTimerProps {
   targetDate: string | null | undefined;
@@ -55,26 +54,34 @@ export const CountdownTimer = ({ targetDate }: CountdownTimerProps) => {
     return <span className="text-sm text-muted-foreground">Est. Upgrade: -</span>;
   }
 
+  // Helper function to create styled segment
+  const renderSegment = (value: number, label: string, isLast = false) => (
+    <>
+      <span className="text-lg font-bold text-foreground font-mono">{value}</span>
+      <span className="text-sm text-muted-foreground font-sans">{label}</span>
+      {!isLast && <span className="text-sm text-muted-foreground mx-1">:</span>}
+    </>
+  );
+
   if (timeLeft.passed) {
-    // Render 0s using the new style, with seconds
+    // Render 0s in the new horizontal style
     return (
-      <div className="flex space-x-4">
-        <TimeUnit value={0} label="Days" />
-        <TimeUnit value={0} label="Hours" />
-        <TimeUnit value={0} label="Minutes" />
-        <TimeUnit value={0} label="Seconds" /> {/* Added Seconds */}
+      <div className="flex items-baseline"> {/* Use items-baseline for alignment */}
+        {renderSegment(0, "d")}
+        {renderSegment(0, "h")}
+        {renderSegment(0, "m")}
+        {renderSegment(0, "s", true)}
       </div>
     );
   }
 
-  // Render the time units with full labels, with seconds
+  // Render the time units horizontally
   return (
-    <div className="flex space-x-4">
-      {/* Conditionally render days only if > 0 */}
-      {timeLeft.days > 0 && <TimeUnit value={timeLeft.days} label="Days" />}
-      <TimeUnit value={timeLeft.hours} label="Hours" />
-      <TimeUnit value={timeLeft.minutes} label="Minutes" />
-      <TimeUnit value={timeLeft.seconds} label="Seconds" /> {/* Added Seconds */}
+    <div className="flex items-baseline"> {/* Use items-baseline for alignment */}
+      {timeLeft.days > 0 && renderSegment(timeLeft.days, "d")}
+      {renderSegment(timeLeft.hours, "h")}
+      {renderSegment(timeLeft.minutes, "m")}
+      {renderSegment(timeLeft.seconds, "s", true)}
     </div>
   );
 };
