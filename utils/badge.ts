@@ -28,7 +28,7 @@ export const getBadgeProps = (
   if (statusData.source === "current_upgrade_plan") {
     return {
       text: "Planned",
-      variant: "default",
+      variant: "success",
       Icon: CheckCircle,
       link: null,
     };
@@ -36,7 +36,7 @@ export const getBadgeProps = (
   if (statusData.source === "active_upgrade_proposals") {
     return {
       text: "In Voting",
-      variant: "secondary",
+      variant: "warning",
       Icon: Info,
       link: null,
     };
