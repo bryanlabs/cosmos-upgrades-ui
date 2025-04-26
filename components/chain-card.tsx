@@ -326,7 +326,7 @@ export const ChainCard = ({
                   <TooltipContent
                     side="top"
                     align="start"
-                    className="bg-popover text-popover-foreground shadow-md rounded-md p-2 max-w-xs text-xs"
+                    className="bg-blue-50 text-blue-900 border border-blue-200 dark:bg-blue-950 dark:text-blue-200 dark:border-blue-800 shadow-md rounded-md p-2 max-w-xs text-xs"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <p className="font-semibold mb-1">Plan: {cosmovisorInfo.name}</p>
