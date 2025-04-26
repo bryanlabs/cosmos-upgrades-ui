@@ -128,11 +128,15 @@ export const ChainCard = ({
     variant: statusBadgeVariant,
     Icon: StatusBadgeIcon,
     link: badgeLink,
+    className: statusBadgeClassName,
   } = badgeProps;
   const upgradeFound = data.upgrade_found;
 
   const StatusBadge = () => (
-    <Badge variant={statusBadgeVariant} className="flex items-center gap-1">
+    <Badge
+      variant={statusBadgeVariant}
+      className={`flex items-center gap-1 ${statusBadgeClassName || ""}`}
+    >
       {StatusBadgeIcon && <StatusBadgeIcon className="h-4 w-4" />}
       {statusBadgeText}
     </Badge>
