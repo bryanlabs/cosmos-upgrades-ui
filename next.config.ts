@@ -17,7 +17,8 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/cosmos-upgrades/:path*",
-        destination: "https://cosmos-upgrades.bryanlabs.net/:path*",
+        // destination: "https://cosmos-upgrades.bryanlabs.net/:path*",
+        destination: "http://localhost:5001/:path*",
       },
     ];
   },
