@@ -90,14 +90,14 @@ export const ChainCard = ({
           setTimeout(() => {
             setCopiedBlock(false);
             setBlockTooltipOpen(false);
-          }, 1500);
+          }, 1000);
         } else {
           setCopiedUpgrade(true);
           setUpgradeTooltipOpen(true);
           setTimeout(() => {
             setCopiedUpgrade(false);
             setUpgradeTooltipOpen(false);
-          }, 1500);
+          }, 1000);
         }
       })
       .catch((err) => {
