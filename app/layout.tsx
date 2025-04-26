@@ -39,10 +39,10 @@ export default function RootLayout({
               {/* Placeholder for Logo 1 */}
               <Link href="/">
                 <Image
-                  src="/cosmosupgrades.webp"
+                  src="/cosmosupgrades.png"
                   alt="cosmos upgrades logo"
-                  width={70}
-                  height={70}
+                  width={100}
+                  height={100}
                 />
               </Link>
               <Link href="/">
