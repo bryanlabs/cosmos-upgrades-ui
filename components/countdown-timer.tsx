@@ -53,7 +53,7 @@ export const CountdownTimer = ({ targetDate }: CountdownTimerProps) => {
 
   const renderSegment = (value: number, label: string, isLast = false) => (
     <>
-      <span className="text-base font-bold text-foreground font-mono">{value}</span>
+      <span className="text-sm font-medium text-foreground font-mono">{value}</span>
       <span className="text-xs text-gray-500 font-sans">{label}</span>
       {!isLast && <span className="text-xs text-gray-500 mx-1">:</span>}
     </>
@@ -71,13 +71,16 @@ export const CountdownTimer = ({ targetDate }: CountdownTimerProps) => {
       {passed ? (
         <>
           {renderSegment(0, "d")}
-          {renderSegment(0, "h", true)}
+          {renderSegment(0, "h")}
+          {renderSegment(0, "m")}
+          {renderSegment(0, "s", true)}
         </>
       ) : (
         <>
           {timeLeft.days > 0 && renderSegment(timeLeft.days, "d")}
-          {renderSegment(timeLeft.hours, "h", true)}
-          <span className="text-xs text-gray-400 ml-1">...</span>
+          {renderSegment(timeLeft.hours, "h")}
+          {renderSegment(timeLeft.minutes, "m")}
+          {renderSegment(timeLeft.seconds, "s", true)}
         </>
       )}
     </div>

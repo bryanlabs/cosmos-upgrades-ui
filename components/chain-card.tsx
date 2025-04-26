@@ -367,15 +367,22 @@ export const ChainCard = ({
             )}
           </div>
 
+          {/* Combine Context Header and Countdown Timer */}
           {upgradeFound && data.estimated_upgrade_time && (
-            <div className="w-full mt-2 mb-3">
-              <CountdownTimer
-                targetDate={data.estimated_upgrade_time}
-              />
+            <div className="mt-3 flex items-baseline gap-2">
+              {/* Context Header - Remove Text */}
+              <p className="text-sm text-muted-foreground">🗓️</p>
+              {/* Countdown Timer */}
+              <div className="w-auto">
+                <CountdownTimer
+                  targetDate={data.estimated_upgrade_time}
+                />
+              </div>
             </div>
           )}
+          {/* Placeholder if no time and upgrade found */}
           {upgradeFound && !data.estimated_upgrade_time && (
-            <div className="text-sm text-muted-foreground w-full mt-2 mb-3">
+            <div className="text-sm text-muted-foreground w-full mt-3">
               Est. Upgrade: -
             </div>
           )}

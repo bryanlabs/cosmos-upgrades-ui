@@ -17,10 +17,10 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
-        success: // Use stronger green
-          "border-transparent bg-green-500 text-white dark:bg-green-600 dark:text-green-50 [a&]:hover:bg-green-500/80 dark:[a&]:hover:bg-green-600/80",
-        warning: // Use stronger amber/yellow
-          "border-transparent bg-amber-500 text-white dark:bg-amber-600 dark:text-amber-50 [a&]:hover:bg-amber-500/80 dark:[a&]:hover:bg-amber-600/80",
+        success: // Use soft green (green-200) background with dark text and subtle border
+          "border border-green-300/50 bg-green-200 text-green-900 dark:border-green-700/50 dark:bg-green-800 dark:text-green-100 [a&]:hover:bg-green-200/80 dark:[a&]:hover:bg-green-800/80",
+        warning: // Use lighter yellow (yellow-200) background with dark text and subtle border
+          "border border-yellow-300/50 bg-yellow-200 text-yellow-800 dark:border-yellow-700/50 dark:bg-yellow-800 dark:text-yellow-100 [a&]:hover:bg-yellow-200/80 dark:[a&]:hover:bg-yellow-800/80",
       },
     },
     defaultVariants: {
