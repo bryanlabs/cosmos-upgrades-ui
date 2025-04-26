@@ -371,8 +371,6 @@ export const ChainCard = ({
             <div className="w-full mt-2 mb-3">
               <CountdownTimer
                 targetDate={data.estimated_upgrade_time}
-                upgradeBlockHeight={data.upgrade_block_height}
-                latestBlockHeight={data.latest_block_height}
               />
             </div>
           )}
