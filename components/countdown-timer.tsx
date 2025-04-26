@@ -76,57 +76,77 @@ export const CountdownTimer = ({
   // Helper function to create styled segment
   const renderSegment = (value: number, label: string, isLast = false) => (
     <>
-      <span className="text-lg font-bold text-foreground font-mono">{value}</span>
-      <span className="text-sm text-muted-foreground font-sans">{label}</span>
-      {!isLast && <span className="text-sm text-muted-foreground mx-1">:</span>}
+      {/* Reduced font size */}
+      <span className="text-base font-bold text-foreground font-mono">{value}</span>
+      {/* Reduced font size, changed color */}
+      <span className="text-xs text-gray-500 font-sans">{label}</span>
+      {/* Changed color */}
+      {!isLast && <span className="text-xs text-gray-500 mx-1">:</span>}
     </>
   );
 
   const isLessThanOneHour = timeLeft.days === 0 && timeLeft.hours === 0;
 
-  const renderCountdown = (passed = false) => (
+  // Renders the visual countdown part (D:H... or 0s)
+  const renderCountdownDisplay = (passed = false) => (
     <div
       className={cn(
         "flex items-baseline",
-        !passed && isLessThanOneHour && "animate-breathing"
+        !passed && isLessThanOneHour && "animate-breathing" // Keep breathing animation logic
       )}
     >
       {passed ? (
         <>
           {renderSegment(0, "d")}
-          {renderSegment(0, "h")}
-          {renderSegment(0, "m")}
-          {renderSegment(0, "s", true)}
+          {renderSegment(0, "h", true)} {/* End here when passed */}
         </>
       ) : (
         <>
           {timeLeft.days > 0 && renderSegment(timeLeft.days, "d")}
-          {renderSegment(timeLeft.hours, "h")}
-          {renderSegment(timeLeft.minutes, "m")}
-          {renderSegment(timeLeft.seconds, "s", true)}
+          {renderSegment(timeLeft.hours, "h", true)} {/* End main display here */}
+          {/* Add subtle indicator for more details on hover */}
+          <span className="text-xs text-gray-400 ml-1">...</span>
         </>
       )}
     </div>
   );
 
-  // Wrap the countdown in a tooltip
+  // Tooltip content now includes M:S and block info
+  const tooltipContent = (
+    <>
+      {!timeLeft.passed && ( // Only show M:S if not passed
+        <p className="text-xs text-muted-foreground">
+          Full:{" "}
+          <span className="font-mono font-medium text-foreground">
+            {timeLeft.days > 0 ? `${timeLeft.days}d : ` : ""}
+            {`${timeLeft.hours}h : ${timeLeft.minutes}m : ${timeLeft.seconds}s`}
+          </span>
+        </p>
+      )}
+      <p className="text-xs text-muted-foreground mt-1">
+        Upgrade block:{" "}
+        <span className="font-mono font-medium text-foreground">
+          {formatNumberWithCommas(upgradeBlockHeight)}
+        </span>
+      </p>
+      <p className="text-xs text-muted-foreground">
+        Current block:{" "}
+        <span className="font-mono font-medium text-foreground">
+          {formatNumberWithCommas(latestBlockHeight)}
+        </span>
+      </p>
+    </>
+  );
+
+  // Wrap the D:H display in a tooltip
   return (
     <TooltipProvider delayDuration={100}>
       <Tooltip>
-        <TooltipTrigger asChild>{renderCountdown(timeLeft.passed)}</TooltipTrigger>
+        <TooltipTrigger asChild>
+          {renderCountdownDisplay(timeLeft.passed)}
+        </TooltipTrigger>
         <TooltipContent side="top" align="center">
-          <p className="text-xs text-muted-foreground">
-            Upgrade at block:{" "}
-            <span className="font-mono font-medium text-foreground">
-              {formatNumberWithCommas(upgradeBlockHeight)}
-            </span>
-          </p>
-          <p className="text-xs text-muted-foreground">
-            Current block:{" "}
-            <span className="font-mono font-medium text-foreground">
-              {formatNumberWithCommas(latestBlockHeight)}
-            </span>
-          </p>
+          {tooltipContent}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

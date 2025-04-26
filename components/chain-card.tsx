@@ -38,6 +38,19 @@ const extractChecksum = (url: string): string | null => {
   return null;
 };
 
+// Helper function to extract domain from URL
+const extractDomain = (url: string | undefined): string => {
+  if (!url) return "Explorer";
+  try {
+    const parsedUrl = new URL(url);
+    // Remove www. if present
+    return parsedUrl.hostname.replace(/^www\./, "");
+  } catch (e) {
+    console.error("Failed to parse URL for domain:", url, e);
+    return "Explorer"; // Fallback
+  }
+};
+
 interface ParsedPlanInfo {
   name: string;
   binaries: Record<string, string>;
@@ -223,21 +236,14 @@ export const ChainCard = ({
                   <TooltipProvider delayDuration={100}>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Rocket className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                        <Rocket className="h-4 w-4 text-blue-400 flex-shrink-0 transition-transform duration-150 ease-in-out hover:scale-110" />
                       </TooltipTrigger>
                       <TooltipContent
                         side="top"
                         align="center"
                         className="bg-background text-foreground border shadow-md rounded-md p-2 max-w-xs text-xs"
                       >
-                        <p className="font-semibold">Cosmovisor Supported</p>
-                        <p className="text-muted-foreground">
-                          Plan: {cosmovisorInfo.name} (
-                          {Object.keys(cosmovisorInfo.checksums).length > 0
-                            ? "Full Support"
-                            : "Partial Support"}
-                          )
-                        </p>
+                        <p className="font-semibold">Cosmovisor Support Available</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -360,10 +366,9 @@ export const ChainCard = ({
               </div>
             )}
           </div>
-        </CardContent>
-        <CardFooter className="flex flex-col items-start pt-2 pb-4 px-4 space-y-2">
+
           {upgradeFound && data.estimated_upgrade_time && (
-            <div className="w-full">
+            <div className="w-full mt-2 mb-3">
               <CountdownTimer
                 targetDate={data.estimated_upgrade_time}
                 upgradeBlockHeight={data.upgrade_block_height}
@@ -372,10 +377,12 @@ export const ChainCard = ({
             </div>
           )}
           {upgradeFound && !data.estimated_upgrade_time && (
-            <div className="text-sm text-muted-foreground w-full">
+            <div className="text-sm text-muted-foreground w-full mt-2 mb-3">
               Est. Upgrade: -
             </div>
           )}
+        </CardContent>
+        <CardFooter className="flex flex-col items-start pt-2 pb-4 px-4 space-y-2">
           {data.explorer_url?.url && (
             <Button variant="outline" size="sm" className="w-full" asChild>
               <a
@@ -386,7 +393,7 @@ export const ChainCard = ({
                 className="flex items-center justify-center gap-1.5"
               >
                 <LinkIcon className="h-3 w-3 flex-shrink-0" />
-                <span>Explorer</span>
+                <span className="truncate">{extractDomain(data.explorer_url.url)}</span>
               </a>
             </Button>
           )}
