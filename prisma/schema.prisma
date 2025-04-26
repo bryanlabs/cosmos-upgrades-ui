@@ -8,7 +8,22 @@ datasource db {
 }
 
 model User {
-  id             Int    @id @default(autoincrement())
-  wallet         String @unique
+  id             Int       @id @default(autoincrement())
+  wallet         String    @unique
   favoriteChains String // comma separated list of chain ids, it's not an array because sqlite doesn't support it
+  webHooks       WebHook[] // relation to links the user made for chains
+}
+
+model WebHook {
+  id                  Int     @id @default(autoincrement())
+  userId              Int
+  chainId             String
+  label               String
+  notificationType    String
+  notifyBeforeUpgrade String?
+  url                 String
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }

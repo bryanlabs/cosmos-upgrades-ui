@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /* TODO: REMOVE THIS AFTER DEMO */
+  devIndicators: false,
   images: {
     remotePatterns: [
       {

@@ -126,7 +126,10 @@ export const ChainCard = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={handleStarClick}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleStarClick();
+                  }}
                   className="h-6 w-6 rounded-full"
                 >
                   <Star
@@ -205,6 +208,9 @@ export const ChainCard = ({
         <CardFooter className="px-6">
           <a
             href={data.explorer_url.url}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center w-full min-w-0 gap-1.5 border rounded-md px-2 py-1 text-xs text-muted-foreground hover:bg-muted/50 transition-colors"
