@@ -185,7 +185,7 @@ export const ChainCard = ({
               <div className="w-7 h-7 bg-gray-300 rounded-full flex-shrink-0" />
             )}
             <div className="flex flex-col overflow-hidden">
-              <CardTitle className="text-lg font-semibold capitalize truncate">
+              <CardTitle className="text-xl font-bold capitalize truncate">
                 {data.network}
               </CardTitle>
               {data.version && (
@@ -272,7 +272,7 @@ export const ChainCard = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="inline-block text-sm font-mono hover:underline text-blue-600 dark:text-blue-400"
+                  className="inline-block text-sm font-mono text-foreground hover:underline"
                 >
                   {formatNumber(data.latest_block_height)}
                 </a>
@@ -292,7 +292,7 @@ export const ChainCard = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="inline-block text-sm font-mono hover:underline text-blue-600 dark:text-blue-400"
+                    className="inline-block text-sm font-mono text-foreground hover:underline"
                   >
                     {formatNumber(data.upgrade_block_height)}
                   </a>
@@ -354,7 +354,7 @@ export const ChainCard = ({
             </div>
           )}
           {upgradeFound && data.estimated_upgrade_time && (
-            <div className="text-sm text-muted-foreground w-full">
+            <div className="w-full">
               <CountdownTimer targetDate={data.estimated_upgrade_time} />
             </div>
           )}

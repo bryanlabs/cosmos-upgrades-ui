@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { differenceInSeconds, intervalToDuration } from "date-fns";
+import { TimeUnit } from "./time-unit";
 
 interface CountdownTimerProps {
   targetDate: string | null | undefined;
@@ -16,11 +17,13 @@ const calculateTimeLeft = (target: Date | null) => {
   const difference = differenceInSeconds(target, now);
 
   if (difference <= 0) {
+    // Return 0s for passed state
     return { days: 0, hours: 0, minutes: 0, seconds: 0, passed: true };
   }
 
   const duration = intervalToDuration({ start: now, end: target });
 
+  // Return numbers
   return {
     days: duration.days ?? 0,
     hours: duration.hours ?? 0,
@@ -53,27 +56,25 @@ export const CountdownTimer = ({ targetDate }: CountdownTimerProps) => {
   }
 
   if (timeLeft.passed) {
-    return <span className="text-sm text-green-600 dark:text-green-400">Upgrade time passed</span>;
+    // Render 0s using the new style, with seconds
+    return (
+      <div className="flex space-x-4">
+        <TimeUnit value={0} label="Days" />
+        <TimeUnit value={0} label="Hours" />
+        <TimeUnit value={0} label="Minutes" />
+        <TimeUnit value={0} label="Seconds" /> {/* Added Seconds */}
+      </div>
+    );
   }
 
-  // Format the output string
-  const parts = [];
-  if (timeLeft.days > 0) parts.push(`${timeLeft.days}d`);
-  if (timeLeft.hours > 0) parts.push(`${timeLeft.hours}h`);
-  if (timeLeft.minutes > 0) parts.push(`${timeLeft.minutes}m`);
-  // Always show seconds if less than a minute remaining or if it's the only unit left
-  if (timeLeft.days === 0 && timeLeft.hours === 0 && timeLeft.minutes === 0) {
-      parts.push(`${timeLeft.seconds}s`);
-  } else if (parts.length < 3) { // Show seconds if we have space (e.g., not showing days, hours, and minutes already)
-      parts.push(`${timeLeft.seconds}s`);
-  }
-
-
-  const formattedTimeLeft = parts.join(" ");
-
+  // Render the time units with full labels, with seconds
   return (
-    <span className="text-sm text-muted-foreground">
-      Est. Upgrade: <span className="font-medium text-foreground">{formattedTimeLeft}</span>
-    </span>
+    <div className="flex space-x-4">
+      {/* Conditionally render days only if > 0 */}
+      {timeLeft.days > 0 && <TimeUnit value={timeLeft.days} label="Days" />}
+      <TimeUnit value={timeLeft.hours} label="Hours" />
+      <TimeUnit value={timeLeft.minutes} label="Minutes" />
+      <TimeUnit value={timeLeft.seconds} label="Seconds" /> {/* Added Seconds */}
+    </div>
   );
 };
