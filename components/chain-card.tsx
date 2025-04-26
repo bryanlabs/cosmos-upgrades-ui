@@ -151,7 +151,7 @@ export const ChainCard = ({
   };
 
   return (
-    <Card className="w-full shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col h-full">
+    <Card className="w-full shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 flex flex-col h-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 gap-2">
         <div className="flex items-center gap-2 min-w-0">
           {logoUrl ? (
