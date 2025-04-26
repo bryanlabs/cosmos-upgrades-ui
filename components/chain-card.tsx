@@ -22,6 +22,7 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { ChainDetailDialog } from "./chain-detail-dialog";
+import { CountdownTimer } from "./countdown-timer";
 
 const formatNumber = (num: number | null | undefined) =>
   num ? num.toString() : "-";
@@ -232,12 +233,15 @@ export const ChainCard = ({
             )}
           </div>
 
-          {upgradeFound && (
-            <p className="text-xs text-muted-foreground pt-1">
-              {isClient
-                ? `Est. Upgrade: ${formatDateTime(data.estimated_upgrade_time)}`
-                : "Calculating..."}
-            </p>
+          {upgradeFound && data.estimated_upgrade_time && (
+            <div className="text-sm text-muted-foreground">
+              <CountdownTimer targetDate={data.estimated_upgrade_time} />
+            </div>
+          )}
+          {upgradeFound && !data.estimated_upgrade_time && (
+            <div className="text-sm text-muted-foreground">
+              Est. Upgrade: <span className="font-medium text-foreground">-</span>
+            </div>
           )}
         </CardContent>
 
