@@ -1,10 +1,3 @@
-type ChainUpgradePlan = {
-  height: number;
-  binaries: string[];
-  name: string;
-  upgraded_client_state: unknown | null;
-};
-
 type LogoUrls = {
   png: string | null;
   svg: string | null;
@@ -26,7 +19,7 @@ type ChainUpgradeStatus = {
   source: string;
   upgrade_block_height: number | null;
   estimated_upgrade_time: string | null; // ISO date string
-  upgrade_plan: ChainUpgradePlan | null;
+  upgrade_plan: string | null; // Changed: API sends this as a JSON string
   version: string;
   error: unknown | null;
   logo_urls: LogoUrls;

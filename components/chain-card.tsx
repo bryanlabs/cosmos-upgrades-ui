@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LinkIcon, Star } from "lucide-react";
+import { LinkIcon, Star, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import type React from "react";
@@ -27,6 +27,21 @@ import { CountdownTimer } from "./countdown-timer";
 const formatNumber = (num: number | null | undefined) =>
   num ? num.toString() : "-";
 
+// Helper function to extract sha256 checksums from URLs (simple example)
+const extractChecksum = (url: string): string | null => {
+  const match = url.match(/[?&_](?:sha256|checksum)=([a-f0-9]{64})/i);
+  if (match && match[1]) {
+    return match[1].substring(0, 8) + "...";
+  }
+  return null;
+};
+
+interface ParsedPlanInfo {
+  name: string;
+  binaries: Record<string, string>;
+  checksums: Record<string, string>;
+}
+
 interface ChainCardProps {
   data: ChainUpgradeStatus;
   isFavorite: boolean;
@@ -44,12 +59,62 @@ export const ChainCard = ({
 }: ChainCardProps) => {
   const [isClient, setIsClient] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [cosmovisorInfo, setCosmovisorInfo] = useState<ParsedPlanInfo | null>(
+    null
+  );
 
   const chainId = data.network;
 
   useEffect(() => {
     setIsClient(true);
-  }, []);
+
+    if (
+      data.upgrade_found &&
+      data.source === "current_upgrade_plan" &&
+      data.upgrade_plan
+    ) {
+      try {
+        const parsedPlan = JSON.parse(data.upgrade_plan);
+        if (parsedPlan && parsedPlan.info && typeof parsedPlan.info === "string") {
+          try {
+            const parsedInfo = JSON.parse(parsedPlan.info);
+            if (
+              parsedInfo &&
+              parsedInfo.binaries &&
+              typeof parsedInfo.binaries === "object" &&
+              Object.keys(parsedInfo.binaries).length > 0
+            ) {
+              const checksums: Record<string, string> = {};
+              for (const platform in parsedInfo.binaries) {
+                const url = parsedInfo.binaries[platform];
+                const checksum = extractChecksum(url);
+                if (checksum) {
+                  checksums[platform] = checksum;
+                }
+              }
+              setCosmovisorInfo({
+                name: parsedPlan.name || "N/A",
+                binaries: parsedInfo.binaries,
+                checksums: checksums,
+              });
+            } else {
+              setCosmovisorInfo(null);
+            }
+          } catch (infoError) {
+            console.error("Failed to parse plan.info JSON:", infoError);
+            setCosmovisorInfo(null);
+          }
+        } else {
+          setCosmovisorInfo(null);
+        }
+      } catch (planError) {
+        console.error("Failed to parse upgrade_plan JSON:", planError);
+        setCosmovisorInfo(null);
+      }
+    } else {
+      setCosmovisorInfo(null);
+    }
+  }, [data.upgrade_found, data.source, data.upgrade_plan]);
 
   const logoUrl = data.logo_urls?.png || data.logo_urls?.svg;
   const badgeProps = getBadgeProps(data);
@@ -232,35 +297,78 @@ export const ChainCard = ({
               </div>
             )}
           </div>
-
+        </CardContent>
+        <CardFooter className="flex flex-col items-start pt-2 pb-4 px-4 space-y-2">
+          {cosmovisorInfo && (
+            <div className="w-full">
+              <TooltipProvider delayDuration={100}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge
+                      variant={
+                        Object.keys(cosmovisorInfo.checksums).length > 0
+                          ? "success"
+                          : "warning"
+                      }
+                      className="flex items-center gap-1"
+                    >
+                      <Rocket className="h-3 w-3" />
+                      Cosmovisor
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent
+                    side="top"
+                    align="start"
+                    className="bg-popover text-popover-foreground shadow-md rounded-md p-2 max-w-xs text-xs"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <p className="font-semibold mb-1">Plan: {cosmovisorInfo.name}</p>
+                    {Object.keys(cosmovisorInfo.checksums).length > 0 ? (
+                      <>
+                        <p className="font-medium mt-1">Checksums:</p>
+                        <ul className="list-disc list-inside">
+                          {Object.entries(cosmovisorInfo.checksums).map(
+                            ([platform, checksum]) => (
+                              <li key={platform} className="font-mono text-muted-foreground">
+                                {platform}: {checksum}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </>
+                    ) : (
+                      <p className="text-muted-foreground italic mt-1">
+                        No checksums found in URLs
+                      </p>
+                    )}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          )}
           {upgradeFound && data.estimated_upgrade_time && (
-            <div className="text-sm text-muted-foreground">
+            <div className="text-sm text-muted-foreground w-full">
               <CountdownTimer targetDate={data.estimated_upgrade_time} />
             </div>
           )}
-          {upgradeFound && !data.estimated_upgrade_time && (
-            <div className="text-sm text-muted-foreground">
-              Est. Upgrade: <span className="font-medium text-foreground">-</span>
+          {upgradeFound && !data.estimated_upgrade_time && !cosmovisorInfo && (
+            <div className="text-sm text-muted-foreground w-full">
+              Est. Upgrade: -
             </div>
           )}
-        </CardContent>
-
-        {data.explorer_url?.url && (
-          <CardFooter className="px-6">
+          {data.explorer_url?.url && (
             <a
               href={data.explorer_url.url}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center w-full min-w-0 gap-1.5 border rounded-md px-2 py-1 text-xs text-muted-foreground hover:bg-muted/50 transition-colors"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground border rounded-md px-2 py-1 w-full truncate"
             >
               <LinkIcon className="h-3 w-3 flex-shrink-0" />
               <span className="truncate">{data.explorer_url.url}</span>
             </a>
-          </CardFooter>
-        )}
+          )}
+        </CardFooter>
       </Card>
       <ChainDetailDialog
         chain={data}
