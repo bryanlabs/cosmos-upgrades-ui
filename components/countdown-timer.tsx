@@ -2,11 +2,25 @@
 
 import { useState, useEffect } from "react";
 import { differenceInSeconds, intervalToDuration } from "date-fns";
-import { cn } from "@/lib/utils"; // Import cn for conditional classes
+import { cn } from "@/lib/utils";
+// Import Tooltip components
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 interface CountdownTimerProps {
   targetDate: string | null | undefined;
+  // Add props for block heights
+  upgradeBlockHeight: number | null;
+  latestBlockHeight: number | null;
 }
+
+// Helper to format numbers with commas
+const formatNumberWithCommas = (num: number | null | undefined) =>
+  num ? num.toLocaleString() : "-";
 
 const calculateTimeLeft = (target: Date | null) => {
   if (!target || isNaN(target.getTime())) {
@@ -33,7 +47,11 @@ const calculateTimeLeft = (target: Date | null) => {
   };
 };
 
-export const CountdownTimer = ({ targetDate }: CountdownTimerProps) => {
+export const CountdownTimer = ({
+  targetDate,
+  upgradeBlockHeight,
+  latestBlockHeight,
+}: CountdownTimerProps) => {
   const target = targetDate ? new Date(targetDate) : null;
   const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(target));
 
@@ -66,30 +84,51 @@ export const CountdownTimer = ({ targetDate }: CountdownTimerProps) => {
 
   const isLessThanOneHour = timeLeft.days === 0 && timeLeft.hours === 0;
 
-  if (timeLeft.passed) {
-    // Render 0s in the new horizontal style
-    return (
-      <div className="flex items-baseline">
-        {renderSegment(0, "d")}
-        {renderSegment(0, "h")}
-        {renderSegment(0, "m")}
-        {renderSegment(0, "s", true)}
-      </div>
-    );
-  }
-
-  // Render the time units horizontally, add breathing animation if < 1 hour
-  return (
+  const renderCountdown = (passed = false) => (
     <div
       className={cn(
         "flex items-baseline",
-        isLessThanOneHour && "animate-breathing" // Apply pulse animation conditionally
+        !passed && isLessThanOneHour && "animate-breathing"
       )}
     >
-      {timeLeft.days > 0 && renderSegment(timeLeft.days, "d")}
-      {renderSegment(timeLeft.hours, "h")}
-      {renderSegment(timeLeft.minutes, "m")}
-      {renderSegment(timeLeft.seconds, "s", true)}
+      {passed ? (
+        <>
+          {renderSegment(0, "d")}
+          {renderSegment(0, "h")}
+          {renderSegment(0, "m")}
+          {renderSegment(0, "s", true)}
+        </>
+      ) : (
+        <>
+          {timeLeft.days > 0 && renderSegment(timeLeft.days, "d")}
+          {renderSegment(timeLeft.hours, "h")}
+          {renderSegment(timeLeft.minutes, "m")}
+          {renderSegment(timeLeft.seconds, "s", true)}
+        </>
+      )}
     </div>
+  );
+
+  // Wrap the countdown in a tooltip
+  return (
+    <TooltipProvider delayDuration={100}>
+      <Tooltip>
+        <TooltipTrigger asChild>{renderCountdown(timeLeft.passed)}</TooltipTrigger>
+        <TooltipContent side="top" align="center">
+          <p className="text-xs text-muted-foreground">
+            Upgrade at block:{" "}
+            <span className="font-mono font-medium text-foreground">
+              {formatNumberWithCommas(upgradeBlockHeight)}
+            </span>
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Current block:{" "}
+            <span className="font-mono font-medium text-foreground">
+              {formatNumberWithCommas(latestBlockHeight)}
+            </span>
+          </p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };

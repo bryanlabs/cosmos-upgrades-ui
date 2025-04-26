@@ -24,6 +24,8 @@ import { ChainDetailDialog } from "./chain-detail-dialog";
 import { CountdownTimer } from "./countdown-timer";
 import { cn } from "@/lib/utils";
 
+const LOGO_SIZE = 32;
+
 const formatNumber = (num: number | null | undefined) =>
   num ? num.toString() : "-";
 
@@ -193,8 +195,8 @@ export const ChainCard = ({
                   <Image
                     src={logoUrl}
                     alt={`${data.network} Logo`}
-                    width={28}
-                    height={28}
+                    width={LOGO_SIZE}
+                    height={LOGO_SIZE}
                     className="rounded-full flex-shrink-0"
                   />
                 </a>
@@ -202,18 +204,45 @@ export const ChainCard = ({
                 <Image
                   src={logoUrl}
                   alt={`${data.network} Logo`}
-                  width={28}
-                  height={28}
+                  width={LOGO_SIZE}
+                  height={LOGO_SIZE}
                   className="rounded-full flex-shrink-0"
                 />
               )
             ) : (
-              <div className="w-7 h-7 bg-gray-300 rounded-full flex-shrink-0" />
+              <div
+                className={`w-${LOGO_SIZE / 4} h-${LOGO_SIZE / 4} bg-gray-300 rounded-full flex-shrink-0`}
+              />
             )}
             <div className="flex flex-col overflow-hidden">
-              <CardTitle className="text-xl font-bold capitalize truncate">
-                {data.network}
-              </CardTitle>
+              <div className="flex items-center gap-1.5">
+                <CardTitle className="text-xl font-bold capitalize truncate">
+                  {data.network}
+                </CardTitle>
+                {cosmovisorInfo && (
+                  <TooltipProvider delayDuration={100}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Rocket className="h-4 w-4 text-blue-500 flex-shrink-0" />
+                      </TooltipTrigger>
+                      <TooltipContent
+                        side="top"
+                        align="center"
+                        className="bg-background text-foreground border shadow-md rounded-md p-2 max-w-xs text-xs"
+                      >
+                        <p className="font-semibold">Cosmovisor Supported</p>
+                        <p className="text-muted-foreground">
+                          Plan: {cosmovisorInfo.name} (
+                          {Object.keys(cosmovisorInfo.checksums).length > 0
+                            ? "Full Support"
+                            : "Partial Support"}
+                          )
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+              </div>
               {data.version && (
                 <p className="text-xs font-mono text-foreground truncate">
                   {data.version}
@@ -333,70 +362,22 @@ export const ChainCard = ({
           </div>
         </CardContent>
         <CardFooter className="flex flex-col items-start pt-2 pb-4 px-4 space-y-2">
-          {cosmovisorInfo && (
-            <div className="w-full">
-              <TooltipProvider delayDuration={100}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Badge
-                      variant={
-                        Object.keys(cosmovisorInfo.checksums).length > 0
-                          ? "success"
-                          : "warning"
-                      }
-                      className="flex items-center gap-1"
-                    >
-                      <Rocket className="h-3 w-3" />
-                      Cosmovisor
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent
-                    side="top"
-                    align="start"
-                    className="bg-blue-50 text-blue-900 border border-blue-200 dark:bg-blue-950 dark:text-blue-200 dark:border-blue-800 shadow-md rounded-md p-2 max-w-xs text-xs"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <p className="font-semibold mb-1">Plan: {cosmovisorInfo.name}</p>
-                    {Object.keys(cosmovisorInfo.checksums).length > 0 ? (
-                      <>
-                        <p className="font-medium mt-1">Checksums:</p>
-                        <ul className="list-disc list-inside">
-                          {Object.entries(cosmovisorInfo.checksums).map(
-                            ([platform, checksum]) => (
-                              <li key={platform} className="font-mono text-muted-foreground">
-                                {platform}: {checksum}
-                              </li>
-                            )
-                          )}
-                        </ul>
-                      </>
-                    ) : (
-                      <p className="text-muted-foreground italic mt-1">
-                        No checksums found in URLs
-                      </p>
-                    )}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          )}
           {upgradeFound && data.estimated_upgrade_time && (
             <div className="w-full">
-              <CountdownTimer targetDate={data.estimated_upgrade_time} />
+              <CountdownTimer
+                targetDate={data.estimated_upgrade_time}
+                upgradeBlockHeight={data.upgrade_block_height}
+                latestBlockHeight={data.latest_block_height}
+              />
             </div>
           )}
-          {upgradeFound && !data.estimated_upgrade_time && !cosmovisorInfo && (
+          {upgradeFound && !data.estimated_upgrade_time && (
             <div className="text-sm text-muted-foreground w-full">
               Est. Upgrade: -
             </div>
           )}
           {data.explorer_url?.url && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full"
-              asChild
-            >
+            <Button variant="outline" size="sm" className="w-full" asChild>
               <a
                 href={data.explorer_url.url}
                 target="_blank"

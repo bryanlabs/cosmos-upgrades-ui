@@ -17,7 +17,6 @@ import { useAccount } from "graz";
 import { toast } from "sonner";
 import { ChainDetailDialog } from "@/components/chain-detail-dialog";
 
-// Define the new filter types
 type StatusFilterType = "all" | "upgrade-found" | "proposed" | "plan";
 
 export const ChainSection = () => {
@@ -38,22 +37,18 @@ export const ChainSection = () => {
     string | null
   >(null);
 
-  // State for dialog
   const [selectedChain, setSelectedChain] = useState<ChainUpgradeStatus | null>(
     null
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Handler to open dialog
   const handleCardClick = (chain: ChainUpgradeStatus) => {
     setSelectedChain(chain);
     setIsDialogOpen(true);
   };
 
-  // Handler for dialog state change (needed by Radix Dialog)
   const handleOpenChange = (open: boolean) => {
     setIsDialogOpen(open);
-    // Reset selected chain when dialog closes
     if (!open) {
       setSelectedChain(null);
     }
@@ -149,25 +144,21 @@ export const ChainSection = () => {
           ? chain.network.toLowerCase().includes(searchTerm.toLowerCase())
           : true
       )
-      // Updated filter logic based on new filterType and specific source strings
       .filter((chain) => {
         switch (filterType) {
           case "upgrade-found":
-            // Correct: Show if upgrade_found is true
             return chain.upgrade_found;
           case "proposed":
-            // Correct: Check if upgrade is found AND source is 'active_upgrade_proposals'
             return (
               chain.upgrade_found && chain.source === "active_upgrade_proposals"
             );
           case "plan":
-            // Correct: Check if upgrade is found AND source is 'current_upgrade_plan'
             return (
               chain.upgrade_found && chain.source === "current_upgrade_plan"
             );
           case "all":
           default:
-            return true; // Show all chains
+            return true;
         }
       })
       .filter((chain) =>
@@ -231,10 +222,9 @@ export const ChainSection = () => {
   );
 
   return (
-    <div className="space-y-4">
+    <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-background to-muted/30 min-h-[calc(100vh-theme(space.14))]">
       <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-start sm:justify-between items-center">
         <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto">
-          {/* Updated Status Filter Select */}
           <Select
             value={filterType}
             onValueChange={(value: StatusFilterType) => setFilterType(value)}
@@ -250,7 +240,6 @@ export const ChainSection = () => {
               <SelectItem value="plan">On-Chain Plan</SelectItem>
             </SelectContent>
           </Select>
-          {/* Keep Favorites Filter Select */}
           {isConnected && (
             <Select
               value={favoriteFilter}
@@ -269,7 +258,6 @@ export const ChainSection = () => {
             </Select>
           )}
         </div>
-        {/* Keep Search Input */}
         <div className="w-full sm:w-auto sm:ml-auto">
           <Input
             type="search"
