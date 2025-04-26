@@ -45,6 +45,14 @@ export default function RootLayout({
                   height={70}
                 />
               </Link>
+              <Link href="/">
+                <Image
+                  src="/bryanlabs_logo_trans.png"
+                  alt="bryan labs logo"
+                  width={70}
+                  height={70}
+                />
+              </Link>
               <SignInButton />
             </div>
           </header>
