@@ -184,9 +184,16 @@ export const ChainCard = ({
             ) : (
               <div className="w-7 h-7 bg-gray-300 rounded-full flex-shrink-0" />
             )}
-            <CardTitle className="text-lg font-semibold capitalize truncate">
-              {data.network}
-            </CardTitle>
+            <div className="flex flex-col overflow-hidden">
+              <CardTitle className="text-lg font-semibold capitalize truncate">
+                {data.network}
+              </CardTitle>
+              {data.version && (
+                <p className="text-xs font-mono text-foreground truncate">
+                  {data.version}
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="flex-shrink-0 flex items-center gap-2">
