@@ -11,7 +11,6 @@ import { LinkIcon, Star, Copy, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import type React from "react";
-import { useState } from "react";
 import Image from "next/image";
 import { getBadgeProps } from "@/utils/badge";
 import {
@@ -22,6 +21,7 @@ import {
 } from "./ui/tooltip";
 import { useCosmovisorInfo } from "@/hooks/useCosmosvisorInfo";
 import { useTimeRemaining } from "@/hooks/useTimeRemaining";
+import { useCopy } from "@/hooks/useCopy";
 
 interface ChainCardProps {
   data: ChainUpgradeStatus;
@@ -38,10 +38,19 @@ export const ChainCard = ({
   isConnected,
   onToggleFavorite,
 }: ChainCardProps) => {
-  const [copiedBlock, setCopiedBlock] = useState(false);
-  const [copiedUpgrade, setCopiedUpgrade] = useState(false);
-  const [blockTooltipOpen, setBlockTooltipOpen] = useState(false);
-  const [upgradeTooltipOpen, setUpgradeTooltipOpen] = useState(false);
+  const {
+    copied: copiedBlock,
+    tooltipOpen: blockTooltipOpen,
+    copy: copyBlock,
+    handleTooltipOpenChange: handleBlockTooltipOpenChange,
+  } = useCopy();
+
+  const {
+    copied: copiedUpgrade,
+    tooltipOpen: upgradeTooltipOpen,
+    copy: copyUpgrade,
+    handleTooltipOpenChange: handleUpgradeTooltipOpenChange,
+  } = useCopy();
 
   const cosmovisorInfo = useCosmovisorInfo(data);
   const timeRemaining = useTimeRemaining(
@@ -50,51 +59,6 @@ export const ChainCard = ({
   );
 
   const chainId = data.network;
-
-  const handleCopy = (
-    text: string | number | null | undefined,
-    type: "block" | "upgrade"
-  ) => {
-    if (!text) return;
-    navigator.clipboard
-      .writeText(text.toString())
-      .then(() => {
-        if (type === "block") {
-          setCopiedBlock(true);
-          setBlockTooltipOpen(true);
-          setTimeout(() => {
-            setCopiedBlock(false);
-            setBlockTooltipOpen(false);
-          }, 1000);
-        } else {
-          setCopiedUpgrade(true);
-          setUpgradeTooltipOpen(true);
-          setTimeout(() => {
-            setCopiedUpgrade(false);
-            setUpgradeTooltipOpen(false);
-          }, 1000);
-        }
-      })
-      .catch((err) => {
-        console.error("Failed to copy text: ", err);
-        if (type === "block") setBlockTooltipOpen(false);
-        else setUpgradeTooltipOpen(false);
-      });
-  };
-
-  const handleBlockTooltipOpenChange = (open: boolean) => {
-    if (!open && copiedBlock) {
-      return;
-    }
-    setBlockTooltipOpen(open);
-  };
-
-  const handleUpgradeTooltipOpenChange = (open: boolean) => {
-    if (!open && copiedUpgrade) {
-      return;
-    }
-    setUpgradeTooltipOpen(open);
-  };
 
   const logoUrl = data.logo_urls?.png || data.logo_urls?.svg;
   const badgeProps = getBadgeProps(data);
@@ -265,7 +229,7 @@ export const ChainCard = ({
                         className="flex items-center gap-1 cursor-pointer group"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleCopy(data.latest_block_height, "block");
+                          copyBlock(data.latest_block_height);
                         }}
                       >
                         <p className="text-sm font-mono">
@@ -307,7 +271,7 @@ export const ChainCard = ({
                           className="flex items-center gap-1 cursor-pointer group"
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleCopy(data.upgrade_block_height, "upgrade");
+                            copyUpgrade(data.upgrade_block_height);
                           }}
                         >
                           <p className="text-sm font-mono">
