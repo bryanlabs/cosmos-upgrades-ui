@@ -41,16 +41,16 @@ export default function RootLayout({
                 <Image
                   src="/cosmosupgrades.png"
                   alt="cosmos upgrades logo"
-                  width={100}
-                  height={100}
+                  width={130}
+                  height={130}
                 />
               </Link>
               <Link href="/">
                 <Image
-                  src="/bryanlabs_logo_trans.png"
+                  src="/bryanlabs_banner.png"
                   alt="bryan labs logo"
-                  width={70}
-                  height={70}
+                  width={180}
+                  height={180}
                 />
               </Link>
               <SignInButton />
