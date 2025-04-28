@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LinkIcon, Star, Copy } from "lucide-react";
+import { LinkIcon, Star, Copy, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import type React from "react";
@@ -21,6 +21,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import { useCosmovisorInfo } from "@/hooks/useCosmosvisorInfo";
 
 interface ChainCardProps {
   data: ChainUpgradeStatus;
@@ -43,6 +44,7 @@ export const ChainCard = ({
   const [copiedUpgrade, setCopiedUpgrade] = useState(false);
   const [blockTooltipOpen, setBlockTooltipOpen] = useState(false);
   const [upgradeTooltipOpen, setUpgradeTooltipOpen] = useState(false);
+  const cosmovisorInfo = useCosmovisorInfo(data);
 
   const chainId = data.network;
 
@@ -182,9 +184,30 @@ export const ChainCard = ({
           ) : (
             <div className="w-7 h-7 bg-gray-300 rounded-full flex-shrink-0" />
           )}
-          <CardTitle className="text-lg font-semibold capitalize truncate">
-            {data.network}
-          </CardTitle>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1">
+              <CardTitle className="text-lg font-semibold capitalize truncate">
+                {data.network}
+              </CardTitle>
+              {cosmovisorInfo && (
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Rocket className="h-4 w-4 text-blue-400 flex-shrink-0 transition-transform duration-150 ease-in-out hover:scale-110" />
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      align="center"
+                      className="border shadow-md rounded-md p-2 max-w-xs text-xs"
+                    >
+                      <p>Cosmovisor Support Available</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground">{data.upgrade_name}</p>
+          </div>
         </div>
 
         <div className="flex-shrink-0 flex items-center gap-2">
@@ -235,7 +258,7 @@ export const ChainCard = ({
           </TooltipProvider>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3 pt-2 flex-grow">
+      <CardContent className="space-y-3 flex-grow">
         <div className="flex items-center justify-between flex-wrap">
           <span className="text-sm font-medium text-foreground whitespace-nowrap">
             Upgrade Status:
