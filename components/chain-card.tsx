@@ -124,7 +124,9 @@ export const ChainCard = ({
           <div className="flex flex-col">
             <div className="flex items-center gap-1">
               <CardTitle className="text-lg font-semibold capitalize truncate">
-                {data.network}
+                {data.network.length > 9
+                  ? `${data.network.slice(0, 9)}...`
+                  : data.network}
               </CardTitle>
               {cosmovisorInfo && (
                 <TooltipProvider delayDuration={100}>
