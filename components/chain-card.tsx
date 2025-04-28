@@ -11,8 +11,7 @@ import { LinkIcon, Star, Copy, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import type React from "react";
-import { formatTimeRemaining } from "@/utils/date";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { getBadgeProps } from "@/utils/badge";
 import {
@@ -22,6 +21,7 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { useCosmovisorInfo } from "@/hooks/useCosmosvisorInfo";
+import { useTimeRemaining } from "@/hooks/useTimeRemaining";
 
 interface ChainCardProps {
   data: ChainUpgradeStatus;
@@ -38,45 +38,18 @@ export const ChainCard = ({
   isConnected,
   onToggleFavorite,
 }: ChainCardProps) => {
-  const [isClient, setIsClient] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState<string | null>(null);
   const [copiedBlock, setCopiedBlock] = useState(false);
   const [copiedUpgrade, setCopiedUpgrade] = useState(false);
   const [blockTooltipOpen, setBlockTooltipOpen] = useState(false);
   const [upgradeTooltipOpen, setUpgradeTooltipOpen] = useState(false);
+
   const cosmovisorInfo = useCosmovisorInfo(data);
+  const timeRemaining = useTimeRemaining(
+    data.estimated_upgrade_time || undefined,
+    data.upgrade_found
+  );
 
   const chainId = data.network;
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isClient || !data.estimated_upgrade_time || !data.upgrade_found) {
-      setTimeRemaining(null);
-      return;
-    }
-
-    const targetDate = new Date(data.estimated_upgrade_time);
-
-    const updateCountdown = () => {
-      const now = new Date();
-      const difference = targetDate.getTime() - now.getTime();
-
-      if (difference <= 0) {
-        setTimeRemaining("Upgrade time passed");
-        clearInterval(intervalId);
-      } else {
-        setTimeRemaining(formatTimeRemaining(difference));
-      }
-    };
-
-    updateCountdown();
-    const intervalId = setInterval(updateCountdown, 1000);
-
-    return () => clearInterval(intervalId);
-  }, [isClient, data.estimated_upgrade_time, data.upgrade_found]);
 
   const handleCopy = (
     text: string | number | null | undefined,
