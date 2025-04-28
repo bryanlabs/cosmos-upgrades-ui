@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LinkIcon, Star, Copy, Rocket } from "lucide-react";
+import { LinkIcon, Star, Copy, Rocket, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import type React from "react";
@@ -303,11 +303,40 @@ export const ChainCard = ({
         </div>
 
         {upgradeFound && (
-          <p className="text-xs font-medium text-muted-foreground pt-1">
-            {timeRemaining
-              ? `Est. Upgrade in: ${timeRemaining}`
-              : "Calculating..."}
-          </p>
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <p className="text-xs font-medium text-muted-foreground pt-1">
+              {timeRemaining ? (
+                timeRemaining.days === 0 &&
+                timeRemaining.hours === 0 &&
+                timeRemaining.minutes === 0 &&
+                timeRemaining.seconds === 0 ? (
+                  "Upgrade time passed"
+                ) : (
+                  <>
+                    <strong className="font-semibold text-sm text-black">
+                      {timeRemaining.days}
+                    </strong>
+                    d{" "}
+                    <strong className="font-semibold text-sm text-black">
+                      {timeRemaining.hours}
+                    </strong>
+                    h{" "}
+                    <strong className="font-semibold text-sm text-black">
+                      {timeRemaining.minutes}
+                    </strong>
+                    m{" "}
+                    <strong className="font-semibold text-sm text-black">
+                      {timeRemaining.seconds}
+                    </strong>
+                    s
+                  </>
+                )
+              ) : (
+                "Calculating..."
+              )}
+            </p>
+          </div>
         )}
       </CardContent>
 
@@ -320,7 +349,7 @@ export const ChainCard = ({
             }}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center w-full min-w-0 gap-1.5 border rounded-md px-2 py-1 text-xs text-muted-foreground hover:bg-muted/50 transition-colors"
+            className="inline-flex items-center w-full min-w-0 gap-1.5 border rounded-md px-2 py-1 text-sm text-muted-foreground hover:bg-muted/50 transition-colors justify-center"
           >
             <LinkIcon className="h-3 w-3 flex-shrink-0" />
             <span className="truncate">{data.explorer_url.url}</span>
