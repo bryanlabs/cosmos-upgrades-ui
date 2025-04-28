@@ -333,7 +333,7 @@ export const ChainSection = () => {
       <ChainDetailDialog
         chain={selectedChain}
         isOpen={isDialogOpen}
-        onOpenChange={handleOpenChange}
+        onClose={() => handleOpenChange(false)}
       />
     </div>
   );

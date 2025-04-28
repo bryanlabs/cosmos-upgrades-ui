@@ -1,17 +1,21 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useWebhooks } from "@/hooks/useWebhooks";
+import { useUserData } from "@/hooks/useUserData";
 import { ChainUpgradeStatus } from "@/types/chain";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { getBadgeProps } from "@/utils/badge";
 import Image from "next/image";
 import { PlusIcon, TrashIcon } from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -19,34 +23,93 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useAccount } from "graz";
-import { toast } from "sonner";
 import { DiscordIcon, SlackIcon } from "./icons/index";
-import { User, Webhook } from "@/types/user";
+import { toast } from "sonner";
 
 interface ChainDetailDialogProps {
-  chain: ChainUpgradeStatus | null;
   isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
+  onClose: () => void;
+  chain: ChainUpgradeStatus | null;
 }
 
 export const ChainDetailDialog = ({
-  chain,
   isOpen,
-  onOpenChange,
+  onClose,
+  chain,
 }: ChainDetailDialogProps) => {
-  const [webhooks, setWebhooks] = useState<Webhook[]>([]);
-  const [isLoadingWebhooks, setIsLoadingWebhooks] = useState(false);
-  const [newWebhookUrl, setNewWebhookUrl] = useState("");
-  const [newWebhookLabel, setNewWebhookLabel] = useState("");
-  const [newNotificationType, setNewNotificationType] = useState("");
-  const [newNotifyBeforeUpgrade, setNewNotifyBeforeUpgrade] = useState("");
-  const { data: account } = useAccount();
-  const [userData, setUserData] = useState<User | null>(null);
-  const userAddress = account?.bech32Address;
-  const chainNetwork = chain?.network;
+  const {
+    userData,
+    userAddress,
+    isLoading: isLoadingUser,
+    error: userError,
+  } = useUserData();
+  const userId = userData?.id;
 
-  const logoUrl = chain?.logo_urls?.png || chain?.logo_urls?.svg;
+  const {
+    webhooks,
+    isLoading: isLoadingWebhooks,
+    error: webhookError,
+    fetchWebhooks,
+    addWebhook,
+    removeWebhook,
+  } = useWebhooks({
+    userId,
+    chainId: chain?.network,
+  });
+
+  const [url, setUrl] = useState("");
+  const [label, setLabel] = useState("");
+  const [notificationType, setNotificationType] = useState("");
+  const [notifyBeforeUpgrade, setNotifyBeforeUpgrade] = useState("");
+
+  useEffect(() => {
+    if (isOpen && userId && chain?.network) {
+      fetchWebhooks();
+    }
+    if (!isOpen || !chain) {
+      setUrl("");
+      setLabel("");
+      setNotificationType("");
+      setNotifyBeforeUpgrade("");
+    }
+  }, [isOpen, userId, chain?.network, fetchWebhooks, chain]);
+
+  const handleAddWebhook = async () => {
+    if (!url.trim() || !label.trim() || !notificationType) {
+      toast.warning(
+        "Please select a type, notification trigger, and enter a valid URL."
+      );
+      return;
+    }
+    if (notificationType === "before-upgrade" && !notifyBeforeUpgrade) {
+      toast.warning("Please select how long before the upgrade to notify.");
+      return;
+    }
+
+    await addWebhook({
+      url,
+      label,
+      notificationType,
+      notifyBeforeUpgrade:
+        notificationType === "before-upgrade" ? notifyBeforeUpgrade : "",
+    });
+
+    setUrl("");
+    setLabel("");
+    setNotificationType("");
+    setNotifyBeforeUpgrade("");
+  };
+
+  const handleRemoveWebhook = async (webhookId: string) => {
+    await removeWebhook(webhookId);
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      onClose();
+    }
+  };
+
   const badgeProps = chain ? getBadgeProps(chain) : null;
   const {
     text: statusBadgeText,
@@ -54,180 +117,7 @@ export const ChainDetailDialog = ({
     Icon: StatusBadgeIcon,
     link: badgeLink,
   } = badgeProps || {};
-
-  const getUserData = useCallback(async () => {
-    if (!userAddress) {
-      console.warn("getUserData called without userAddress.");
-      return null; // Or handle as appropriate
-    }
-    try {
-      const response = await fetch(`/api/users/${userAddress}`);
-      if (!response.ok) {
-        // Handle HTTP errors (e.g., 404 Not Found, 500 Server Error)
-        console.error(`API Error: ${response.status} ${response.statusText}`);
-        // Attempt to read error message from response body if available
-        const errorBody = await response.text(); // Use text() first to avoid JSON parse errors
-        throw new Error(
-          `Failed to fetch user data: ${response.status}. ${errorBody}`
-        );
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      // Depending on how you want to handle errors upstream, you might re-throw or return null
-      throw error; // Re-throwing for now
-    }
-  }, [userAddress]);
-
-  const fetchWebhooks = useCallback(async () => {
-    if (!isOpen || !userData?.id || !chainNetwork) {
-      setWebhooks([]);
-      return;
-    }
-    setIsLoadingWebhooks(true);
-    try {
-      const response = await fetch(
-        `/api/webhooks?userId=${encodeURIComponent(
-          userData.id
-        )}&chainId=${encodeURIComponent(chainNetwork)}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch webhooks");
-      }
-      const data: Webhook[] = await response.json();
-      setWebhooks(data);
-    } catch (error) {
-      console.error("Error fetching webhooks:", error);
-      toast.error("Failed to load webhooks.");
-      setWebhooks([]);
-    } finally {
-      setIsLoadingWebhooks(false);
-    }
-  }, [isOpen, userData?.id, chainNetwork]);
-
-  useEffect(() => {
-    fetchWebhooks();
-  }, [fetchWebhooks]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("Fetching user data for:", userAddress);
-        const data = await getUserData();
-        console.log("User data fetched:", data);
-        setUserData(data);
-      } catch (error) {
-        console.error("Failed to fetch user data in useEffect:", error);
-        // TODO: Handle error state in the UI
-      }
-    };
-    if (userAddress) {
-      // Only fetch if userAddress is available
-      fetchData();
-    }
-  }, [getUserData, userAddress]); // Depend on userAddress instead of getUserData
-
-  const handleAddWebhook = async () => {
-    // Check if the webhook limit has been reached
-    if (webhooks.length >= 4) {
-      toast.warning("Maximum of 4 webhooks reached.");
-      return;
-    }
-
-    // Ensure userData.id exists before proceeding
-    if (!newWebhookUrl || !newWebhookLabel || !userData?.id || !chainNetwork) {
-      toast.warning(
-        "Please select a type, enter a valid webhook URL, and ensure user data is loaded."
-      );
-      return;
-    }
-
-    try {
-      new URL(newWebhookUrl);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_err) {
-      toast.error("Invalid URL format.");
-      return;
-    }
-
-    try {
-      const response = await fetch("/api/webhooks/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: userData.id,
-          chainId: chainNetwork,
-          url: newWebhookUrl,
-          label: newWebhookLabel,
-          notificationType: newNotificationType,
-          notifyBeforeUpgrade: newNotifyBeforeUpgrade,
-        }),
-      });
-
-      if (!response.ok) {
-        let errorMessage = "Failed to add webhook";
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorMessage;
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (_parseError) {
-          errorMessage = `${response.status}: ${response.statusText}`;
-        }
-        throw new Error(errorMessage);
-      }
-
-      toast.success("Webhook added successfully!");
-      setNewWebhookUrl("");
-      setNewWebhookLabel("");
-      setNewNotificationType("");
-      setNewNotifyBeforeUpgrade("");
-      fetchWebhooks();
-    } catch (error: unknown) {
-      console.error("Error adding webhook:", error);
-      if (error instanceof Error) {
-        toast.error(`Failed to add webhook: ${error.message}`);
-      } else {
-        toast.error("An unknown error occurred while adding the webhook.");
-      }
-    }
-  };
-
-  const handleRemoveWebhook = async (webhookId: string) => {
-    try {
-      const response = await fetch(`/api/webhooks`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: webhookId }),
-      });
-
-      if (!response.ok) {
-        let errorMessage = "Failed to remove webhook";
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorMessage;
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (_parseError) {
-          errorMessage = `${response.status}: ${response.statusText}`;
-        }
-        throw new Error(errorMessage);
-      }
-
-      toast.success("Webhook removed successfully!");
-      fetchWebhooks();
-    } catch (error: unknown) {
-      console.error("Error removing webhook:", error);
-      if (error instanceof Error) {
-        toast.error(`Failed to remove webhook: ${error.message}`);
-      } else {
-        toast.error("An unknown error occurred while removing the webhook.");
-      }
-    }
-  };
+  const logoUrl = chain?.logo_urls?.png || chain?.logo_urls?.svg;
 
   const StatusBadge = () => (
     <Badge variant={statusBadgeVariant} className="flex items-center gap-1">
@@ -236,8 +126,10 @@ export const ChainDetailDialog = ({
     </Badge>
   );
 
+  if (!chain) return null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -251,7 +143,7 @@ export const ChainDetailDialog = ({
                 >
                   <Image
                     src={logoUrl}
-                    alt={`${chain?.network} Logo`}
+                    alt={`${chain.network} Logo`}
                     width={28}
                     height={28}
                     className="rounded-full flex-shrink-0"
@@ -260,7 +152,7 @@ export const ChainDetailDialog = ({
               ) : (
                 <Image
                   src={logoUrl}
-                  alt={`${chain?.network} Logo`}
+                  alt={`${chain.network} Logo`}
                   width={28}
                   height={28}
                   className="rounded-full flex-shrink-0"
@@ -269,15 +161,15 @@ export const ChainDetailDialog = ({
             ) : (
               <div className="w-7 h-7 bg-gray-300 rounded-full flex-shrink-0" />
             )}
-            <span className="capitalize">{chain?.network}</span>
+            <span className="capitalize">{chain.network}</span>
             <Badge
               className={`capitalize text-xs px-2 py-0.5 border ${
-                chain?.type === "mainnet"
+                chain.type === "mainnet"
                   ? "bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-900 dark:text-sky-200 dark:border-sky-700"
                   : "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900 dark:text-amber-200 dark:border-amber-700"
               }`}
             >
-              {chain?.type}
+              {chain.type}
             </Badge>
             {badgeLink ? (
               <a
@@ -294,17 +186,23 @@ export const ChainDetailDialog = ({
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4 pt-4">
-          {userAddress ? (
+          {isLoadingUser ? (
+            <p className="text-sm text-muted-foreground italic text-center py-4">
+              Loading user data...
+            </p>
+          ) : userAddress ? (
             <>
               <h3 className="text-sm font-semibold mb-2">
                 Webhooks Notifications
               </h3>
+              {userError && (
+                <p className="text-sm text-red-500 italic">
+                  Error loading user data: {userError.message}
+                </p>
+              )}
               <div className="space-y-3">
                 <div className="flex flex-col sm:flex-row gap-2 items-center">
-                  <Select
-                    value={newWebhookLabel}
-                    onValueChange={setNewWebhookLabel}
-                  >
+                  <Select value={label} onValueChange={setLabel}>
                     <SelectTrigger className="w-full sm:w-[180px]">
                       <SelectValue placeholder="Select Type" />
                     </SelectTrigger>
@@ -313,26 +211,25 @@ export const ChainDetailDialog = ({
                         <DiscordIcon /> Discord
                       </SelectItem>
                       <SelectItem value="slack">
-                        <SlackIcon />
-                        Slack
+                        <SlackIcon /> Slack
                       </SelectItem>
                     </SelectContent>
                   </Select>
                   <Input
                     type="url"
                     placeholder="Enter webhook URL (https://...)"
-                    value={newWebhookUrl}
-                    onChange={(e) => setNewWebhookUrl(e.target.value)}
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") handleAddWebhook();
                     }}
                     className="flex-grow"
-                    disabled={!userAddress || !chainNetwork}
+                    disabled={!userAddress || !chain.network}
                   />
                 </div>
                 <Select
-                  value={newNotificationType}
-                  onValueChange={setNewNotificationType}
+                  value={notificationType}
+                  onValueChange={setNotificationType}
                 >
                   <SelectTrigger className="w-full ">
                     <SelectValue placeholder="Choose when to be notified." />
@@ -349,10 +246,10 @@ export const ChainDetailDialog = ({
                     </SelectItem>
                   </SelectContent>
                 </Select>
-                {newNotificationType === "before-upgrade" && (
+                {notificationType === "before-upgrade" && (
                   <Select
-                    value={newNotifyBeforeUpgrade}
-                    onValueChange={setNewNotifyBeforeUpgrade}
+                    value={notifyBeforeUpgrade}
+                    onValueChange={setNotifyBeforeUpgrade}
                   >
                     <SelectTrigger className="w-full ">
                       <SelectValue placeholder="Choose how long before the upgrade to notify." />
@@ -365,22 +262,31 @@ export const ChainDetailDialog = ({
                   </Select>
                 )}
                 <Button
-                  size="icon"
                   onClick={handleAddWebhook}
                   aria-label="Add webhook"
-                  className="w-full"
+                  className="w-full flex items-center justify-center gap-1"
                   disabled={
-                    !newWebhookUrl ||
-                    !newWebhookLabel ||
-                    !userAddress ||
-                    !chainNetwork ||
-                    !newNotificationType
+                    isLoadingWebhooks ||
+                    !url ||
+                    !label ||
+                    !notificationType ||
+                    (notificationType === "before-upgrade" &&
+                      !notifyBeforeUpgrade)
                   }
                 >
-                  Add Webhook
+                  {isLoadingWebhooks && webhooks.length > 0
+                    ? "Adding..."
+                    : "Add Webhook"}
                   <PlusIcon className="h-4 w-4" />
                 </Button>
-                {isLoadingWebhooks ? (
+
+                {webhookError && (
+                  <p className="text-sm text-red-500 italic">
+                    Error managing webhooks: {webhookError.message}
+                  </p>
+                )}
+
+                {isLoadingWebhooks && webhooks.length === 0 ? (
                   <p className="text-xs text-muted-foreground italic pt-1">
                     Loading webhooks...
                   </p>
@@ -418,6 +324,7 @@ export const ChainDetailDialog = ({
                           className="h-7 w-7 text-muted-foreground hover:text-destructive flex-shrink-0"
                           onClick={() => handleRemoveWebhook(webhook.id)}
                           aria-label={`Remove webhook ${webhook.label}`}
+                          disabled={isLoadingWebhooks}
                         >
                           <TrashIcon className="h-4 w-4" />
                         </Button>
