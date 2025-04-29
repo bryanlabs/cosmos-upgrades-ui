@@ -29,6 +29,7 @@ export const useTimeRemaining = (
     }
 
     const targetDate = new Date(estimatedUpgradeTime);
+    let intervalId: NodeJS.Timeout | null = null;
 
     const updateCountdown = () => {
       const now = new Date();
@@ -37,7 +38,7 @@ export const useTimeRemaining = (
       if (difference <= 0) {
         // Set all components to 0 when time is up or passed
         setTimeRemaining({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        clearInterval(intervalId);
+        if (intervalId) clearInterval(intervalId);
       } else {
         // Calculate days, hours, minutes, seconds
         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -52,10 +53,12 @@ export const useTimeRemaining = (
     // Initial calculation
     updateCountdown();
     // Update every second
-    const intervalId = setInterval(updateCountdown, 1000);
+    intervalId = setInterval(updateCountdown, 1000);
 
     // Cleanup interval on unmount or dependency change
-    return () => clearInterval(intervalId);
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [isClient, estimatedUpgradeTime, upgradeFound]);
 
   // Return the object with time components
