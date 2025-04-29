@@ -22,6 +22,10 @@ import {
 import { useCosmovisorInfo } from "@/hooks/useCosmosvisorInfo";
 import { useTimeRemaining } from "@/hooks/useTimeRemaining";
 import { useCopy } from "@/hooks/useCopy";
+import {
+  testnetToMainnetNetworkMap,
+  mainnetNetworkLogos,
+} from "@/constants/chain-mappings";
 
 interface ChainCardProps {
   data: ChainUpgradeStatus;
@@ -60,7 +64,18 @@ export const ChainCard = ({
 
   const chainId = data.network;
 
-  const logoUrl = data.logo_urls?.png || data.logo_urls?.svg;
+  const isKnownTestnet = data.network in testnetToMainnetNetworkMap;
+
+  let displayLogoUrl: string | undefined;
+  if (isKnownTestnet) {
+    const mainnetNetwork = testnetToMainnetNetworkMap[data.network];
+    displayLogoUrl = mainnetNetworkLogos[mainnetNetwork];
+  }
+  if (!displayLogoUrl) {
+    const originalLogo = data.logo_urls?.png || data.logo_urls?.svg;
+    displayLogoUrl = originalLogo ?? undefined;
+  }
+
   const badgeProps = getBadgeProps(data);
   const {
     text: statusBadgeText,
@@ -93,7 +108,7 @@ export const ChainCard = ({
     <Card className="w-full shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 flex flex-col h-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 gap-2">
         <div className="flex items-center gap-2 min-w-0">
-          {logoUrl ? (
+          {displayLogoUrl ? (
             badgeLink ? (
               <a
                 href={badgeLink}
@@ -102,7 +117,7 @@ export const ChainCard = ({
                 className="no-underline flex-shrink-0"
               >
                 <Image
-                  src={logoUrl}
+                  src={displayLogoUrl}
                   alt={`${data.network} Logo`}
                   width={28}
                   height={28}
@@ -111,7 +126,7 @@ export const ChainCard = ({
               </a>
             ) : (
               <Image
-                src={logoUrl}
+                src={displayLogoUrl}
                 alt={`${data.network} Logo`}
                 width={28}
                 height={28}
