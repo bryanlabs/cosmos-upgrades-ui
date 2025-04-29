@@ -280,6 +280,14 @@ export const ChainDetailDialog = ({
                   <PlusIcon className="h-4 w-4" />
                 </Button>
 
+                {process.env.NEXT_PUBLIC_IS_NOTIFICATION_READY !== "true" && (
+                  <div>
+                    <p className="text-sm italic text-red-500">
+                      Notifications are not ready yet.
+                    </p>
+                  </div>
+                )}
+
                 {webhookError && (
                   <p className="text-sm text-red-500 italic">
                     Error managing webhooks: {webhookError.message}
