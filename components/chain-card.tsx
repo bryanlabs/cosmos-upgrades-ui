@@ -22,10 +22,7 @@ import {
 import { useCosmovisorInfo } from "@/hooks/useCosmosvisorInfo";
 import { useTimeRemaining } from "@/hooks/useTimeRemaining";
 import { useCopy } from "@/hooks/useCopy";
-import {
-  testnetToMainnetNetworkMap,
-  mainnetNetworkLogos,
-} from "@/constants/chain-mappings";
+import { networkLogos } from "@/constants/chain-mappings";
 
 interface ChainCardProps {
   data: ChainUpgradeStatus;
@@ -64,13 +61,8 @@ export const ChainCard = ({
 
   const chainId = data.network;
 
-  const isKnownTestnet = data.network in testnetToMainnetNetworkMap;
+  let displayLogoUrl: string | undefined = networkLogos[data.network];
 
-  let displayLogoUrl: string | undefined;
-  if (isKnownTestnet) {
-    const mainnetNetwork = testnetToMainnetNetworkMap[data.network];
-    displayLogoUrl = mainnetNetworkLogos[mainnetNetwork];
-  }
   if (!displayLogoUrl) {
     const originalLogo = data.logo_urls?.png || data.logo_urls?.svg;
     displayLogoUrl = originalLogo ?? undefined;
