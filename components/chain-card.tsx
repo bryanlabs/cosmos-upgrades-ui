@@ -169,7 +169,7 @@ export const ChainCard = ({
             className={`capitalize text-xs px-2 py-0.5 border ${
               data.type === "mainnet"
                 ? "bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-900 dark:text-sky-200 dark:border-sky-700"
-                : "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900 dark:text-amber-200 dark:border-amber-700"
+                : "bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900 dark:text-purple-200 dark:border-purple-700"
             }`}
           >
             {data.type}
