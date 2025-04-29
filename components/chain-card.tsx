@@ -145,7 +145,7 @@ export const ChainCard = ({
                 </TooltipProvider>
               )}
             </div>
-            <p className="text-xs text-muted-foreground">{data.upgrade_name}</p>
+            <p className="text-xs text-muted-foreground">{data.version}</p>
           </div>
         </div>
 
