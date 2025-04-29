@@ -352,7 +352,9 @@ export const ChainCard = ({
             className="inline-flex items-center w-full min-w-0 gap-1.5 border rounded-md px-2 py-1 text-sm text-muted-foreground hover:bg-muted/50 transition-colors justify-center"
           >
             <LinkIcon className="h-3 w-3 flex-shrink-0" />
-            <span className="truncate">{data.explorer_url.url}</span>
+            <span className="truncate">
+              {data.explorer_url.url.replace(/^(https?:\/\/)/, "")}
+            </span>
           </a>
         </CardFooter>
       )}
