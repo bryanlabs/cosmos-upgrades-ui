@@ -1,0 +1,57 @@
+# .github/workflows/ci.yml
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint and Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Specify your project's Node.js version
+          cache: 'npm' # Or 'yarn' if you use yarn
+
+      - name: Install dependencies
+        run: npm ci # Use 'npm ci' for faster, reliable installs in CI
+
+      - name: Run ESLint
+        run: npm run lint
+
+      # Optional: Add type checking if not covered by lint script
+      # - name: Check TypeScript types
+      #   run: npx tsc --noEmit
+
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+    needs: lint # Run build only if lint passes
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Specify your project's Node.js version
+          cache: 'npm' # Or 'yarn' if you use yarn
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate # Ensure Prisma client is generated before build
+
+      - name: Build Next.js application
+        run: npm run build
