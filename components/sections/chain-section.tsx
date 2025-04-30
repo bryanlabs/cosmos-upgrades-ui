@@ -15,6 +15,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ChainDetailDialog } from "@/components/chain-detail-dialog";
 import { ChainUpgradeStatus } from "@/types/chain";
 import { useFavoriteChains } from "@/hooks/useFavoriteChains";
+import { CosmovisorDialog } from "@/components/cosmovisor-dialog";
+import { useCosmovisorInfo } from "@/hooks/useCosmosvisorInfo";
 
 export const ChainSection = () => {
   const {
@@ -46,10 +48,20 @@ export const ChainSection = () => {
     null
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCosmovisorDialogOpen, setIsCosmovisorDialogOpen] = useState(false);
 
   const handleCardClick = (chain: ChainUpgradeStatus) => {
     setSelectedChain(chain);
     setIsDialogOpen(true);
+  };
+
+  const handleCosmovisorOpen = (chain: ChainUpgradeStatus) => {
+    setSelectedChain(chain);
+    setIsCosmovisorDialogOpen(true);
+  };
+
+  const handleCosmovisorClose = () => {
+    setIsCosmovisorDialogOpen(false);
   };
 
   const handleOpenChange = (open: boolean) => {
@@ -219,6 +231,7 @@ export const ChainSection = () => {
                   onToggleFavorite={handleToggleFavorite}
                   isUpdatingFavorite={updatingFavoriteChainId === chain.network}
                   isConnected={isConnected}
+                  onCosmovisorIconClick={handleCosmovisorOpen}
                 />
               </div>
             ))}
@@ -237,6 +250,38 @@ export const ChainSection = () => {
         onClose={() => handleOpenChange(false)}
         chain={selectedChain}
       />
+
+      {/* Cosmovisor Dialog */}
+      {selectedChain && isCosmovisorDialogOpen && (
+        <RenderCosmovisorDialog
+          isOpen={isCosmovisorDialogOpen}
+          onClose={handleCosmovisorClose}
+          chain={selectedChain}
+        />
+      )}
     </div>
+  );
+};
+
+// Helper component to ensure hook is called conditionally but correctly
+const RenderCosmovisorDialog = ({
+  isOpen,
+  onClose,
+  chain,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  chain: ChainUpgradeStatus;
+}) => {
+  const cosmovisorInfo = useCosmovisorInfo(chain);
+
+  return (
+    <CosmovisorDialog
+      isOpen={isOpen}
+      onClose={onClose}
+      cosmovisorInfo={cosmovisorInfo}
+      estimatedUpgradeTime={chain.estimated_upgrade_time || undefined}
+      upgradeFound={chain.upgrade_found}
+    />
   );
 };
