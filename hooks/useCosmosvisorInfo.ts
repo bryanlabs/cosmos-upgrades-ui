@@ -11,9 +11,16 @@ const extractChecksum = (url: string): string | null => {
 };
 
 export interface ParsedPlanInfo {
-  name: string;
-  binaries: Record<string, string>;
-  checksums: Record<string, string>;
+  name?: string;
+  time?: string; // ISO datetime string
+  height?: string;
+  info?: string; // raw stringified JSON, but we can parse it to:
+  parsedInfo?: {
+    binaries: {
+      [platform: string]: string;
+    };
+  };
+  upgraded_client_state: null;
 }
 
 export const useCosmovisorInfo = (data: ChainUpgradeStatus) => {
@@ -47,8 +54,13 @@ export const useCosmovisorInfo = (data: ChainUpgradeStatus) => {
               }
               setCosmovisorInfo({
                 name: parsedPlan.name || "N/A",
-                binaries: parsedInfo.binaries,
-                checksums,
+                parsedInfo: {
+                  binaries: parsedInfo.binaries ?? {},
+                },
+                time: parsedPlan.time || "N/A",
+                height: parsedPlan.height || "N/A",
+                info: parsedPlan.info || "N/A",
+                upgraded_client_state: parsedPlan.upgraded_client_state || null,
               });
             } else {
               setCosmovisorInfo(null);
