@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { LinkIcon, Star, Copy, Rocket, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-import type React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { getBadgeProps } from "@/utils/badge";
 import {
@@ -24,6 +24,7 @@ import { useTimeRemaining } from "@/hooks/useTimeRemaining";
 import { useCopy } from "@/hooks/useCopy";
 import { networkLogos } from "@/constants/chain-mappings";
 import { isCosmovisorCompleted } from "@/utils/cosmovisor";
+import { CosmovisorDialog } from "./cosmovisor-dialog";
 
 interface ChainCardProps {
   data: ChainUpgradeStatus;
@@ -40,6 +41,8 @@ export const ChainCard = ({
   isConnected,
   onToggleFavorite,
 }: ChainCardProps) => {
+  const [isCosmovisorDialogOpen, setIsCosmovisorDialogOpen] = useState(false);
+
   const {
     copied: copiedBlock,
     tooltipOpen: blockTooltipOpen,
@@ -100,6 +103,12 @@ export const ChainCard = ({
     }
   };
 
+  const handleCosmovisorClick = () => {
+    if (cosmovisorInfo) {
+      setIsCosmovisorDialogOpen(true);
+    }
+  };
+
   return (
     <Card className="w-full shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 flex flex-col h-full">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 gap-2">
@@ -143,13 +152,21 @@ export const ChainCard = ({
                 <TooltipProvider delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Rocket
-                        className={`h-4 w-4 ${
-                          cosmovisorCompleted
-                            ? "text-green-400"
-                            : "text-yellow-400"
-                        } flex-shrink-0 transition-transform duration-150 ease-in-out hover:scale-110`}
-                      />
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCosmovisorClick();
+                        }}
+                        className="cursor-pointer"
+                      >
+                        <Rocket
+                          className={`h-4 w-4 ${
+                            cosmovisorCompleted
+                              ? "text-green-400"
+                              : "text-yellow-400"
+                          } flex-shrink-0 transition-transform duration-150 ease-in-out hover:scale-110`}
+                        />
+                      </div>
                     </TooltipTrigger>
                     <TooltipContent
                       side="top"
@@ -375,6 +392,14 @@ export const ChainCard = ({
           </a>
         </CardFooter>
       )}
+
+      <CosmovisorDialog
+        isOpen={isCosmovisorDialogOpen}
+        onClose={() => setIsCosmovisorDialogOpen(false)}
+        cosmovisorInfo={cosmovisorInfo}
+        estimatedUpgradeTime={data.estimated_upgrade_time || undefined}
+        upgradeFound={data.upgrade_found}
+      />
     </Card>
   );
 };
