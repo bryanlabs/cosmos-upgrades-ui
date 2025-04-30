@@ -23,6 +23,7 @@ import { useCosmovisorInfo } from "@/hooks/useCosmosvisorInfo";
 import { useTimeRemaining } from "@/hooks/useTimeRemaining";
 import { useCopy } from "@/hooks/useCopy";
 import { networkLogos } from "@/constants/chain-mappings";
+import { isCosmovisorCompleted } from "@/utils/cosmovisor";
 
 interface ChainCardProps {
   data: ChainUpgradeStatus;
@@ -54,6 +55,9 @@ export const ChainCard = ({
   } = useCopy();
 
   const cosmovisorInfo = useCosmovisorInfo(data);
+  const cosmovisorCompleted = cosmovisorInfo
+    ? isCosmovisorCompleted(cosmovisorInfo)
+    : false;
   const timeRemaining = useTimeRemaining(
     data.estimated_upgrade_time || undefined,
     data.upgrade_found
@@ -139,7 +143,13 @@ export const ChainCard = ({
                 <TooltipProvider delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Rocket className="h-4 w-4 text-blue-400 flex-shrink-0 transition-transform duration-150 ease-in-out hover:scale-110" />
+                      <Rocket
+                        className={`h-4 w-4 ${
+                          cosmovisorCompleted
+                            ? "text-green-400"
+                            : "text-yellow-400"
+                        } flex-shrink-0 transition-transform duration-150 ease-in-out hover:scale-110`}
+                      />
                     </TooltipTrigger>
                     <TooltipContent
                       side="top"
