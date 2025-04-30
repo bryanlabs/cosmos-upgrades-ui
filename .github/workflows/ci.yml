@@ -33,10 +33,10 @@ jobs:
       # - name: Check TypeScript types
       #   run: npx tsc --noEmit
 
-  build:
-    name: Build Project
+  build-app: # Renamed from 'build'
+    name: Build Next.js App # Renamed from 'Build Project'
     runs-on: ubuntu-latest
-    needs: lint # Run build only if lint passes
+    needs: lint # Depends on lint job
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -55,3 +55,34 @@ jobs:
 
       - name: Build Next.js application
         run: npm run build
+
+  build-image: # New job for Docker
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: build-app # Depends on the app build job
+    permissions:
+      contents: read
+      packages: write # Needed to push to GHCR
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: . # Assumes Dockerfile is in the root
+          push: true # Set to false if you only want to build on PRs, true on merge/push to main
+          tags: ghcr.io/${{ github.repository }}:latest # Adjust tag as needed
+          # Add build args if needed, e.g.:
+          # build-args: |
+          #   NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID }}
