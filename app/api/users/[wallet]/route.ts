@@ -5,7 +5,7 @@ import { getUserByWallet } from "@/lib/prisma";
 function extractWalletAddress(request: Request): string | null {
   const url = new URL(request.url);
   const segments = url.pathname.split("/");
-  const wallet = segments[segments.indexOf("user") + 1];
+  const wallet = segments[segments.indexOf("users") + 1];
   return wallet || null;
 }
 
