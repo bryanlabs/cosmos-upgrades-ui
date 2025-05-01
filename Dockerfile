@@ -11,6 +11,9 @@ COPY package*.json ./
 # Use --ignore-scripts to skip native module compilation during initial install
 RUN npm ci --ignore-scripts
 
+# Manually run the graz generation script that would normally run during postinstall
+RUN npx graz generate -g
+
 # Copy source code
 COPY . .
 
@@ -21,9 +24,8 @@ RUN npm run build -- --no-lint
 FROM nginx:stable-alpine
 
 # Copy build output from previous stage
-COPY --from=build /app/build /usr/share/nginx/html
-# If Next.js outputs to a different directory (like .next or out), adjust the path accordingly
-# COPY --from=build /app/out /usr/share/nginx/html
+# Adjust this path depending on Next.js output directory (.next/out or similar)
+COPY --from=build /app/out /usr/share/nginx/html
 
 # Copy custom nginx config if needed
 # COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
