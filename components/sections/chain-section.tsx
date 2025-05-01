@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { useAllChainData } from "@/hooks/useChainData";
 import { ChainCard } from "@/components/chain-card";
 import { Input } from "@/components/ui/input";
@@ -12,10 +12,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChainUpgradeStatus } from "@/types/chain";
-import { useAccount } from "graz";
-import { toast } from "sonner";
 import { ChainDetailDialog } from "@/components/chain-detail-dialog";
+import { ChainUpgradeStatus } from "@/types/chain";
+import { useFavoriteChains } from "@/hooks/useFavoriteChains";
+import { CosmovisorDialog } from "@/components/cosmovisor-dialog";
+import { useCosmovisorInfo } from "@/hooks/useCosmosvisorInfo";
 
 export const ChainSection = () => {
   const {
@@ -23,7 +24,14 @@ export const ChainSection = () => {
     isLoading: isLoadingChains,
     error,
   } = useAllChainData();
-  const { isConnected, data: account } = useAccount();
+  const {
+    favoritesSet,
+    isLoadingFavorites,
+    updatingFavoriteChainId,
+    handleToggleFavorite,
+    isConnected,
+  } = useFavoriteChains();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<"all" | "upgraded">("all");
   const [networkTypeFilter, setNetworkTypeFilter] = useState<
@@ -32,118 +40,37 @@ export const ChainSection = () => {
   const [favoriteFilter, setFavoriteFilter] = useState<"all" | "favorites">(
     "all"
   );
-  const [favoriteChains, setFavoriteChains] = useState<string[]>([]);
-  const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
-  const [updatingFavoriteChainId, setUpdatingFavoriteChainId] = useState<
-    string | null
-  >(null);
+  const [sortBy, setSortBy] = useState<"default" | "time_asc" | "alpha_asc">(
+    "default"
+  );
 
-  // State for dialog
   const [selectedChain, setSelectedChain] = useState<ChainUpgradeStatus | null>(
     null
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCosmovisorDialogOpen, setIsCosmovisorDialogOpen] = useState(false);
 
-  // Handler to open dialog
   const handleCardClick = (chain: ChainUpgradeStatus) => {
     setSelectedChain(chain);
     setIsDialogOpen(true);
   };
 
-  // Handler for dialog state change (needed by Radix Dialog)
-  const handleOpenChange = (open: boolean) => {
-    setIsDialogOpen(open);
-    // Reset selected chain when dialog closes
-    if (!open) {
-      setSelectedChain(null);
-    }
+  const handleCosmovisorOpen = (chain: ChainUpgradeStatus) => {
+    setSelectedChain(chain);
+    setIsCosmovisorDialogOpen(true);
   };
 
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      if (isConnected && account?.bech32Address) {
-        setIsLoadingFavorites(true);
-        try {
-          const response = await fetch(
-            `/api/user/${account.bech32Address}/favorites`
-          );
-          if (!response.ok) {
-            console.error("Failed to fetch favorites", await response.text());
-            setFavoriteChains([]);
-            return;
-          }
-          const favorites = await response.json();
-          setFavoriteChains(Array.isArray(favorites) ? favorites : []);
-        } catch (err) {
-          console.error("Error fetching favorite chains:", err);
-          setFavoriteChains([]);
-        } finally {
-          setIsLoadingFavorites(false);
-        }
-      } else {
-        setFavoriteChains([]);
-        setIsLoadingFavorites(false);
-      }
-    };
+  const handleCosmovisorClose = () => {
+    setIsCosmovisorDialogOpen(false);
+  };
 
-    fetchFavorites();
-  }, [isConnected, account?.bech32Address]);
+  const handleOpenChange = (open: boolean) => {
+    setIsDialogOpen(open);
+    if (!open) setSelectedChain(null);
+  };
 
-  const favoritesSet = useMemo(() => new Set(favoriteChains), [favoriteChains]);
-
-  const handleToggleFavorite = useCallback(
-    async (chainId: string) => {
-      if (!isConnected || !account?.bech32Address) {
-        toast.info("Please connect your wallet to manage favorites.");
-        return;
-      }
-
-      const isCurrentlyFavorite = favoritesSet.has(chainId);
-      const method = isCurrentlyFavorite ? "DELETE" : "POST";
-      const optimisticAction = isCurrentlyFavorite ? "Removing" : "Adding";
-      const successAction = isCurrentlyFavorite ? "removed from" : "added to";
-
-      setUpdatingFavoriteChainId(chainId);
-
-      try {
-        const response = await fetch(
-          `/api/user/${account.bech32Address}/favorites`,
-          {
-            method: method,
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ chainId }),
-          }
-        );
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            result.error ||
-              `Failed to ${method === "POST" ? "add" : "remove"} favorite`
-          );
-        }
-
-        setFavoriteChains(Array.isArray(result) ? result : []);
-        toast.success(`${chainId} ${successAction} favorites!`);
-      } catch (err) {
-        console.error(`Error ${optimisticAction.toLowerCase()} favorite:`, err);
-        toast.error(
-          `Failed to ${method === "POST" ? "add" : "remove"} ${chainId}. ${
-            err instanceof Error ? err.message : ""
-          }`
-        );
-      } finally {
-        setUpdatingFavoriteChainId(null);
-      }
-    },
-    [isConnected, account?.bech32Address, favoritesSet]
-  );
-
-  const filteredChains = useMemo(() => {
-    return (allChains ?? [])
+  const filteredAndSortedChains = useMemo(() => {
+    const filtered = (allChains ?? [])
       .filter((chain) =>
         searchTerm
           ? chain.network.toLowerCase().includes(searchTerm.toLowerCase())
@@ -160,6 +87,28 @@ export const ChainSection = () => {
           ? isConnected && favoritesSet.has(chain.network)
           : true
       );
+
+    if (sortBy === "alpha_asc") {
+      return filtered.sort((a, b) => a.network.localeCompare(b.network));
+    }
+
+    if (sortBy === "time_asc") {
+      return filtered.sort((a, b) => {
+        const timeA = a.estimated_upgrade_time
+          ? new Date(a.estimated_upgrade_time).getTime()
+          : Infinity;
+        const timeB = b.estimated_upgrade_time
+          ? new Date(b.estimated_upgrade_time).getTime()
+          : Infinity;
+        if (timeA === Infinity && timeB === Infinity)
+          return a.network.localeCompare(b.network);
+        if (timeA === Infinity) return 1;
+        if (timeB === Infinity) return -1;
+        return timeA - timeB;
+      });
+    }
+
+    return filtered;
   }, [
     allChains,
     searchTerm,
@@ -168,6 +117,7 @@ export const ChainSection = () => {
     favoritesSet,
     favoriteFilter,
     isConnected,
+    sortBy,
   ]);
 
   if (error) {
@@ -180,49 +130,14 @@ export const ChainSection = () => {
 
   const isLoading = isLoadingChains || (isConnected && isLoadingFavorites);
 
-  const renderGridContent = (data: ChainUpgradeStatus[] | undefined) => (
-    <div className="space-y-6 pt-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {data?.map((chain) => (
-          <div
-            key={chain.network}
-            onClick={() => handleCardClick(chain)}
-            className="cursor-pointer"
-          >
-            <ChainCard
-              data={chain}
-              isFavorite={favoritesSet.has(chain.network)}
-              onToggleFavorite={handleToggleFavorite}
-              isUpdatingFavorite={updatingFavoriteChainId === chain.network}
-              isConnected={isConnected}
-            />
-          </div>
-        ))}
-      </div>
-      {data?.length === 0 && (
-        <div className="text-center text-muted-foreground col-span-full pt-4">
-          No chains found matching &quot;
-          {searchTerm}&quot;.
-        </div>
-      )}
-    </div>
-  );
-
-  const renderSkeletonGrid = () => (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {Array.from({ length: 8 }).map((_, index) => (
-        <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
-      ))}
-    </div>
-  );
-
   return (
     <div className="space-y-4">
+      {/* Filters */}
       <div className="flex flex-col sm:flex-row flex-wrap gap-2 justify-start sm:justify-between items-center">
-        <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto items-center">
           <Select
             value={filterType}
-            onValueChange={(value: "all" | "upgraded") => setFilterType(value)}
+            onValueChange={(v) => setFilterType(v as "all" | "upgraded")}
             disabled={isLoadingChains}
           >
             <SelectTrigger className="w-full sm:w-[120px]">
@@ -230,18 +145,19 @@ export const ChainSection = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="upgraded">Upgraded</SelectItem>
+              <SelectItem value="upgraded">Has Upgrade</SelectItem>
             </SelectContent>
           </Select>
+
           <Select
             value={networkTypeFilter}
-            onValueChange={(value: "all" | "mainnet" | "testnet") =>
-              setNetworkTypeFilter(value)
+            onValueChange={(v) =>
+              setNetworkTypeFilter(v as "all" | "mainnet" | "testnet")
             }
             disabled={isLoadingChains}
           >
-            <SelectTrigger className="w-full sm:w-[120px]">
-              <SelectValue placeholder="Network" />
+            <SelectTrigger className="w-full sm:w-[130px]">
+              <SelectValue placeholder="Network Type" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Networks</SelectItem>
@@ -249,13 +165,12 @@ export const ChainSection = () => {
               <SelectItem value="testnet">Testnet</SelectItem>
             </SelectContent>
           </Select>
+
           {isConnected && (
             <Select
               value={favoriteFilter}
-              onValueChange={(value: "all" | "favorites") =>
-                setFavoriteFilter(value)
-              }
-              disabled={isLoadingChains || isLoadingFavorites}
+              onValueChange={(v) => setFavoriteFilter(v as "all" | "favorites")}
+              disabled={isLoading}
             >
               <SelectTrigger className="w-full sm:w-[120px]">
                 <SelectValue placeholder="Favorites" />
@@ -266,24 +181,107 @@ export const ChainSection = () => {
               </SelectContent>
             </Select>
           )}
-        </div>
-        <div className="w-full sm:w-auto sm:ml-auto">
-          <Input
-            type="search"
-            placeholder="Search chains..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full sm:w-[250px]"
+
+          <Select
+            value={sortBy}
+            onValueChange={(v) =>
+              setSortBy(v as "default" | "time_asc" | "alpha_asc")
+            }
             disabled={isLoadingChains}
-          />
+          >
+            <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="default">Sort: Default</SelectItem>
+              <SelectItem value="time_asc">Sort: Upgrade Time</SelectItem>
+              <SelectItem value="alpha_asc">Sort: Alphabetical</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
+
+        <Input
+          placeholder="Search chain..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full sm:w-[250px]"
+          disabled={isLoading}
+        />
       </div>
-      {isLoading ? renderSkeletonGrid() : renderGridContent(filteredChains)}
+
+      {/* Grid */}
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-6 pt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredAndSortedChains.map((chain) => (
+              <div
+                key={chain.network}
+                onClick={() => handleCardClick(chain)}
+                className="cursor-pointer"
+              >
+                <ChainCard
+                  data={chain}
+                  isFavorite={favoritesSet.has(chain.network)}
+                  onToggleFavorite={handleToggleFavorite}
+                  isUpdatingFavorite={updatingFavoriteChainId === chain.network}
+                  isConnected={isConnected}
+                  onCosmovisorIconClick={handleCosmovisorOpen}
+                />
+              </div>
+            ))}
+          </div>
+          {filteredAndSortedChains.length === 0 && (
+            <div className="text-center text-muted-foreground col-span-full pt-4">
+              No chains found matching your filters.
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Chain Detail Dialog */}
       <ChainDetailDialog
-        chain={selectedChain}
         isOpen={isDialogOpen}
-        onOpenChange={handleOpenChange}
+        onClose={() => handleOpenChange(false)}
+        chain={selectedChain}
       />
+
+      {/* Cosmovisor Dialog */}
+      {selectedChain && isCosmovisorDialogOpen && (
+        <RenderCosmovisorDialog
+          isOpen={isCosmovisorDialogOpen}
+          onClose={handleCosmovisorClose}
+          chain={selectedChain}
+        />
+      )}
     </div>
+  );
+};
+
+// Helper component to ensure hook is called conditionally but correctly
+const RenderCosmovisorDialog = ({
+  isOpen,
+  onClose,
+  chain,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  chain: ChainUpgradeStatus;
+}) => {
+  const cosmovisorInfo = useCosmovisorInfo(chain);
+
+  return (
+    <CosmovisorDialog
+      isOpen={isOpen}
+      onClose={onClose}
+      cosmovisorInfo={cosmovisorInfo}
+      estimatedUpgradeTime={chain.estimated_upgrade_time || undefined}
+      upgradeFound={chain.upgrade_found}
+    />
   );
 };
