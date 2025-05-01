@@ -1,11 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getUserByWallet } from "@/lib/prisma";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { wallet: string } }
-) {
-  const wallet = params.wallet;
+// Helper to extract the wallet address from the URL
+function extractWalletAddress(request: Request): string | null {
+  const url = new URL(request.url);
+  const segments = url.pathname.split("/");
+  const wallet = segments[segments.indexOf("user") + 1];
+  return wallet || null;
+}
+
+export async function GET(request: NextRequest) {
+  const wallet = extractWalletAddress(request);
 
   if (!wallet || typeof wallet !== "string") {
     return NextResponse.json(
@@ -33,12 +38,10 @@ export async function GET(
   }
 }
 
-// Optional: Handle other methods if needed, or return Method Not Allowed
+// Optional: Handle unsupported HTTP methods
 export async function POST() {
   return NextResponse.json({ message: "Method Not Allowed" }, { status: 405 });
 }
-
-// Add similar handlers for PUT, DELETE, PATCH etc. if you want to explicitly reject them
 export async function PUT() {
   return NextResponse.json({ message: "Method Not Allowed" }, { status: 405 });
 }

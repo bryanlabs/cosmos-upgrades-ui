@@ -1,17 +1,23 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import {
   getUserFavoriteChains,
   addFavoriteChain,
   removeFavoriteChain,
 } from "@/lib/prisma";
 
+function extractWalletAddress(request: Request): string | null {
+  const url = new URL(request.url);
+  const segments = url.pathname.split("/");
+  const wallet = segments[segments.indexOf("user") + 1];
+  return wallet || null;
+}
+
 // GET handler to fetch favorite chains for a user
-export async function GET(
-  request: Request,
-  { params }: { params: { walletAddress: string } }
-) {
+export async function GET(request: NextRequest) {
   try {
-    const walletAddress = params.walletAddress;
+    const walletAddress = extractWalletAddress(request);
+    console.log("walletAddress", walletAddress);
+
     if (!walletAddress) {
       return NextResponse.json(
         { error: "Wallet address is required" },
@@ -31,12 +37,10 @@ export async function GET(
 }
 
 // POST handler to add a favorite chain for a user
-export async function POST(
-  request: Request,
-  { params }: { params: { walletAddress: string } }
-) {
+export async function POST(request: NextRequest) {
   try {
-    const walletAddress = params.walletAddress;
+    const walletAddress = extractWalletAddress(request);
+    console.log("walletAddress", walletAddress);
     const { chainId } = await request.json();
 
     if (!walletAddress || !chainId) {
@@ -54,7 +58,6 @@ export async function POST(
     return NextResponse.json(updatedFavorites);
   } catch (error) {
     console.error("API Error adding favorite chain:", error);
-    // Handle specific errors like 'User not found' if needed
     if (error instanceof Error && error.message === "User not found") {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
@@ -66,14 +69,9 @@ export async function POST(
 }
 
 // DELETE handler to remove a favorite chain for a user
-export async function DELETE(
-  request: Request,
-  { params }: { params: { walletAddress: string } }
-) {
+export async function DELETE(request: NextRequest) {
   try {
-    const walletAddress = params.walletAddress;
-    // For DELETE, it's common to pass identifiers in the body or query params
-    // We'll assume body here for consistency with POST
+    const walletAddress = extractWalletAddress(request);
     const { chainId } = await request.json();
 
     if (!walletAddress || !chainId) {
