@@ -17,6 +17,9 @@ RUN npx graz generate -g
 # Copy source code
 COPY . .
 
+# Generate Prisma client
+RUN npx prisma generate
+
 # Build with --no-lint flag to skip TypeScript checks
 RUN npm run build -- --no-lint
 
