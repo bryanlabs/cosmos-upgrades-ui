@@ -103,7 +103,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: true # Always push the image
+          push: true
+          platforms: linux/amd64,linux/arm64 # Add platforms for multi-arch build
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
