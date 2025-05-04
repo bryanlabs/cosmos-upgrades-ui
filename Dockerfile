@@ -26,12 +26,14 @@ RUN npm run build -- --no-lint
 # Production stage
 FROM nginx:stable-alpine
 
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy build output from previous stage
 # The default output directory for `next build` is .next
-COPY --from=build /app/.next /usr/share/nginx/html
-
-# Copy custom nginx config if needed
-# COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/.next/static /usr/share/nginx/html/static
+COPY --from=build /app/.next/standalone /usr/share/nginx/html/standalone
+COPY --from=build /app/public /usr/share/nginx/html/static/public
 
 # Expose port 80
 EXPOSE 80
