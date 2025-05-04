@@ -24,18 +24,27 @@ RUN npx prisma generate
 RUN npm run build -- --no-lint
 
 # Production stage
-FROM nginx:stable-alpine
+FROM node:18-alpine AS runner
 
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-# Copy build output from previous stage
-# The default output directory for `next build` is .next
-COPY --from=build /app/.next/static /usr/share/nginx/html/static
-COPY --from=build /app/.next/standalone /usr/share/nginx/html/standalone
-COPY --from=build /app/public /usr/share/nginx/html/static/public
+# Set NODE_ENV to production
+ENV NODE_ENV production
+# Uncomment the following line in case you need sharp installation
+# RUN apk add --no-cache --virtual .sharp-deps vips
 
-# Expose port 80
-EXPOSE 80
+# Copy the standalone build output
+COPY --from=build /app/.next/standalone ./ 
+# Copy the static assets
+COPY --from=build /app/.next/static ./.next/static
+# Copy the public assets
+COPY --from=build /app/public ./public
 
-CMD ["nginx", "-g", "daemon off;"]
+# Expose the port the app runs on (default 3000)
+EXPOSE 3000
+
+# Set the host to listen on all interfaces
+ENV HOSTNAME 0.0.0.0
+
+# Run the Next.js server
+CMD ["node", "server.js"]

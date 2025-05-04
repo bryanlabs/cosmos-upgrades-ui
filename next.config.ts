@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Use standalone output for optimized Node.js server deployment
+  output: 'standalone',
   /* TODO: REMOVE THIS AFTER DEMO */
   devIndicators: false,
   images: {
