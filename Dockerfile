@@ -27,8 +27,8 @@ RUN npm run build -- --no-lint
 FROM nginx:stable-alpine
 
 # Copy build output from previous stage
-# Adjust this path depending on Next.js output directory (.next/out or similar)
-COPY --from=build /app/out /usr/share/nginx/html
+# The default output directory for `next build` is .next
+COPY --from=build /app/.next /usr/share/nginx/html
 
 # Copy custom nginx config if needed
 # COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
