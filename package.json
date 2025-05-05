@@ -9,6 +9,9 @@
     "lint": "next lint",
     "install": "graz generate -g"
   },
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
+  },
   "dependencies": {
     "@cosmjs/cosmwasm-stargate": "^0.33.1",
     "@cosmjs/launchpad": "^0.27.1",
