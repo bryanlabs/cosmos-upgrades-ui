@@ -138,3 +138,25 @@ export const handleRemoveWebhook = async (webhookId: string) => {
     }
   }
 };
+
+export const parseUpgradeInfo = (info: unknown): unknown => {
+  if (typeof info !== "string") return info;
+
+  try {
+    const parsed = JSON.parse(info);
+    if (typeof parsed === "object" && parsed !== null) return parsed;
+    return info;
+  } catch {
+    const fixed = fixMalformedJSON(info);
+    try {
+      const parsed = JSON.parse(fixed);
+      if (typeof parsed === "object" && parsed !== null) return parsed;
+      return info;
+    } catch {
+      return info;
+    }
+  }
+};
+
+export const fixMalformedJSON = (str: string): string =>
+  str.replace(/(:\s*)(https?:\/\/[^\s",}]+)/g, '$1"$2"');
