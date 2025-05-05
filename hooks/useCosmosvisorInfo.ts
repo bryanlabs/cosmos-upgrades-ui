@@ -32,13 +32,13 @@ export const useCosmovisorInfo = (data: ChainUpgradeStatus) => {
     if (
       data.upgrade_found &&
       data.source === "current_upgrade_plan" &&
-      data.upgrade_plan
+      data.upgrade_plan !== null
     ) {
       try {
         const parsedPlan = JSON.parse(data.upgrade_plan);
         if (parsedPlan?.info && typeof parsedPlan.info === "string") {
           try {
-            const parsedInfo = JSON.parse(parsedPlan.info);
+            const parsedInfo = parsedPlan.info;
             if (
               parsedInfo?.binaries &&
               typeof parsedInfo.binaries === "object" &&
@@ -52,19 +52,17 @@ export const useCosmovisorInfo = (data: ChainUpgradeStatus) => {
                   checksums[platform] = checksum;
                 }
               }
-              setCosmovisorInfo({
-                name: parsedPlan.name || "N/A",
-                parsedInfo: {
-                  binaries: parsedInfo.binaries ?? {},
-                },
-                time: parsedPlan.time || "N/A",
-                height: parsedPlan.height || "N/A",
-                info: parsedPlan.info || "N/A",
-                upgraded_client_state: parsedPlan.upgraded_client_state || null,
-              });
-            } else {
-              setCosmovisorInfo(null);
             }
+            setCosmovisorInfo({
+              name: parsedPlan.name || "N/A",
+              parsedInfo: {
+                binaries: parsedInfo.binaries ?? {},
+              },
+              time: parsedPlan.time || "N/A",
+              height: parsedPlan.height || "N/A",
+              info: parsedPlan.info || "N/A",
+              upgraded_client_state: parsedPlan.upgraded_client_state || null,
+            });
           } catch (infoError) {
             console.error("Failed to parse plan.info JSON:", infoError);
             setCosmovisorInfo(null);
