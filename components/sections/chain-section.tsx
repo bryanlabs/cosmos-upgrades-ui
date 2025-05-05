@@ -274,6 +274,7 @@ const RenderCosmovisorDialog = ({
   chain: ChainUpgradeStatus;
 }) => {
   const cosmovisorInfo = useCosmovisorInfo(chain);
+  const logoUrl = chain?.logo_urls?.png || chain?.logo_urls?.svg;
 
   return (
     <CosmovisorDialog
@@ -282,6 +283,7 @@ const RenderCosmovisorDialog = ({
       cosmovisorInfo={cosmovisorInfo}
       estimatedUpgradeTime={chain.estimated_upgrade_time || undefined}
       upgradeFound={chain.upgrade_found}
+      chainLogoUrl={logoUrl}
     />
   );
 };
