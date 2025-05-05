@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChainUpgradeStatus } from "@/types/chain";
+import { parseUpgradeInfo } from "@/utils/chain-detail";
 
 // Helper function to extract sha256 checksums from URLs
 const extractChecksum = (url: string): string | null => {
@@ -38,7 +39,9 @@ export const useCosmovisorInfo = (data: ChainUpgradeStatus) => {
         const parsedPlan = JSON.parse(data.upgrade_plan);
         if (parsedPlan?.info && typeof parsedPlan.info === "string") {
           try {
-            const parsedInfo = parsedPlan.info;
+            const parsedInfo = parseUpgradeInfo(
+              parsedPlan.info
+            ) as ParsedPlanInfo["parsedInfo"];
             if (
               parsedInfo?.binaries &&
               typeof parsedInfo.binaries === "object" &&
@@ -56,7 +59,7 @@ export const useCosmovisorInfo = (data: ChainUpgradeStatus) => {
             setCosmovisorInfo({
               name: parsedPlan.name || "N/A",
               parsedInfo: {
-                binaries: parsedInfo.binaries ?? {},
+                binaries: parsedInfo?.binaries ?? {},
               },
               time: parsedPlan.time || "N/A",
               height: parsedPlan.height || "N/A",
