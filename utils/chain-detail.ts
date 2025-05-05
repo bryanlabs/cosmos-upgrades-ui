@@ -143,20 +143,28 @@ export const parseUpgradeInfo = (info: unknown): unknown => {
   if (typeof info !== "string") return info;
 
   try {
-    const parsed = JSON.parse(info);
-    if (typeof parsed === "object" && parsed !== null) return parsed;
-    return info;
+    return JSON.parse(info);
   } catch {
     const fixed = fixMalformedJSON(info);
     try {
-      const parsed = JSON.parse(fixed);
-      if (typeof parsed === "object" && parsed !== null) return parsed;
-      return info;
+      return JSON.parse(fixed);
     } catch {
       return info;
     }
   }
 };
 
-export const fixMalformedJSON = (str: string): string =>
-  str.replace(/(:\s*)(https?:\/\/[^\s",}]+)/g, '$1"$2"');
+const fixMalformedJSON = (str: string): string => {
+  let fixed = str;
+
+  // Fix unquoted URLs (only if the value is not already quoted)
+  fixed = fixed.replace(
+    /(:\s*)(https?:\/\/[^\s",}]+)/g,
+    (_, prefix, url) => `${prefix}"${url}"`
+  );
+
+  // Remove double trailing quotes before } or ,
+  fixed = fixed.replace(/""(?=\s*[},])/g, '"');
+
+  return fixed;
+};
