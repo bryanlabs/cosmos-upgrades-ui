@@ -16,6 +16,7 @@ interface CosmovisorDialogProps {
   cosmovisorInfo: ParsedPlanInfo | null;
   estimatedUpgradeTime?: string;
   upgradeFound?: boolean;
+  chainLogoUrl?: string | null;
 }
 
 export const CosmovisorDialog = ({
@@ -24,6 +25,7 @@ export const CosmovisorDialog = ({
   cosmovisorInfo,
   estimatedUpgradeTime,
   upgradeFound,
+  chainLogoUrl,
 }: CosmovisorDialogProps) => {
   const timeRemaining = useTimeRemaining(estimatedUpgradeTime, upgradeFound);
 
@@ -36,9 +38,20 @@ export const CosmovisorDialog = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>
-            Cosmovisor Upgrade Plan: {cosmovisorInfo.name}
-          </DialogTitle>
+          <div className="flex items-center gap-2">
+            {chainLogoUrl && (
+              <Image
+                src={chainLogoUrl}
+                alt={`${cosmovisorInfo.name} logo`}
+                width={24}
+                height={24}
+                className="rounded-full"
+              />
+            )}
+            <DialogTitle>
+              Cosmovisor Upgrade Plan: {cosmovisorInfo.name}
+            </DialogTitle>
+          </div>
           <DialogDescription>
             Details for the upcoming upgrade plan detected via Cosmovisor.
           </DialogDescription>

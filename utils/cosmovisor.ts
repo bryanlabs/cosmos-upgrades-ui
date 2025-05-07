@@ -7,14 +7,14 @@ export const isCosmovisorCompleted = (plan: ParsedPlanInfo): boolean => {
   let hasValidBinaries = false;
 
   try {
-    const info = plan.info ? JSON.parse(plan.info) : {};
-    const binaries = info.binaries;
+    const info = plan.parsedInfo ? plan.parsedInfo : null;
+    const binaries = info ? info.binaries : null;
 
     hasValidBinaries =
-      binaries &&
-      Object.values(binaries).every(
-        (url: unknown) => typeof url === "string" && url.includes("checksum=")
-      );
+      binaries !== null &&
+      typeof binaries === "object" &&
+      Object.keys(binaries).length > 0 &&
+      Object.values(binaries).every((url: unknown) => typeof url === "string");
   } catch {
     hasValidBinaries = false;
   }

@@ -138,3 +138,33 @@ export const handleRemoveWebhook = async (webhookId: string) => {
     }
   }
 };
+
+export const parseUpgradeInfo = (info: unknown): unknown => {
+  if (typeof info !== "string") return info;
+
+  try {
+    return JSON.parse(info);
+  } catch {
+    const fixed = fixMalformedJSON(info);
+    try {
+      return JSON.parse(fixed);
+    } catch {
+      return info;
+    }
+  }
+};
+
+const fixMalformedJSON = (str: string): string => {
+  let fixed = str;
+
+  // Fix unquoted URLs (only if the value is not already quoted)
+  fixed = fixed.replace(
+    /(:\s*)(https?:\/\/[^\s",}]+)/g,
+    (_, prefix, url) => `${prefix}"${url}"`
+  );
+
+  // Remove double trailing quotes before } or ,
+  fixed = fixed.replace(/""(?=\s*[},])/g, '"');
+
+  return fixed;
+};
