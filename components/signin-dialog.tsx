@@ -10,17 +10,48 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { supportedWallets } from "@/lib/wallet";
-import { getAvailableWallets, useConnect, WalletType } from "graz";
+import { getAvailableWallets, useAccount, useConnect, WalletType } from "graz";
 import { WalletConnect } from "./icons";
 import { isMobile } from "react-device-detect";
 import { cosmoshub } from "graz/chains";
+import { useUserData } from "@/hooks/useUserData";
 
 export function SignInDialog({ children }: { children: React.ReactNode }) {
   const wallets = getAvailableWallets();
   const isWalletInstalled = (wallet: WalletType) => wallets && wallets[wallet];
   const { connect } = useConnect();
+  const { data: account } = useAccount();
+  useUserData();
+
+  const checkAndCreateUser = async () => {
+    if (account?.bech32Address) {
+      try {
+        const response = await fetch("/api/user/check-or-create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ walletAddress: account.bech32Address }),
+        });
+
+        const data = await response.json();
+
+        console.log("User check/create response:", response);
+
+        if (!response.ok) {
+          throw new Error(data.error || "API request failed");
+        }
+
+        console.log("User check/create result:", data); // { exists: boolean, created: boolean }
+      } catch (error) {
+        console.error("Error calling user check/create API:", error);
+      }
+    }
+  };
+
   const handleConnect = async (wallet: WalletType) => {
     connect({ chainId: cosmoshub.chainId, walletType: wallet });
+    checkAndCreateUser();
   };
 
   // Filter wallets for mobile and desktop
