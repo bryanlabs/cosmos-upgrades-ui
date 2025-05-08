@@ -1,39 +1,41 @@
-"use client";
-
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAccount } from "graz";
-import { useUserDataStore } from "@/store/userDataStore";
+import { User } from "@/types/user";
+import { getUserData as fetchUserDataUtil } from "@/utils/chain-detail";
 
 export const useUserData = () => {
   const { data: account } = useAccount();
-  const connectedUserAddress = account?.bech32Address;
+  const userAddress = account?.bech32Address;
+  const [userData, setUserData] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
 
-  // Get states and actions from the Zustand store
-  const {
-    userData,
-    userAddress,
-    isLoading,
-    error,
-    fetchUserData,
-    clearUserData,
-    setUserAddress,
-  } = useUserDataStore();
-
-  // Effect to update userAddress in store when account changes
   useEffect(() => {
-    setUserAddress(connectedUserAddress);
-  }, [connectedUserAddress, setUserAddress]);
+    const fetchData = async () => {
+      if (!userAddress) {
+        setUserData(null);
+        setIsLoading(false);
+        setError(null);
+        return;
+      }
 
-  // Effect to fetch data when userAddress in store changes
-  useEffect(() => {
-    if (userAddress) {
-      fetchUserData(userAddress);
-    } else {
-      // If there's no userAddress (e.g., after disconnect), clear existing data
-      clearUserData();
-    }
-  }, [userAddress, fetchUserData, clearUserData]); // Dependencies include store actions
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await fetchUserDataUtil(userAddress);
+        setUserData(data);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err : new Error("Failed to fetch user data")
+        );
+        setUserData(null); // Clear data on error
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // Return the relevant data from the store
+    fetchData();
+  }, [userAddress]); // Re-fetch when userAddress changes
+
   return { userData, userAddress, isLoading, error };
 };
