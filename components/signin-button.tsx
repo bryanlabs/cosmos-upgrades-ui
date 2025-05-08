@@ -5,9 +5,11 @@ import { SignInDialog } from "./signin-dialog";
 import { useAccount, useDisconnect } from "graz";
 import { shortenAddress } from "@/lib/utils";
 import { useEffect } from "react";
+import { useUserData } from "@/hooks/useUserData";
 
 export function SignInButton() {
-  const { isConnected, data: account } = useAccount();
+  const { data: account } = useAccount();
+  const { userData } = useUserData();
   const { disconnect } = useDisconnect();
 
   useEffect(() => {
@@ -41,14 +43,16 @@ export function SignInButton() {
 
   return (
     <>
-      {!isConnected && (
+      {!userData?.wallet && (
         <SignInDialog>
           <Button variant="secondary">Connect Wallet</Button>
         </SignInDialog>
       )}
-      {isConnected && account && (
+      {userData?.wallet && (
         <div className="flex items-center gap-2">
-          <span>{shortenAddress(account.bech32Address)}</span>
+          <span>
+            {userData?.wallet ? shortenAddress(userData?.wallet) : ""}
+          </span>
           <Button variant="secondary" onClick={() => disconnect()}>
             Disconnect
           </Button>
