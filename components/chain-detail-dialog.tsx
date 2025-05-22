@@ -314,7 +314,7 @@ export const ChainDetailDialog = ({
                             )}
                           </span>
                           <div className="flex flex-col flex-1 min-w-0">
-                            <span className="text-xs text-muted-foreground truncate">
+                            <span className="text-xs text-muted-foreground truncate max-w-[100px] md:max-w-[350px]">
                               {webhook.url.replace(/^https?:\/\//, "")}
                             </span>
                             <span className="text-xs text-muted-foreground/80 capitalize">
