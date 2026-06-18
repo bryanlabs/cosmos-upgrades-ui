@@ -1,18 +1,23 @@
 import { useState, useEffect } from "react";
-import { useAccount } from "graz";
+import { useSession } from "next-auth/react";
 import { User } from "@/types/user";
-import { getUserData as fetchUserDataUtil } from "@/utils/chain-detail";
+import { getCurrentUserData } from "@/utils/chain-detail";
 
 export const useUserData = () => {
-  const { data: account } = useAccount();
-  const userAddress = account?.bech32Address;
+  const { data: session, status } = useSession();
+  const userAddress = session?.user?.identityKey;
   const [userData, setUserData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!userAddress) {
+      if (status === "loading") {
+        setIsLoading(true);
+        return;
+      }
+
+      if (status !== "authenticated") {
         setUserData(null);
         setIsLoading(false);
         setError(null);
@@ -22,7 +27,7 @@ export const useUserData = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await fetchUserDataUtil(userAddress);
+        const data = await getCurrentUserData();
         setUserData(data);
       } catch (err) {
         setError(
@@ -35,7 +40,14 @@ export const useUserData = () => {
     };
 
     fetchData();
-  }, [userAddress]); // Re-fetch when userAddress changes
+  }, [status, session?.user?.id]);
 
-  return { userData, userAddress, isLoading, error };
+  return {
+    userData,
+    userAddress,
+    isLoading,
+    error,
+    isAuthenticated: status === "authenticated",
+    session,
+  };
 };

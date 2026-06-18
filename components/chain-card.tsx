@@ -1,16 +1,16 @@
 import { ChainUpgradeStatus } from "@/types/chain";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LinkIcon, Star, Copy, Rocket, Calendar } from "lucide-react";
+import {
+  CalendarClock,
+  Copy,
+  ExternalLink,
+  Gauge,
+  LinkIcon,
+  Rocket,
+  Star,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-import React from "react";
 import Image from "next/image";
 import { getBadgeProps } from "@/utils/badge";
 import {
@@ -24,6 +24,7 @@ import { useTimeRemaining } from "@/hooks/useTimeRemaining";
 import { useCopy } from "@/hooks/useCopy";
 import { networkLogos } from "@/constants/chain-mappings";
 import { isCosmovisorCompleted } from "@/utils/cosmovisor";
+import { cn } from "@/lib/utils";
 
 interface ChainCardProps {
   data: ChainUpgradeStatus;
@@ -42,20 +43,8 @@ export const ChainCard = ({
   onToggleFavorite,
   onCosmovisorIconClick,
 }: ChainCardProps) => {
-  const {
-    copied: copiedBlock,
-    tooltipOpen: blockTooltipOpen,
-    copy: copyBlock,
-    handleTooltipOpenChange: handleBlockTooltipOpenChange,
-  } = useCopy();
-
-  const {
-    copied: copiedUpgrade,
-    tooltipOpen: upgradeTooltipOpen,
-    copy: copyUpgrade,
-    handleTooltipOpenChange: handleUpgradeTooltipOpenChange,
-  } = useCopy();
-
+  const blockCopy = useCopy();
+  const upgradeCopy = useCopy();
   const cosmovisorInfo = useCosmovisorInfo(data);
   const cosmovisorCompleted = cosmovisorInfo
     ? isCosmovisorCompleted(cosmovisorInfo)
@@ -65,124 +54,106 @@ export const ChainCard = ({
     data.upgrade_found
   );
 
-  const chainId = data.network;
-
-  let displayLogoUrl: string | undefined = networkLogos[data.network];
-
-  if (!displayLogoUrl) {
-    const originalLogo = data.logo_urls?.png || data.logo_urls?.svg;
-    displayLogoUrl = originalLogo ?? undefined;
-  }
-
+  const displayLogoUrl =
+    networkLogos[data.network] ||
+    data.logo_urls?.png ||
+    data.logo_urls?.svg ||
+    undefined;
   const badgeProps = getBadgeProps(data);
-  const {
-    text: statusBadgeText,
-    variant: statusBadgeVariant,
-    Icon: StatusBadgeIcon,
-    link: badgeLink,
-    className: statusBadgeClassName,
-  } = badgeProps;
-  const upgradeFound = data.upgrade_found;
-
-  const StatusBadge = () => (
-    <Badge
-      variant={statusBadgeVariant}
-      className={`flex items-center gap-1 ${statusBadgeClassName || ""}`}
-    >
-      {StatusBadgeIcon && <StatusBadgeIcon className="h-4 w-4" />}
-      {statusBadgeText}
-    </Badge>
-  );
+  const blockDelta =
+    data.upgrade_block_height && data.latest_block_height
+      ? data.upgrade_block_height - data.latest_block_height
+      : null;
+  const progress =
+    data.upgrade_found &&
+    data.upgrade_block_height &&
+    data.latest_block_height &&
+    data.upgrade_block_height > 0
+      ? Math.min(
+          100,
+          Math.max(0, (data.latest_block_height / data.upgrade_block_height) * 100)
+        )
+      : 0;
 
   const handleStarClick = () => {
-    if (isConnected) {
-      onToggleFavorite(chainId);
-    } else {
-      console.log("Connect wallet to manage favorites");
-    }
+    if (isConnected) onToggleFavorite(data.network);
   };
 
   return (
-    <Card className="w-full shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 flex flex-col h-full">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 gap-2">
-        <div className="flex items-center gap-2 min-w-0">
-          {displayLogoUrl ? (
-            badgeLink ? (
-              <a
-                href={badgeLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="no-underline flex-shrink-0"
-              >
-                <Image
-                  src={displayLogoUrl}
-                  alt={`${data.network} Logo`}
-                  width={28}
-                  height={28}
-                  className="rounded-full flex-shrink-0"
-                />
-              </a>
-            ) : (
+    <Card className="surface-card group relative h-full overflow-hidden rounded-lg py-0 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg">
+      <div className="absolute inset-x-0 top-0 h-1 bg-muted">
+        <div
+          className={cn(
+            "h-full rounded-r-full transition-all duration-500",
+            data.upgrade_found ? "bg-primary" : "bg-primary/60"
+          )}
+          style={{ width: `${data.upgrade_found ? progress : 100}%` }}
+        />
+      </div>
+
+      <CardHeader className="flex flex-row items-start justify-between gap-3 px-4 pb-0 pt-5">
+        <div className="flex min-w-0 items-start gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-secondary">
+            {displayLogoUrl ? (
               <Image
                 src={displayLogoUrl}
-                alt={`${data.network} Logo`}
-                width={28}
-                height={28}
-                className="rounded-full flex-shrink-0"
+                alt={`${data.network} logo`}
+                width={44}
+                height={44}
+                className="h-10 w-10 rounded-full object-contain"
               />
-            )
-          ) : (
-            <div className="w-7 h-7 bg-gray-300 rounded-full flex-shrink-0" />
-          )}
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1">
-              <CardTitle className="text-lg font-semibold capitalize truncate">
-                {data.network.length > 9
-                  ? `${data.network.slice(0, 9)}...`
-                  : data.network}
-              </CardTitle>
+            ) : (
+              <Gauge className="h-5 w-5 text-muted-foreground" />
+            )}
+          </div>
+          <div className="min-w-0">
+            <div className="flex min-w-0 items-center gap-2">
+              <h3 className="truncate text-lg font-semibold capitalize leading-6 text-card-foreground">
+                {formatChainName(data.network)}
+              </h3>
               {cosmovisorInfo && (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onCosmovisorIconClick(data);
-                  }}
-                  className="cursor-pointer"
-                >
-                  <TooltipProvider delayDuration={100}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Rocket
-                          className={`h-4 w-4 ${
-                            cosmovisorCompleted
-                              ? "text-green-400"
-                              : "text-yellow-400"
-                          } flex-shrink-0 transition-transform duration-150 ease-in-out hover:scale-110`}
-                        />
-                      </TooltipTrigger>
-                      <TooltipContent
-                        side="top"
-                        align="center"
-                        className="border shadow-md rounded-md p-2 max-w-xs text-xs"
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onCosmovisorIconClick(data);
+                        }}
+                        className="rounded text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        aria-label="Open Cosmovisor upgrade plan"
                       >
-                        <p>Cosmovisor Support Available</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
+                        <Rocket
+                          className={cn(
+                            "h-4 w-4",
+                            cosmovisorCompleted ? "text-primary" : "text-violet-300"
+                          )}
+                        />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Cosmovisor plan available</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
             </div>
-            <p className="text-xs text-muted-foreground">{data.version}</p>
+            <p className="truncate text-xs text-muted-foreground">
+              {data.version || "Version unknown"}
+            </p>
           </div>
         </div>
 
-        <div className="flex-shrink-0 flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <Badge
-            className={`capitalize text-xs px-2 py-0.5 border ${
+            className={cn(
+              "capitalize",
               data.type === "mainnet"
-                ? "bg-sky-100 text-sky-800 border-sky-200 dark:bg-sky-900 dark:text-sky-200 dark:border-sky-700"
-                : "bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900 dark:text-purple-200 dark:border-purple-700"
-            }`}
+                ? "border-sky-500/30 bg-sky-500/10 text-sky-300"
+                : "border-violet-500/30 bg-violet-500/10 text-violet-300"
+            )}
+            variant="outline"
           >
             {data.type}
           </Badge>
@@ -196,195 +167,202 @@ export const ChainCard = ({
                     e.stopPropagation();
                     handleStarClick();
                   }}
-                  className="h-6 w-6 rounded-full"
+                  className="h-8 w-8 rounded-md"
+                  aria-label={isFavorite ? "Remove from watchlist" : "Add to watchlist"}
                 >
                   <Star
-                    className={`h-4 w-4 ${
+                    className={cn(
+                      "h-4 w-4 transition-colors",
                       isUpdatingFavorite
-                        ? "text-muted-foreground animate-pulse"
+                        ? "animate-pulse text-muted-foreground"
                         : isFavorite
-                        ? "text-yellow-400 fill-yellow-400"
-                        : "text-muted-foreground hover:text-yellow-400"
-                    } transition-colors`}
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-muted-foreground hover:text-yellow-400"
+                    )}
                   />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                {!isConnected ? (
-                  <p>Connect wallet to manage favorites</p>
-                ) : isUpdatingFavorite ? (
-                  <p>Updating...</p>
-                ) : (
-                  <p>
-                    {isFavorite ? "Remove from favorites" : "Add to favorites"}
-                  </p>
-                )}
+                {!isConnected
+                  ? "Sign in to manage watchlist"
+                  : isUpdatingFavorite
+                    ? "Updating..."
+                    : isFavorite
+                      ? "Remove from watchlist"
+                      : "Add to watchlist"}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
       </CardHeader>
-      <CardContent className="space-y-3 flex-grow">
-        <div className="flex items-center justify-between flex-wrap">
-          <span className="text-sm font-medium text-foreground whitespace-nowrap">
-            Upgrade Status:
+
+      <CardContent className="flex flex-1 flex-col gap-4 px-4 pb-2 pt-4">
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-sm font-medium text-muted-foreground">
+            Upgrade status
           </span>
-          {badgeLink ? (
-            <a
-              href={badgeLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="no-underline"
-            >
-              <StatusBadge />
-            </a>
-          ) : (
-            <StatusBadge />
-          )}
+          <StatusBadge badgeProps={badgeProps} />
         </div>
 
-        <div className="space-y-2 flex flex-wrap justify-between">
-          <div>
-            <p className="text-sm text-muted-foreground">Latest Block</p>
-            <div className="flex items-center gap-1">
-              {data.latest_block_height ? (
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip
-                    open={blockTooltipOpen}
-                    onOpenChange={handleBlockTooltipOpenChange}
-                  >
-                    <TooltipTrigger asChild>
-                      <span
-                        className="flex items-center gap-1 cursor-pointer group"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          copyBlock(data.latest_block_height);
-                        }}
-                      >
-                        <p className="text-sm font-mono">
-                          {data.latest_block_height}
-                        </p>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-4 w-4 text-muted-foreground group-hover:text-foreground"
-                          aria-label="Copy block height"
-                        >
-                          <Copy className="h-3 w-3" />
-                        </Button>
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent side="top" className="text-xs px-2 py-1">
-                      {copiedBlock ? "Copied!" : "Copy block height"}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ) : (
-                <p className="text-sm font-mono">-</p>
-              )}
+        <div className="grid grid-cols-2 gap-3">
+          <Metric
+            label="Latest block"
+            value={data.latest_block_height}
+            copy={blockCopy}
+          />
+          <Metric
+            label="Upgrade height"
+            value={data.upgrade_block_height}
+            copy={upgradeCopy}
+          />
+        </div>
+
+        {data.upgrade_found ? (
+          <div className="rounded-lg border border-border/80 bg-background/35 p-3">
+            <div className="mb-2 flex items-center gap-2 text-sm font-medium">
+              <CalendarClock className="h-4 w-4 text-primary" />
+              {formatCountdown(timeRemaining)}
+            </div>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+              <span>
+                {blockDelta !== null && blockDelta > 0
+                  ? `${blockDelta.toLocaleString()} blocks away`
+                  : "Height reached or unavailable"}
+              </span>
+              <span>{formatSource(data.source)}</span>
             </div>
           </div>
-
-          {upgradeFound && (
-            <div>
-              <p className="text-sm text-muted-foreground">Upgrade Height</p>
-              <div className="flex items-center gap-1">
-                {data.upgrade_block_height ? (
-                  <TooltipProvider delayDuration={100}>
-                    <Tooltip
-                      open={upgradeTooltipOpen}
-                      onOpenChange={handleUpgradeTooltipOpenChange}
-                    >
-                      <TooltipTrigger asChild>
-                        <span
-                          className="flex items-center gap-1 cursor-pointer group"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            copyUpgrade(data.upgrade_block_height);
-                          }}
-                        >
-                          <p className="text-sm font-mono">
-                            {data.upgrade_block_height}
-                          </p>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-4 w-4 text-muted-foreground group-hover:text-foreground"
-                            aria-label="Copy upgrade height"
-                          >
-                            <Copy className="h-3 w-3" />
-                          </Button>
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent side="top" className="text-xs px-2 py-1">
-                        {copiedUpgrade ? "Copied!" : "Copy upgrade height"}
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                ) : (
-                  <p className="text-sm font-mono">-</p>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {upgradeFound && (
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <p className="text-xs font-medium text-muted-foreground pt-1">
-              {timeRemaining ? (
-                timeRemaining.days === 0 &&
-                timeRemaining.hours === 0 &&
-                timeRemaining.minutes === 0 &&
-                timeRemaining.seconds === 0 ? (
-                  "Upgrade time passed"
-                ) : (
-                  <>
-                    <strong className="font-semibold text-sm text-black">
-                      {timeRemaining.days}
-                    </strong>
-                    d{" "}
-                    <strong className="font-semibold text-sm text-black">
-                      {timeRemaining.hours}
-                    </strong>
-                    h{" "}
-                    <strong className="font-semibold text-sm text-black">
-                      {timeRemaining.minutes}
-                    </strong>
-                    m{" "}
-                    <strong className="font-semibold text-sm text-black">
-                      {timeRemaining.seconds}
-                    </strong>
-                    s
-                  </>
-                )
-              ) : (
-                "Calculating..."
-              )}
-            </p>
+        ) : (
+          <div className="rounded-lg border border-border/80 bg-background/35 p-3 text-sm text-muted-foreground">
+            No scheduled upgrade detected in the latest scan.
           </div>
         )}
       </CardContent>
 
-      {data.explorer_url?.url && (
-        <CardFooter className="px-6">
+      <CardFooter className="px-4 pb-4 pt-0">
+        {data.explorer_url?.url ? (
           <a
             href={data.explorer_url.url}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
+            onClick={(e) => e.stopPropagation()}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center w-full min-w-0 gap-1.5 border rounded-md px-2 py-1 text-sm text-muted-foreground hover:bg-muted/50 transition-colors justify-center"
+            className="inline-flex h-9 w-full min-w-0 items-center justify-center gap-2 rounded-md border border-border bg-background/30 px-3 text-sm text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
           >
-            <LinkIcon className="h-3 w-3 flex-shrink-0" />
+            <LinkIcon className="h-3.5 w-3.5 shrink-0" />
             <span className="truncate">
               {data.explorer_url.url.replace(/^(https?:\/\/)/, "")}
             </span>
+            <ExternalLink className="h-3.5 w-3.5 shrink-0" />
           </a>
-        </CardFooter>
-      )}
+        ) : (
+          <div className="h-9 w-full rounded-md border border-dashed border-border" />
+        )}
+      </CardFooter>
     </Card>
   );
 };
+
+const StatusBadge = ({
+  badgeProps,
+}: {
+  badgeProps: ReturnType<typeof getBadgeProps>;
+}) => {
+  const { text, variant, Icon, link, className } = badgeProps;
+  const badge = (
+    <Badge
+      variant={variant}
+      className={cn(
+        "flex items-center gap-1",
+        className ||
+          "border-border bg-secondary/70 text-secondary-foreground"
+      )}
+    >
+      {Icon && <Icon className="h-3.5 w-3.5" />}
+      {text}
+    </Badge>
+  );
+
+  if (!link) return badge;
+
+  return (
+    <a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="no-underline"
+      onClick={(event) => event.stopPropagation()}
+    >
+      {badge}
+    </a>
+  );
+};
+
+const Metric = ({
+  label,
+  value,
+  copy,
+}: {
+  label: string;
+  value: number | null | undefined;
+  copy: ReturnType<typeof useCopy>;
+}) => (
+  <div className="min-w-0 rounded-lg border border-border/80 bg-background/35 p-3">
+    <div className="mb-1 text-xs text-muted-foreground">{label}</div>
+    {value ? (
+      <TooltipProvider delayDuration={100}>
+        <Tooltip
+          open={copy.tooltipOpen}
+          onOpenChange={copy.handleTooltipOpenChange}
+        >
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                copy.copy(value);
+              }}
+              className="flex min-w-0 items-center gap-1 rounded text-left font-mono text-sm text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span className="truncate">{value.toLocaleString()}</span>
+              <Copy className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            {copy.copied ? "Copied" : `Copy ${label.toLowerCase()}`}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    ) : (
+      <div className="font-mono text-sm text-muted-foreground">-</div>
+    )}
+  </div>
+);
+
+const formatChainName = (network: string) =>
+  network
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+
+const formatCountdown = (
+  timeRemaining: ReturnType<typeof useTimeRemaining>
+) => {
+  if (!timeRemaining) return "Calculating upgrade window";
+  const { days, hours, minutes, seconds } = timeRemaining;
+  if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+    return "Upgrade window reached";
+  }
+  const parts = [
+    days > 0 ? `${days}d` : null,
+    hours > 0 || days > 0 ? `${hours}h` : null,
+    minutes > 0 || hours > 0 || days > 0 ? `${minutes}m` : null,
+    `${seconds}s`,
+  ].filter(Boolean);
+  return parts.join(" ");
+};
+
+const formatSource = (source: string) =>
+  source
+    ? source.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
+    : "Source unknown";

@@ -1,10 +1,11 @@
 // hooks/useFa.ts
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { useAccount } from "graz";
+import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 
 export const useFavoriteChains = () => {
-  const { isConnected, data: account } = useAccount();
+  const { status } = useSession();
+  const isConnected = status === "authenticated";
   const [favoriteChains, setFavoriteChains] = useState<string[]>([]);
   const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
   const [updatingFavoriteChainId, setUpdatingFavoriteChainId] = useState<
@@ -13,12 +14,10 @@ export const useFavoriteChains = () => {
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      if (isConnected && account?.bech32Address) {
+      if (status === "authenticated") {
         setIsLoadingFavorites(true);
         try {
-          const response = await fetch(
-            `/api/user/${account.bech32Address}/favorites`
-          );
+          const response = await fetch("/api/me/favorites");
           if (!response.ok) {
             console.error("Failed to fetch favorites", await response.text());
             setFavoriteChains([]);
@@ -32,21 +31,21 @@ export const useFavoriteChains = () => {
         } finally {
           setIsLoadingFavorites(false);
         }
-      } else {
+      } else if (status !== "loading") {
         setFavoriteChains([]);
         setIsLoadingFavorites(false);
       }
     };
 
     fetchFavorites();
-  }, [isConnected, account?.bech32Address]);
+  }, [status]);
 
   const favoritesSet = useMemo(() => new Set(favoriteChains), [favoriteChains]);
 
   const handleToggleFavorite = useCallback(
     async (chainId: string) => {
-      if (!isConnected || !account?.bech32Address) {
-        toast.info("Please connect your wallet to manage favorites.");
+      if (!isConnected) {
+        toast.info("Please sign in to manage favorites.");
         return;
       }
 
@@ -59,7 +58,7 @@ export const useFavoriteChains = () => {
 
       try {
         const response = await fetch(
-          `/api/user/${account.bech32Address}/favorites`,
+          "/api/me/favorites",
           {
             method: method,
             headers: {
@@ -91,7 +90,7 @@ export const useFavoriteChains = () => {
         setUpdatingFavoriteChainId(null);
       }
     },
-    [isConnected, account?.bech32Address, favoritesSet]
+    [isConnected, favoritesSet]
   );
 
   return {

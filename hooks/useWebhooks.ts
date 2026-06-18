@@ -7,8 +7,8 @@ import {
 } from "@/utils/chain-detail";
 
 interface UseWebhooksProps {
-  userId: number | undefined;
   chainId: string | undefined;
+  isAuthenticated: boolean;
 }
 
 interface AddWebhookPayload {
@@ -18,13 +18,13 @@ interface AddWebhookPayload {
   notifyBeforeUpgrade: string;
 }
 
-export const useWebhooks = ({ userId, chainId }: UseWebhooksProps) => {
+export const useWebhooks = ({ chainId, isAuthenticated }: UseWebhooksProps) => {
   const [webhooks, setWebhooks] = useState<Webhook[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchWebhooks = useCallback(async () => {
-    if (!userId || !chainId) {
+    if (!isAuthenticated || !chainId) {
       setWebhooks([]);
       setError(null);
       return;
@@ -32,7 +32,7 @@ export const useWebhooks = ({ userId, chainId }: UseWebhooksProps) => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await fetchWebhooksUtil(userId, chainId);
+      const data = await fetchWebhooksUtil(chainId);
       setWebhooks(data);
     } catch (err) {
       setError(
@@ -42,12 +42,12 @@ export const useWebhooks = ({ userId, chainId }: UseWebhooksProps) => {
     } finally {
       setIsLoading(false);
     }
-  }, [userId, chainId]);
+  }, [isAuthenticated, chainId]);
 
   const addWebhook = useCallback(
     async (payload: AddWebhookPayload) => {
-      if (!userId || !chainId) {
-        setError(new Error("User ID or Chain ID is missing"));
+      if (!isAuthenticated || !chainId) {
+        setError(new Error("Sign in and select a chain before adding webhooks."));
         return;
       }
 
@@ -65,7 +65,6 @@ export const useWebhooks = ({ userId, chainId }: UseWebhooksProps) => {
       setError(null);
       try {
         await handleAddWebhookUtil({
-          userId: userId,
           chainNetwork: chainId,
           url: payload.url,
           label: payload.label,
@@ -82,11 +81,11 @@ export const useWebhooks = ({ userId, chainId }: UseWebhooksProps) => {
         setIsLoading(false);
       }
     },
-    [userId, chainId, fetchWebhooks, webhooks.length]
+    [isAuthenticated, chainId, fetchWebhooks, webhooks.length]
   );
 
   const removeWebhook = useCallback(
-    async (webhookId: string) => {
+    async (webhookId: number) => {
       setIsLoading(true); // Indicate loading during remove operation
       setError(null);
       try {

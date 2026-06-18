@@ -52,6 +52,8 @@ export function useMainnetsData() {
   return useQuery<ChainDataResponse, Error>({
     queryKey: ["mainnets"],
     queryFn: () => fetchChainData(MAINNETS_URL),
+    staleTime: 60_000,
+    refetchInterval: 60_000,
   });
 }
 
@@ -62,6 +64,8 @@ export function useTestnetsData() {
   return useQuery<ChainDataResponse, Error>({
     queryKey: ["testnets"],
     queryFn: () => fetchChainData(TESTNETS_URL),
+    staleTime: 60_000,
+    refetchInterval: 60_000,
   });
 }
 
@@ -80,10 +84,14 @@ export function useAllChainData() {
       {
         queryKey: ["mainnets"],
         queryFn: () => fetchChainData(MAINNETS_URL),
+        staleTime: 60_000,
+        refetchInterval: 60_000,
       },
       {
         queryKey: ["testnets"],
         queryFn: () => fetchChainData(TESTNETS_URL),
+        staleTime: 60_000,
+        refetchInterval: 60_000,
       },
     ],
   });

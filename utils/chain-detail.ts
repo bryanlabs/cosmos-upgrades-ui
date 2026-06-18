@@ -22,19 +22,34 @@ export const getUserData = async (userAddress: string | undefined) => {
   }
 };
 
+export const getCurrentUserData = async () => {
+  try {
+    const response = await fetch("/api/users/me");
+    if (response.status === 401) return null;
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new Error(
+        `Failed to fetch current user data: ${response.status}. ${errorBody}`
+      );
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching current user data:", error);
+    throw error;
+  }
+};
+
 export const fetchWebhooks = async (
-  userId: number | undefined,
   chainNetwork: string | undefined
 ): Promise<Webhook[]> => {
-  if (!userId || !chainNetwork) {
+  if (!chainNetwork) {
     return [];
   }
   try {
     const response = await fetch(
-      `/api/webhooks?userId=${encodeURIComponent(
-        userId
-      )}&chainId=${encodeURIComponent(chainNetwork)}`
+      `/api/webhooks?chainId=${encodeURIComponent(chainNetwork)}`
     );
+    if (response.status === 401) return [];
     if (!response.ok) {
       throw new Error("Failed to fetch webhooks");
     }
@@ -43,19 +58,17 @@ export const fetchWebhooks = async (
   } catch (error) {
     console.error("Error fetching webhooks:", error);
     toast.error("Failed to load webhooks.");
-    return [];
+    throw error;
   }
 };
 
 export const handleAddWebhook = async ({
-  userId,
   chainNetwork,
   url,
   label,
   notificationType,
   notifyBeforeUpgrade,
 }: {
-  userId: number;
   chainNetwork: string;
   url: string;
   label: string;
@@ -76,7 +89,6 @@ export const handleAddWebhook = async ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId,
         chainId: chainNetwork,
         url,
         label,
@@ -89,7 +101,7 @@ export const handleAddWebhook = async ({
       let errorMessage = "Failed to add webhook";
       try {
         const errorData = await response.json();
-        errorMessage = errorData.message || errorMessage;
+        errorMessage = errorData.error || errorData.message || errorMessage;
       } catch {
         errorMessage = `${response.status}: ${response.statusText}`;
       }
@@ -101,13 +113,15 @@ export const handleAddWebhook = async ({
     console.error("Error adding webhook:", error);
     if (error instanceof Error) {
       toast.error(`Failed to add webhook: ${error.message}`);
+      throw error;
     } else {
       toast.error("An unknown error occurred while adding the webhook.");
+      throw new Error("An unknown error occurred while adding the webhook.");
     }
   }
 };
 
-export const handleRemoveWebhook = async (webhookId: string) => {
+export const handleRemoveWebhook = async (webhookId: number) => {
   try {
     const response = await fetch(`/api/webhooks`, {
       method: "DELETE",
@@ -121,7 +135,7 @@ export const handleRemoveWebhook = async (webhookId: string) => {
       let errorMessage = "Failed to remove webhook";
       try {
         const errorData = await response.json();
-        errorMessage = errorData.message || errorMessage;
+        errorMessage = errorData.error || errorData.message || errorMessage;
       } catch {
         errorMessage = `${response.status}: ${response.statusText}`;
       }
@@ -133,8 +147,10 @@ export const handleRemoveWebhook = async (webhookId: string) => {
     console.error("Error removing webhook:", error);
     if (error instanceof Error) {
       toast.error(`Failed to remove webhook: ${error.message}`);
+      throw error;
     } else {
       toast.error("An unknown error occurred while removing the webhook.");
+      throw new Error("An unknown error occurred while removing the webhook.");
     }
   }
 };

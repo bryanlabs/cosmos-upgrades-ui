@@ -4,14 +4,21 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = env("DATABASE_URL")
 }
 
 model User {
   id             Int       @id @default(autoincrement())
   wallet         String    @unique
-  favoriteChains String // comma separated list of chain ids, it's not an array because sqlite doesn't support it
+  email          String?
+  name           String?
+  image          String?
+  authProvider   String?
+  authSubject    String?
+  favoriteChains String    @default("") // comma separated list of chain ids, it's not an array because sqlite doesn't support it
   webHooks       WebHook[] // relation to links the user made for chains
+
+  @@unique([authProvider, authSubject])
 }
 
 model WebHook {
@@ -23,7 +30,24 @@ model WebHook {
   notifyBeforeUpgrade String?
   url                 String
 
-  user User @relation(fields: [userId], references: [id])
+  user       User              @relation(fields: [userId], references: [id])
+  deliveries WebHookDelivery[]
 
   @@index([userId])
+}
+
+model WebHookDelivery {
+  id           Int      @id @default(autoincrement())
+  webHookId    Int
+  eventKey     String
+  status       String
+  responseCode Int?
+  responseText String?
+  error        String?
+  deliveredAt  DateTime @default(now())
+
+  webHook WebHook @relation(fields: [webHookId], references: [id])
+
+  @@unique([webHookId, eventKey])
+  @@index([eventKey])
 }

@@ -1,0 +1,13 @@
+.env
+.env.*
+.next
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.git
+.gitignore
+Dockerfile
+README.md
+prisma/dev.db*
+*.tsbuildinfo

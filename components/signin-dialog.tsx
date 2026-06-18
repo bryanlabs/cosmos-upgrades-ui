@@ -10,48 +10,28 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { supportedWallets } from "@/lib/wallet";
-import { getAvailableWallets, useAccount, useConnect, WalletType } from "graz";
+import { getAvailableWallets, useConnect, WalletType } from "graz";
 import { WalletConnect } from "./icons";
 import { isMobile } from "react-device-detect";
 import { cosmoshub } from "graz/chains";
-import { useUserData } from "@/hooks/useUserData";
+import { signIn } from "next-auth/react";
+import { ShieldCheck, Wallet } from "lucide-react";
 
 export function SignInDialog({ children }: { children: React.ReactNode }) {
   const wallets = getAvailableWallets();
   const isWalletInstalled = (wallet: WalletType) => wallets && wallets[wallet];
   const { connect } = useConnect();
-  const { data: account } = useAccount();
-  useUserData();
-
-  const checkAndCreateUser = async () => {
-    if (account?.bech32Address) {
-      try {
-        const response = await fetch("/api/user/check-or-create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ walletAddress: account.bech32Address }),
-        });
-
-        const data = await response.json();
-
-        console.log("User check/create response:", response);
-
-        if (!response.ok) {
-          throw new Error(data.error || "API request failed");
-        }
-
-        console.log("User check/create result:", data); // { exists: boolean, created: boolean }
-      } catch (error) {
-        console.error("Error calling user check/create API:", error);
-      }
-    }
-  };
 
   const handleConnect = async (wallet: WalletType) => {
     connect({ chainId: cosmoshub.chainId, walletType: wallet });
-    checkAndCreateUser();
+  };
+
+  const handleAccountSignIn = () => {
+    signIn(
+      "authentik",
+      { callbackUrl: window.location.href },
+      { prompt: "login" }
+    );
   };
 
   // Filter wallets for mobile and desktop
@@ -78,12 +58,24 @@ export function SignInDialog({ children }: { children: React.ReactNode }) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Connect Wallet</DialogTitle>
+          <DialogTitle>Sign in</DialogTitle>
           <DialogDescription>
-            Choose a wallet to connect to your account.
+            Use Apple, Google, or a Cosmos wallet to save watchlists and
+            notifications.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
+          <Button className="gap-2" onClick={handleAccountSignIn}>
+            <ShieldCheck className="h-4 w-4" />
+            Continue with Apple or Google
+          </Button>
+
+          <div className="flex items-center gap-3 text-xs uppercase tracking-wide text-muted-foreground">
+            <span className="h-px flex-1 bg-border" />
+            Wallet
+            <span className="h-px flex-1 bg-border" />
+          </div>
+
           {walletConnect && isWalletInstalled(WalletType.WALLETCONNECT) && (
             <Button
               variant="outline"
@@ -100,7 +92,7 @@ export function SignInDialog({ children }: { children: React.ReactNode }) {
                 onClick={() => handleConnect(wallet.walletType)}
                 key={wallet.walletType}
               >
-                {wallet.icon}{" "}
+                {wallet.icon || <Wallet className="h-4 w-4" />}{" "}
                 {isWalletInstalled(wallet.walletType)
                   ? "Connect with"
                   : "Install"}{" "}
