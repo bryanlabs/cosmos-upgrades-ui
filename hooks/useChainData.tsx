@@ -12,6 +12,7 @@ const MAINNETS_URL = MOCK_ENABLED
 const TESTNETS_URL = MOCK_ENABLED
   ? "/mocks/testnet-mock.json"
   : "/api/cosmos-upgrades/testnets";
+const CHAINS_URL = MOCK_ENABLED ? null : "/api/cosmos-upgrades/chains";
 
 /**
  * Fetches data from a given URL and expects an array response.
@@ -74,6 +75,14 @@ export function useTestnetsData() {
  * and combine them.
  */
 export function useAllChainData() {
+  const combinedResult = useQuery<ChainDataResponse, Error>({
+    queryKey: ["chains"],
+    queryFn: () => fetchChainData(CHAINS_URL || MAINNETS_URL),
+    enabled: Boolean(CHAINS_URL),
+    staleTime: 60_000,
+    refetchInterval: 60_000,
+  });
+
   const results = useQueries<
     [
       UseQueryResult<ChainDataResponse, Error>,
@@ -84,12 +93,14 @@ export function useAllChainData() {
       {
         queryKey: ["mainnets"],
         queryFn: () => fetchChainData(MAINNETS_URL),
+        enabled: !CHAINS_URL,
         staleTime: 60_000,
         refetchInterval: 60_000,
       },
       {
         queryKey: ["testnets"],
         queryFn: () => fetchChainData(TESTNETS_URL),
+        enabled: !CHAINS_URL,
         staleTime: 60_000,
         refetchInterval: 60_000,
       },
@@ -100,16 +111,21 @@ export function useAllChainData() {
 
   // Combine data using useMemo
   const allChains = useMemo(() => {
+    if (CHAINS_URL) return combinedResult.data || [];
     const mainnets = mainnetsResult.data || [];
     const testnets = testnetsResult.data || [];
     return [...mainnets, ...testnets];
-  }, [mainnetsResult.data, testnetsResult.data]);
+  }, [combinedResult.data, mainnetsResult.data, testnetsResult.data]);
 
   // Consolidate loading state
-  const isLoading = mainnetsResult.isLoading || testnetsResult.isLoading;
+  const isLoading = CHAINS_URL
+    ? combinedResult.isLoading
+    : mainnetsResult.isLoading || testnetsResult.isLoading;
 
   // Consolidate error state (return the first error encountered)
-  const error = mainnetsResult.error || testnetsResult.error;
+  const error = CHAINS_URL
+    ? combinedResult.error
+    : mainnetsResult.error || testnetsResult.error;
 
   return {
     data: allChains,

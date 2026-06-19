@@ -4,7 +4,9 @@ import {
   getWebHooksByUserAndChain,
   getWebHooksByUserId,
   countWebHooksByUserId,
+  getWebHookByIdForUser,
   addWebHook,
+  updateWebHook,
   removeWebHookForUser,
 } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/current-user";
@@ -128,13 +130,13 @@ export async function POST(req: NextRequest) {
     ]);
     if (existing.length >= MAX_WEBHOOKS_PER_CHAIN) {
       return NextResponse.json(
-        { error: `Maximum of ${MAX_WEBHOOKS_PER_CHAIN} alerts per chain reached.` },
+        { error: `Maximum of ${MAX_WEBHOOKS_PER_CHAIN} webhooks per chain reached.` },
         { status: 400 }
       );
     }
     if (total >= MAX_WEBHOOKS_PER_USER) {
       return NextResponse.json(
-        { error: `Maximum of ${MAX_WEBHOOKS_PER_USER} alerts reached.` },
+        { error: `Maximum of ${MAX_WEBHOOKS_PER_USER} webhooks reached.` },
         { status: 400 }
       );
     }
@@ -147,6 +149,106 @@ export async function POST(req: NextRequest) {
       notificationType,
       notifyBeforeMinutes
     );
+    return NextResponse.json(serializeWebhook(webhook));
+  } catch (error) {
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  const user = await getCurrentUser();
+  if (!user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const limit = rateLimit(
+    `webhooks:update:${user.id}`,
+    CREATE_RATE_LIMIT,
+    CREATE_RATE_WINDOW_MS
+  );
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: "Too many webhook changes. Try again shortly." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } }
+    );
+  }
+
+  const body = await req.json();
+  const webhookId = Number(body.id);
+  const { label, url, notificationType } = body;
+
+  if (
+    !Number.isInteger(webhookId) ||
+    !label ||
+    !notificationType
+  ) {
+    return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+  }
+
+  const existing = await getWebHookByIdForUser(webhookId, user.id);
+  if (!existing) {
+    return NextResponse.json({ error: "Webhook not found" }, { status: 404 });
+  }
+
+  if (!isWebhookProvider(label)) {
+    return NextResponse.json({ error: "Unsupported webhook type" }, { status: 400 });
+  }
+
+  if (!isNotificationType(notificationType)) {
+    return NextResponse.json({ error: "Unsupported notification trigger" }, { status: 400 });
+  }
+
+  let notifyBeforeMinutes: number | null = null;
+  if (notificationType === "before-upgrade") {
+    if (typeof body.notifyBeforeMinutes === "number") {
+      notifyBeforeMinutes = body.notifyBeforeMinutes;
+    } else if (typeof body.notifyBeforeUpgrade === "string") {
+      notifyBeforeMinutes = parseWindowToMinutes(body.notifyBeforeUpgrade);
+    }
+    if (!isValidNotifyBeforeMinutes(notifyBeforeMinutes)) {
+      return NextResponse.json(
+        { error: "Choose a lead time between 5 minutes and 30 days." },
+        { status: 400 }
+      );
+    }
+  } else if (body.notifyBeforeMinutes != null || body.notifyBeforeUpgrade != null) {
+    return NextResponse.json(
+      { error: "Notification window only applies before an upgrade" },
+      { status: 400 }
+    );
+  }
+
+  const nextUrl = typeof url === "string" && url.trim() ? url.trim() : null;
+  if (nextUrl) {
+    try {
+      validateWebhookUrl(label, nextUrl);
+    } catch (error) {
+      return NextResponse.json(
+        { error: error instanceof Error ? error.message : "Invalid webhook URL" },
+        { status: 400 }
+      );
+    }
+  } else if (label !== existing.label) {
+    return NextResponse.json(
+      { error: "Enter a new URL when changing webhook providers." },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const webhook = await updateWebHook(webhookId, user.id, {
+      label,
+      ...(nextUrl ? { url: nextUrl } : {}),
+      notificationType,
+      notifyBeforeMinutes,
+      notifyBeforeUpgrade: null,
+    });
+    if (!webhook) {
+      return NextResponse.json({ error: "Webhook not found" }, { status: 404 });
+    }
     return NextResponse.json(serializeWebhook(webhook));
   } catch (error) {
     return NextResponse.json(

@@ -1,4 +1,4 @@
-import { Database, Home, BellRing, type LucideIcon } from "lucide-react";
+import { Database, Home, Send, type LucideIcon } from "lucide-react";
 
 export type NavItem = {
   label: string;
@@ -12,7 +12,7 @@ export type NavItem = {
 // the mobile drawer never drift apart.
 export const NAV_ITEMS: NavItem[] = [
   { label: "Chains", href: "/", icon: Home },
-  { label: "Alerts", href: "/dashboard", icon: BellRing, authOnly: true },
+  { label: "Webhooks", href: "/dashboard", icon: Send, authOnly: true },
   { label: "API", href: "/api-docs", icon: Database },
 ];
 

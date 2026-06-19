@@ -75,8 +75,9 @@ export const handleAddWebhook = async ({
   notificationType: string;
   notifyBeforeMinutes: number | null;
 }) => {
+  const nextUrl = url.trim();
   try {
-    new URL(url);
+    new URL(nextUrl);
   } catch {
     toast.error("Invalid URL format.");
     return;
@@ -90,7 +91,7 @@ export const handleAddWebhook = async ({
       },
       body: JSON.stringify({
         chainId: chainNetwork,
-        url,
+        url: nextUrl,
         label,
         notificationType,
         notifyBeforeMinutes,
@@ -152,6 +153,95 @@ export const handleRemoveWebhook = async (webhookId: number) => {
       toast.error("An unknown error occurred while removing the webhook.");
       throw new Error("An unknown error occurred while removing the webhook.");
     }
+  }
+};
+
+export const handleUpdateWebhook = async ({
+  id,
+  url,
+  label,
+  notificationType,
+  notifyBeforeMinutes,
+}: {
+  id: number;
+  url: string;
+  label: string;
+  notificationType: string;
+  notifyBeforeMinutes: number | null;
+}) => {
+  const nextUrl = url.trim();
+  if (nextUrl) {
+    try {
+      new URL(nextUrl);
+    } catch {
+      toast.error("Invalid URL format.");
+      return;
+    }
+  }
+
+  try {
+    const response = await fetch("/api/webhooks", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id,
+        url: nextUrl,
+        label,
+        notificationType,
+        notifyBeforeMinutes,
+      }),
+    });
+
+    if (!response.ok) {
+      let errorMessage = "Failed to update webhook";
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.error || errorData.message || errorMessage;
+      } catch {
+        errorMessage = `${response.status}: ${response.statusText}`;
+      }
+      throw new Error(errorMessage);
+    }
+
+    toast.success("Webhook updated successfully!");
+  } catch (error: unknown) {
+    console.error("Error updating webhook:", error);
+    if (error instanceof Error) {
+      toast.error(`Failed to update webhook: ${error.message}`);
+      throw error;
+    }
+    toast.error("An unknown error occurred while updating the webhook.");
+    throw new Error("An unknown error occurred while updating the webhook.");
+  }
+};
+
+export const handleTestSavedWebhook = async (webhookId: number) => {
+  try {
+    const response = await fetch("/api/webhooks/test", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: webhookId, eventType: "all" }),
+    });
+
+    const body = await response.json();
+
+    if (!response.ok) {
+      throw new Error(body.error || "Webhook test failed.");
+    }
+
+    toast.success("Webhook test events sent.");
+  } catch (error: unknown) {
+    console.error("Error testing webhook:", error);
+    if (error instanceof Error) {
+      toast.error(`Webhook test failed: ${error.message}`);
+      throw error;
+    }
+    toast.error("An unknown error occurred while testing the webhook.");
+    throw new Error("An unknown error occurred while testing the webhook.");
   }
 };
 

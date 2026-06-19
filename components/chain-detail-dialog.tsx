@@ -130,7 +130,7 @@ export const ChainDetailDialog = ({
         throw new Error(body.error || "Webhook test failed.");
       }
 
-      toast.success("Test notification sent.");
+      toast.success("Webhook test events sent.");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Webhook test failed.");
     } finally {
@@ -257,10 +257,10 @@ export const ChainDetailDialog = ({
           ) : isAuthenticated ? (
             <>
               <div>
-                <h3 className="text-sm font-semibold">Upgrade alerts</h3>
+                <h3 className="text-sm font-semibold">Upgrade webhooks</h3>
                 <p className="mt-1 text-xs text-muted-foreground">
                   Send Discord, Slack, or Telegram notifications for this chain.
-                  Stack as many alerts as you like (for example a week, a day,
+                  Stack as many webhooks as you like (for example a week, a day,
                   and an hour before).
                 </p>
               </div>
@@ -355,25 +355,25 @@ export const ChainDetailDialog = ({
 
                 <Button
                   onClick={handleAddWebhook}
-                  aria-label="Add alert"
+                  aria-label="Add webhook"
                   className="w-full gap-2"
                   disabled={addDisabled}
                 >
                   {isLoadingWebhooks && webhooks.length > 0
                     ? "Saving..."
-                    : "Add alert"}
+                    : "Add webhook"}
                   <PlusIcon className="h-4 w-4" />
                 </Button>
 
                 {webhookError && (
                   <p className="rounded-md border border-red-400/25 bg-red-500/10 p-3 text-sm text-red-200">
-                    Error managing alerts: {webhookError.message}
+                    Error managing webhooks: {webhookError.message}
                   </p>
                 )}
 
                 {isLoadingWebhooks && webhooks.length === 0 ? (
                   <p className="text-xs italic text-muted-foreground">
-                    Loading alerts...
+                    Loading webhooks...
                   </p>
                 ) : webhooks.length > 0 ? (
                   <ul className="scrollbar-thin max-h-44 space-y-2 overflow-y-auto pt-1">
@@ -388,7 +388,7 @@ export const ChainDetailDialog = ({
                   </ul>
                 ) : (
                   <p className="rounded-md border border-dashed border-white/10 p-3 text-xs italic text-muted-foreground">
-                    No alerts added for this chain yet.
+                    No webhooks added for this chain yet.
                   </p>
                 )}
               </div>

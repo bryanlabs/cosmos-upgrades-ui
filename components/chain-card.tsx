@@ -63,18 +63,30 @@ const ChainCardComponent = ({
     data.logo_urls?.svg ||
     undefined;
   const badgeProps = getBadgeProps(data);
+  const latestBlockHeight =
+    typeof data.latest_block_height === "number" &&
+    Number.isFinite(data.latest_block_height) &&
+    data.latest_block_height >= 0
+      ? data.latest_block_height
+      : null;
+  const upgradeBlockHeight =
+    typeof data.upgrade_block_height === "number" &&
+    Number.isFinite(data.upgrade_block_height) &&
+    data.upgrade_block_height >= 0
+      ? data.upgrade_block_height
+      : null;
   const blockDelta =
-    data.upgrade_block_height && data.latest_block_height
-      ? data.upgrade_block_height - data.latest_block_height
+    upgradeBlockHeight !== null && latestBlockHeight !== null
+      ? upgradeBlockHeight - latestBlockHeight
       : null;
   const progress =
     data.upgrade_found &&
-    data.upgrade_block_height &&
-    data.latest_block_height &&
-    data.upgrade_block_height > 0
+    upgradeBlockHeight !== null &&
+    latestBlockHeight !== null &&
+    upgradeBlockHeight > 0
       ? Math.min(
           100,
-          Math.max(0, (data.latest_block_height / data.upgrade_block_height) * 100)
+          Math.max(0, (latestBlockHeight / upgradeBlockHeight) * 100)
         )
       : 0;
 
@@ -222,12 +234,12 @@ const ChainCardComponent = ({
         <div className="grid grid-cols-2 gap-3">
           <Metric
             label="Latest block"
-            value={data.latest_block_height}
+            value={latestBlockHeight}
             copy={blockCopy}
           />
           <Metric
             label="Upgrade height"
-            value={data.upgrade_block_height}
+            value={upgradeBlockHeight}
             copy={upgradeCopy}
           />
         </div>
@@ -325,7 +337,7 @@ const Metric = ({
 }) => (
   <div className="min-w-0 rounded-lg border border-border/80 bg-background/35 p-3">
     <div className="mb-1 text-xs text-muted-foreground">{label}</div>
-    {value ? (
+    {isMetricValue(value) ? (
       <TooltipProvider delayDuration={100}>
         <Tooltip
           open={copy.tooltipOpen}
@@ -355,6 +367,10 @@ const Metric = ({
     )}
   </div>
 );
+
+function isMetricValue(value: number | null | undefined): value is number {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0;
+}
 
 const formatChainName = (network: string) =>
   network

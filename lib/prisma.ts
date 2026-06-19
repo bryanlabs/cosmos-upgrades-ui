@@ -323,6 +323,14 @@ async function getWebHookById(id: number) {
   });
 }
 
+async function getWebHookByIdForUser(id: number, userId: number) {
+  if (!Number.isInteger(id) || !Number.isInteger(userId)) {
+    throw new Error("Valid webhook and user IDs are required.");
+  }
+  await ensureDatabase();
+  return prisma.webHook.findFirst({ where: { id, userId } });
+}
+
 async function addWebHook(
   userId: number,
   chainId: string,
@@ -349,16 +357,27 @@ async function addWebHook(
 
 async function updateWebHook(
   id: number,
-  data: { label?: string; url?: string }
+  userId: number,
+  data: {
+    label?: string;
+    url?: string;
+    notificationType?: string;
+    notifyBeforeMinutes?: number | null;
+    notifyBeforeUpgrade?: string | null;
+  }
 ) {
-  if (!Number.isInteger(id)) throw new Error("Valid id is required.");
-  if (!data.label && !data.url) throw new Error("No update data provided.");
+  if (!Number.isInteger(id) || !Number.isInteger(userId)) {
+    throw new Error("Valid webhook and user IDs are required.");
+  }
+  if (Object.keys(data).length === 0) throw new Error("No update data provided.");
   await ensureDatabase();
 
   const payload = { ...data };
   if (typeof payload.url === "string") payload.url = encryptUrl(payload.url);
 
   try {
+    const webhook = await prisma.webHook.findFirst({ where: { id, userId } });
+    if (!webhook) return null;
     return await prisma.webHook.update({ where: { id }, data: payload });
   } catch (error) {
     if (
@@ -481,6 +500,7 @@ export {
   getWebHooksByUserId,
   countWebHooksByUserId,
   getWebHookById,
+  getWebHookByIdForUser,
   addWebHook,
   updateWebHook,
   removeWebHook,

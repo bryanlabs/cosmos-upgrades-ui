@@ -51,7 +51,22 @@ export function LeadTimePicker({
     if (value == null) {
       setSelection("");
       setAmount("");
+      return;
     }
+
+    const preset = NOTIFY_BEFORE_PRESETS.find((item) => item.minutes === value);
+    if (preset) {
+      setSelection(String(value));
+      setAmount("");
+      return;
+    }
+
+    const matchingUnit =
+      [...UNITS].reverse().find((item) => value % Number(item.value) === 0) ||
+      UNITS[0];
+    setSelection(CUSTOM);
+    setUnit(matchingUnit.value);
+    setAmount(String(value / Number(matchingUnit.value)));
   }, [value]);
 
   const handleSelection = (next: string) => {

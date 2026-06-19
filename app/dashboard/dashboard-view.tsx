@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
-import { BellRing, LogIn, Star } from "lucide-react";
+import { LogIn, Send, Star } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ const SignInDialog = dynamic(
   () => import("@/components/signin-dialog").then((m) => m.SignInDialog),
   { ssr: false }
 );
-import { AlertsPanel } from "@/components/dashboard/alerts-panel";
+import { WebhooksPanel } from "@/components/dashboard/webhooks-panel";
 import { ChainGrid } from "@/components/sections/chain-grid";
 import { useFavoriteChains } from "@/hooks/useFavoriteChains";
 import { useAllChainData } from "@/hooks/useChainData";
@@ -48,7 +48,7 @@ export function DashboardView() {
       <EmptyState
         icon={<LogIn className="h-6 w-6" />}
         title="Sign in to see your dashboard"
-        description="Your watchlist and upgrade alerts are tied to your account."
+        description="Your watchlist and upgrade webhooks are tied to your account."
         action={
           <SignInDialog>
             <Button className="gap-2">
@@ -62,17 +62,17 @@ export function DashboardView() {
   }
 
   return (
-    <Tabs defaultValue="alerts" className="space-y-5">
+    <Tabs defaultValue="webhooks" className="space-y-5">
       <TabsList>
-        <TabsTrigger value="alerts" className="gap-2">
-          <BellRing className="h-4 w-4" /> Alerts
+        <TabsTrigger value="webhooks" className="gap-2">
+          <Send className="h-4 w-4" /> Webhooks
         </TabsTrigger>
         <TabsTrigger value="watchlist" className="gap-2">
           <Star className="h-4 w-4" /> Watchlist
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="alerts">
-        <AlertsPanel enabled />
+      <TabsContent value="webhooks">
+        <WebhooksPanel enabled />
       </TabsContent>
       <TabsContent value="watchlist">
         <WatchlistPanel />
