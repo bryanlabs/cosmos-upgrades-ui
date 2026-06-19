@@ -67,13 +67,13 @@ export const handleAddWebhook = async ({
   url,
   label,
   notificationType,
-  notifyBeforeUpgrade,
+  notifyBeforeMinutes,
 }: {
   chainNetwork: string;
   url: string;
   label: string;
   notificationType: string;
-  notifyBeforeUpgrade: string;
+  notifyBeforeMinutes: number | null;
 }) => {
   try {
     new URL(url);
@@ -93,7 +93,7 @@ export const handleAddWebhook = async ({
         url,
         label,
         notificationType,
-        notifyBeforeUpgrade,
+        notifyBeforeMinutes,
       }),
     });
 

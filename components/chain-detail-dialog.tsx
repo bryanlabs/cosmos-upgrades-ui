@@ -9,11 +9,11 @@ import {
   PlusIcon,
   Send,
   TestTube2,
-  TrashIcon,
 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -32,6 +32,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DiscordIcon, SlackIcon } from "./icons/index";
+import { LeadTimePicker } from "@/components/webhooks/lead-time-picker";
+import { WebhookRow } from "@/components/webhooks/webhook-row";
 import { toast } from "sonner";
 
 interface ChainDetailDialogProps {
@@ -39,12 +41,6 @@ interface ChainDetailDialogProps {
   onClose: () => void;
   chain: ChainUpgradeStatus | null;
 }
-
-const providerNames: Record<string, string> = {
-  discord: "Discord",
-  slack: "Slack",
-  telegram: "Telegram",
-};
 
 export const ChainDetailDialog = ({
   isOpen,
@@ -72,28 +68,36 @@ export const ChainDetailDialog = ({
   const [url, setUrl] = useState("");
   const [label, setLabel] = useState("");
   const [notificationType, setNotificationType] = useState("");
-  const [notifyBeforeUpgrade, setNotifyBeforeUpgrade] = useState("");
+  const [notifyBeforeMinutes, setNotifyBeforeMinutes] = useState<number | null>(
+    null
+  );
   const [isTesting, setIsTesting] = useState(false);
+
+  const resetForm = () => {
+    setUrl("");
+    setLabel("");
+    setNotificationType("");
+    setNotifyBeforeMinutes(null);
+  };
 
   useEffect(() => {
     if (isOpen && isAuthenticated && chain?.network) {
       fetchWebhooks();
     }
     if (!isOpen || !chain) {
-      setUrl("");
-      setLabel("");
-      setNotificationType("");
-      setNotifyBeforeUpgrade("");
+      resetForm();
     }
   }, [isOpen, isAuthenticated, chain?.network, fetchWebhooks, chain]);
+
+  const isBeforeUpgrade = notificationType === "before-upgrade";
 
   const handleAddWebhook = async () => {
     if (!url.trim() || !label.trim() || !notificationType) {
       toast.warning("Select a provider, trigger, and destination URL.");
       return;
     }
-    if (notificationType === "before-upgrade" && !notifyBeforeUpgrade) {
-      toast.warning("Select how long before the upgrade to notify.");
+    if (isBeforeUpgrade && notifyBeforeMinutes == null) {
+      toast.warning("Choose how long before the upgrade to notify.");
       return;
     }
 
@@ -101,14 +105,10 @@ export const ChainDetailDialog = ({
       url,
       label,
       notificationType,
-      notifyBeforeUpgrade:
-        notificationType === "before-upgrade" ? notifyBeforeUpgrade : "",
+      notifyBeforeMinutes: isBeforeUpgrade ? notifyBeforeMinutes : null,
     });
 
-    setUrl("");
-    setLabel("");
-    setNotificationType("");
-    setNotifyBeforeUpgrade("");
+    resetForm();
   };
 
   const handleTestWebhook = async () => {
@@ -161,6 +161,13 @@ export const ChainDetailDialog = ({
   );
 
   if (!chain) return null;
+
+  const addDisabled =
+    isLoadingWebhooks ||
+    !url ||
+    !label ||
+    !notificationType ||
+    (isBeforeUpgrade && notifyBeforeMinutes == null);
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -219,6 +226,9 @@ export const ChainDetailDialog = ({
               <StatusBadge />
             )}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            Upgrade details and notification settings for {chain.network}.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-5 px-5 pb-5 pt-1">
@@ -247,9 +257,11 @@ export const ChainDetailDialog = ({
           ) : isAuthenticated ? (
             <>
               <div>
-                <h3 className="text-sm font-semibold">Webhook notifications</h3>
+                <h3 className="text-sm font-semibold">Upgrade alerts</h3>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Save Discord, Slack, or Telegram destinations for this chain.
+                  Send Discord, Slack, or Telegram notifications for this chain.
+                  Stack as many alerts as you like (for example a week, a day,
+                  and an hour before).
                 </p>
               </div>
 
@@ -262,7 +274,7 @@ export const ChainDetailDialog = ({
               <div className="space-y-3">
                 <div className="grid gap-2 sm:grid-cols-[150px_1fr_auto]">
                   <Select value={label} onValueChange={setLabel}>
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="Provider">
                       <SelectValue placeholder="Provider" />
                     </SelectTrigger>
                     <SelectContent>
@@ -288,11 +300,12 @@ export const ChainDetailDialog = ({
                     placeholder="https://..."
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
-	                    onKeyDown={(e) => {
-	                      if (e.key === "Enter") handleAddWebhook();
-	                    }}
-	                    disabled={!isAuthenticated || !chain.network}
-	                  />
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleAddWebhook();
+                    }}
+                    aria-label="Webhook URL"
+                    disabled={!isAuthenticated || !chain.network}
+                  />
                   <Button
                     type="button"
                     variant="outline"
@@ -310,7 +323,7 @@ export const ChainDetailDialog = ({
                     value={notificationType}
                     onValueChange={setNotificationType}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger aria-label="Notification trigger">
                       <SelectValue placeholder="Notification trigger" />
                     </SelectTrigger>
                     <SelectContent>
@@ -325,97 +338,57 @@ export const ChainDetailDialog = ({
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                  {notificationType === "before-upgrade" && (
-                    <Select
-                      value={notifyBeforeUpgrade}
-                      onValueChange={setNotifyBeforeUpgrade}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Lead time" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="15m">15 minutes</SelectItem>
-                        <SelectItem value="60m">60 minutes</SelectItem>
-                        <SelectItem value="8h">8 hours</SelectItem>
-                        <SelectItem value="24h">24 hours</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  {isBeforeUpgrade && (
+                    <LeadTimePicker
+                      value={notifyBeforeMinutes}
+                      onChange={setNotifyBeforeMinutes}
+                    />
                   )}
                 </div>
 
+                {isBeforeUpgrade && (
+                  <p className="text-xs text-muted-foreground">
+                    If the upgrade is already nearer than your lead time, you
+                    will be notified on the next check.
+                  </p>
+                )}
+
                 <Button
                   onClick={handleAddWebhook}
-                  aria-label="Add webhook"
+                  aria-label="Add alert"
                   className="w-full gap-2"
-                  disabled={
-                    isLoadingWebhooks ||
-                    !url ||
-                    !label ||
-                    !notificationType ||
-                    (notificationType === "before-upgrade" &&
-                      !notifyBeforeUpgrade)
-                  }
+                  disabled={addDisabled}
                 >
                   {isLoadingWebhooks && webhooks.length > 0
                     ? "Saving..."
-                    : "Add webhook"}
+                    : "Add alert"}
                   <PlusIcon className="h-4 w-4" />
                 </Button>
 
                 {webhookError && (
                   <p className="rounded-md border border-red-400/25 bg-red-500/10 p-3 text-sm text-red-200">
-                    Error managing webhooks: {webhookError.message}
+                    Error managing alerts: {webhookError.message}
                   </p>
                 )}
 
                 {isLoadingWebhooks && webhooks.length === 0 ? (
                   <p className="text-xs italic text-muted-foreground">
-                    Loading webhooks...
+                    Loading alerts...
                   </p>
                 ) : webhooks.length > 0 ? (
                   <ul className="scrollbar-thin max-h-44 space-y-2 overflow-y-auto pt-1">
                     {webhooks.map((webhook) => (
-                      <li
+                      <WebhookRow
                         key={webhook.id}
-                        className="flex items-center justify-between gap-3 rounded-md border border-white/10 bg-white/[0.03] px-3 py-2 text-sm"
-                      >
-                        <div className="flex min-w-0 flex-1 items-center gap-3">
-                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.04]">
-                            {renderProviderIcon(webhook.label)}
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="font-medium">
-                                {providerNames[webhook.label] || webhook.label}
-                              </span>
-                              <span className="text-xs capitalize text-muted-foreground">
-                                {webhook.notificationType.replace(/-/g, " ")}
-                                {webhook.notificationType === "before-upgrade" &&
-                                  webhook.notifyBeforeUpgrade &&
-                                  ` (${webhook.notifyBeforeUpgrade})`}
-                              </span>
-                            </div>
-                            <span className="block max-w-[180px] truncate text-xs text-muted-foreground sm:max-w-[380px]">
-                              {webhook.maskedUrl}
-                            </span>
-                          </div>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
-                          onClick={() => removeWebhook(webhook.id)}
-                          aria-label={`Remove ${webhook.label} webhook`}
-                          disabled={isLoadingWebhooks}
-                        >
-                          <TrashIcon className="h-4 w-4" />
-                        </Button>
-                      </li>
+                        webhook={webhook}
+                        onRemove={removeWebhook}
+                        isRemoving={isLoadingWebhooks}
+                      />
                     ))}
                   </ul>
                 ) : (
                   <p className="rounded-md border border-dashed border-white/10 p-3 text-xs italic text-muted-foreground">
-                    No webhooks added for this chain yet.
+                    No alerts added for this chain yet.
                   </p>
                 )}
               </div>
@@ -449,10 +422,4 @@ function ChainMeta({
       <div className="truncate text-sm font-medium">{value}</div>
     </div>
   );
-}
-
-function renderProviderIcon(label: string) {
-  if (label === "discord") return <DiscordIcon size={16} />;
-  if (label === "slack") return <SlackIcon size={16} />;
-  return <Send className="h-4 w-4 text-muted-foreground" />;
 }

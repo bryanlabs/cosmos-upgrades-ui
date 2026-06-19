@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { ChainUpgradeStatus } from "@/types/chain";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -33,15 +34,17 @@ interface ChainCardProps {
   isConnected: boolean;
   onToggleFavorite: (chainId: string) => void;
   onCosmovisorIconClick: (chain: ChainUpgradeStatus) => void;
+  onSelect: (chain: ChainUpgradeStatus) => void;
 }
 
-export const ChainCard = ({
+const ChainCardComponent = ({
   data,
   isFavorite,
   isUpdatingFavorite,
   isConnected,
   onToggleFavorite,
   onCosmovisorIconClick,
+  onSelect,
 }: ChainCardProps) => {
   const blockCopy = useCopy();
   const upgradeCopy = useCopy();
@@ -80,7 +83,19 @@ export const ChainCard = ({
   };
 
   return (
-    <Card className="surface-card group relative h-full overflow-hidden rounded-lg py-0 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg">
+    <Card
+      role="button"
+      tabIndex={0}
+      aria-label={`Open ${formatChainName(data.network)} details`}
+      onClick={() => onSelect(data)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect(data);
+        }
+      }}
+      className="surface-card group relative h-full cursor-pointer overflow-hidden rounded-lg py-0 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
       <div className="absolute inset-x-0 top-0 h-1 bg-muted">
         <div
           className={cn(
@@ -262,6 +277,8 @@ export const ChainCard = ({
   );
 };
 
+export const ChainCard = memo(ChainCardComponent);
+
 const StatusBadge = ({
   badgeProps,
 }: {
@@ -321,6 +338,7 @@ const Metric = ({
                 e.stopPropagation();
                 copy.copy(value);
               }}
+              aria-label={`Copy ${label.toLowerCase()}`}
               className="flex min-w-0 items-center gap-1 rounded text-left font-mono text-sm text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <span className="truncate">{value.toLocaleString()}</span>

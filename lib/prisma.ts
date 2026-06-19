@@ -1,6 +1,24 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import { encryptSecret, isEncryptionConfigured } from "@/lib/crypto";
 
 process.env.DATABASE_URL ||= "file:./prisma/dev.db";
+
+let warnedPlaintextWebhook = false;
+
+// Encrypt a webhook URL when an encryption key is configured. If it is not
+// (e.g. local dev, or before the secret is deployed), the URL is stored as
+// plaintext exactly as before and the startup sweep encrypts it once the key
+// appears. decryptSecret() transparently reads either form.
+function encryptUrl(url: string): string {
+  if (isEncryptionConfigured()) return encryptSecret(url);
+  if (!warnedPlaintextWebhook) {
+    warnedPlaintextWebhook = true;
+    console.warn(
+      "WEBHOOK_ENCRYPTION_KEY is not set; storing webhook URLs as plaintext."
+    );
+  }
+  return url;
+}
 
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
@@ -68,6 +86,24 @@ async function ensureDatabase() {
         CREATE INDEX IF NOT EXISTS "WebHook_chainId_idx"
         ON "WebHook"("chainId")
       `);
+      await ensureColumn(
+        "WebHook",
+        "notifyBeforeMinutes",
+        '"notifyBeforeMinutes" INTEGER'
+      );
+      // Backfill the integer lead time from the legacy string token (idempotent:
+      // only touches rows not yet backfilled).
+      await prisma.$executeRawUnsafe(`
+        UPDATE "WebHook" SET "notifyBeforeMinutes" =
+          CASE "notifyBeforeUpgrade"
+            WHEN '15m' THEN 15
+            WHEN '60m' THEN 60
+            WHEN '8h'  THEN 480
+            WHEN '24h' THEN 1440
+            ELSE NULL
+          END
+        WHERE "notifyBeforeMinutes" IS NULL AND "notifyBeforeUpgrade" IS NOT NULL
+      `);
       await prisma.$executeRawUnsafe(`
         CREATE TABLE IF NOT EXISTS "WebHookDelivery" (
           "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -91,6 +127,20 @@ async function ensureDatabase() {
         CREATE INDEX IF NOT EXISTS "WebHookDelivery_eventKey_idx"
         ON "WebHookDelivery"("eventKey")
       `);
+      // One-time, idempotent re-encryption of any plaintext webhook URLs. Runs
+      // only once a key is configured; the "v1:" prefix marks already-encrypted
+      // rows so this is a no-op on subsequent startups.
+      if (isEncryptionConfigured()) {
+        const plaintextRows = await prisma.$queryRawUnsafe<
+          Array<{ id: number; url: string }>
+        >(`SELECT "id", "url" FROM "WebHook" WHERE "url" NOT LIKE 'v1:%'`);
+        for (const row of plaintextRows) {
+          await prisma.webHook.update({
+            where: { id: row.id },
+            data: { url: encryptSecret(row.url) },
+          });
+        }
+      }
     })();
   }
 
@@ -249,6 +299,21 @@ async function getWebHooksByChainId(chainId: string) {
   });
 }
 
+async function getWebHooksByUserId(userId: number) {
+  if (!Number.isInteger(userId)) throw new Error("Valid userId is required.");
+  await ensureDatabase();
+  return prisma.webHook.findMany({
+    where: { userId },
+    orderBy: { id: "desc" },
+  });
+}
+
+async function countWebHooksByUserId(userId: number) {
+  if (!Number.isInteger(userId)) throw new Error("Valid userId is required.");
+  await ensureDatabase();
+  return prisma.webHook.count({ where: { userId } });
+}
+
 async function getWebHookById(id: number) {
   if (!Number.isInteger(id)) throw new Error("Valid id is required.");
   await ensureDatabase();
@@ -264,7 +329,8 @@ async function addWebHook(
   label: string,
   url: string,
   notificationType: string,
-  notifyBeforeUpgrade?: string
+  notifyBeforeMinutes?: number | null,
+  notifyBeforeUpgrade?: string | null
 ) {
   if (!Number.isInteger(userId)) throw new Error("Valid userId is required.");
   await ensureDatabase();
@@ -273,9 +339,10 @@ async function addWebHook(
       userId,
       chainId,
       label,
-      url,
+      url: encryptUrl(url),
       notificationType,
-      notifyBeforeUpgrade: notifyBeforeUpgrade || null,
+      notifyBeforeMinutes: notifyBeforeMinutes ?? null,
+      notifyBeforeUpgrade: notifyBeforeUpgrade ?? null,
     },
   });
 }
@@ -288,8 +355,11 @@ async function updateWebHook(
   if (!data.label && !data.url) throw new Error("No update data provided.");
   await ensureDatabase();
 
+  const payload = { ...data };
+  if (typeof payload.url === "string") payload.url = encryptUrl(payload.url);
+
   try {
-    return await prisma.webHook.update({ where: { id }, data });
+    return await prisma.webHook.update({ where: { id }, data: payload });
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -408,6 +478,8 @@ export {
   getUserByWallet,
   getWebHooksByUserAndChain,
   getWebHooksByChainId,
+  getWebHooksByUserId,
+  countWebHooksByUserId,
   getWebHookById,
   addWebHook,
   updateWebHook,

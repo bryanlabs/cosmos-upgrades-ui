@@ -1,0 +1,122 @@
+"use client";
+
+import { useMemo } from "react";
+import dynamic from "next/dynamic";
+import { useSession } from "next-auth/react";
+import { BellRing, LogIn, Star } from "lucide-react";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { EmptyState } from "@/components/dashboard/empty-state";
+
+// Lazy: the sign-in dialog pulls in the heavy wallet/cosmjs bundle, and only
+// signed-out visitors (the minority on this page) ever see it.
+const SignInDialog = dynamic(
+  () => import("@/components/signin-dialog").then((m) => m.SignInDialog),
+  { ssr: false }
+);
+import { AlertsPanel } from "@/components/dashboard/alerts-panel";
+import { ChainGrid } from "@/components/sections/chain-grid";
+import { useFavoriteChains } from "@/hooks/useFavoriteChains";
+import { useAllChainData } from "@/hooks/useChainData";
+
+function CardSkeletons({ count = 6 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: count }).map((_, index) => (
+        <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
+      ))}
+    </div>
+  );
+}
+
+export function DashboardView() {
+  const { status } = useSession();
+
+  if (status === "loading") {
+    return (
+      <div className="space-y-3">
+        <Skeleton className="h-9 w-64 rounded-md" />
+        <CardSkeletons />
+      </div>
+    );
+  }
+
+  if (status !== "authenticated") {
+    return (
+      <EmptyState
+        icon={<LogIn className="h-6 w-6" />}
+        title="Sign in to see your dashboard"
+        description="Your watchlist and upgrade alerts are tied to your account."
+        action={
+          <SignInDialog>
+            <Button className="gap-2">
+              <LogIn className="h-4 w-4" />
+              Sign in
+            </Button>
+          </SignInDialog>
+        }
+      />
+    );
+  }
+
+  return (
+    <Tabs defaultValue="alerts" className="space-y-5">
+      <TabsList>
+        <TabsTrigger value="alerts" className="gap-2">
+          <BellRing className="h-4 w-4" /> Alerts
+        </TabsTrigger>
+        <TabsTrigger value="watchlist" className="gap-2">
+          <Star className="h-4 w-4" /> Watchlist
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="alerts">
+        <AlertsPanel enabled />
+      </TabsContent>
+      <TabsContent value="watchlist">
+        <WatchlistPanel />
+      </TabsContent>
+    </Tabs>
+  );
+}
+
+function WatchlistPanel() {
+  const { data: allChains, isLoading: isLoadingChains } = useAllChainData();
+  const {
+    favoritesSet,
+    isLoadingFavorites,
+    updatingFavoriteChainId,
+    handleToggleFavorite,
+    isConnected,
+  } = useFavoriteChains();
+
+  const favoriteChains = useMemo(
+    () => (allChains ?? []).filter((chain) => favoritesSet.has(chain.network)),
+    [allChains, favoritesSet]
+  );
+
+  if (isLoadingChains || isLoadingFavorites) {
+    return <CardSkeletons />;
+  }
+
+  if (favoriteChains.length === 0) {
+    return (
+      <EmptyState
+        icon={<Star className="h-6 w-6" />}
+        title="No chains in your watchlist"
+        description="Star chains on the explorer to keep an eye on them here."
+      />
+    );
+  }
+
+  return (
+    <ChainGrid
+      chains={favoriteChains}
+      favoritesSet={favoritesSet}
+      updatingFavoriteChainId={updatingFavoriteChainId}
+      onToggleFavorite={handleToggleFavorite}
+      isConnected={isConnected}
+    />
+  );
+}

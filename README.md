@@ -25,35 +25,28 @@ Built with the latest web technologies and a sleek, user-friendly interface, Cos
 ### Prerequisites
 
 - Node.js 18 or later
-- npm or yarn
-- PostgreSQL (for user data and favorites)
+- npm
+- No external database — user data lives in a bundled SQLite file via Prisma.
 
 ### Installation
 
-1. Clone the repository
+1. Clone and install:
 ```bash
 git clone https://github.com/bryanlabs/cosmos-upgrades-ui.git
 cd cosmos-upgrades-ui
-```
-
-2. Install dependencies
-```bash
 npm install
 ```
 
-3. Create a `.env.local` file with the following variables:
+2. Copy `.env.example` to `.env.local` and fill it in (see Environment variables). Minimum for local dev:
 ```
-DATABASE_URL="postgresql://username:password@localhost:5432/cosmosupgrades"
-NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID="your_wallet_connect_project_id"
-```
-
-4. Initialize the database
-```bash
-npx prisma db push
+DATABASE_URL="file:./prisma/dev.db"
+AUTH_SECRET="<openssl rand -base64 32>"
+COSMOS_UPGRADES_API_BASE_URL="http://localhost:8080"   # or the public API
 ```
 
-5. Start the development server
+3. Generate the Prisma client and run (the SQLite schema is created automatically at runtime):
 ```bash
+npx prisma generate
 npm run dev
 ```
 
@@ -61,12 +54,43 @@ npm run dev
 
 This project uses:
 
-- **Next.js 14**: Full-stack React framework with server components
-- **TanStack Query**: Data fetching and state management
-- **Prisma**: Database ORM for PostgreSQL
-- **graz**: Cosmos wallet connection library
-- **shadcn/ui**: Component system built on Radix UI and Tailwind CSS
-- **Docker**: Containerization for easy deployment
+- **Next.js 15 / React 19**: Full-stack React framework with server components
+- **TanStack Query**: Data fetching and caching
+- **Prisma + SQLite**: User data, favorites, and webhook alerts (a single-file DB)
+- **NextAuth (Auth.js)**: Sessions via Authentik (Apple/Google) and Sign-In With Cosmos (Keplr/Leap)
+- **shadcn/ui + Tailwind v4**: Component system built on Radix UI
+- **Docker**: Standalone Next.js server image
+
+## 🔐 Authentication
+
+Two ways to sign in, both producing a NextAuth (JWT) session:
+
+- **Apple / Google** via Authentik (OIDC). Requires the `AUTH_AUTHENTIK_*` env.
+- **Cosmos wallet (Keplr / Leap)** via Sign-In With Cosmos: the browser signs a
+  server-issued nonce (ADR-036), the server verifies the secp256k1 signature and
+  derives the address (`lib/cosmos-auth.ts`), and a NextAuth Credentials provider
+  mints the session. No wallet SDK ships to the browser — `graz` was removed.
+
+## 🔔 Notifications
+
+Alerts are sent server-side, not from the browser. A Kubernetes CronJob
+(`notification-dispatch`, every 5 min) POSTs to `/api/notifications/dispatch`
+with a bearer token; that route reads saved webhooks from SQLite, decides what to
+fire (per chain, trigger, and lead time), de-duplicates, and sends to the user's
+Discord/Slack/Telegram URL. Webhook URLs are encrypted at rest (AES-256-GCM,
+`WEBHOOK_ENCRYPTION_KEY`).
+
+## ⚙️ Environment variables
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | SQLite path, e.g. `file:/data/cosmos-upgrades-ui.db`. |
+| `COSMOS_UPGRADES_API_BASE_URL` | Base URL of the upgrades API the UI proxies to. |
+| `AUTH_SECRET` | NextAuth signing secret (`openssl rand -base64 32`). |
+| `AUTH_AUTHENTIK_ISSUER` / `_ID` / `_SECRET` | Authentik OIDC (Apple/Google). Optional — wallet login works without it. |
+| `NOTIFICATION_DISPATCH_TOKEN` | Bearer token the dispatch CronJob presents. |
+| `WEBHOOK_ENCRYPTION_KEY` | base64 32-byte AES key encrypting webhook URLs at rest. |
+| `NEXT_PUBLIC_AUTHENTIK_END_SESSION_URL` | Authentik logout URL (build-time). |
 
 ## 🐳 Docker Deployment
 

@@ -2,20 +2,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   getWebHooksByUserAndChain,
+  getWebHooksByUserId,
+  countWebHooksByUserId,
   addWebHook,
   removeWebHookForUser,
 } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/current-user";
 import {
+  formatNotifyBefore,
   isNotificationType,
-  isNotifyBeforeWindow,
+  isValidNotifyBeforeMinutes,
   isWebhookProvider,
   maskWebhookUrl,
+  parseWindowToMinutes,
+  toNotifyMinutes,
   validateWebhookUrl,
 } from "@/lib/webhook-delivery";
+import { decryptSecret } from "@/lib/crypto";
+import { rateLimit } from "@/lib/rate-limit";
 
-const MAX_WEBHOOKS_PER_CHAIN = 4;
+export const runtime = "nodejs";
+
+const MAX_WEBHOOKS_PER_CHAIN = 10;
+const MAX_WEBHOOKS_PER_USER = 50;
 const MAX_CHAIN_ID_LENGTH = 80;
+const CREATE_RATE_LIMIT = 20;
+const CREATE_RATE_WINDOW_MS = 10 * 60 * 1000;
 
 export async function GET(req: NextRequest) {
   const user = await getCurrentUser();
@@ -26,15 +38,12 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const chainId = searchParams.get("chainId");
 
-  if (!chainId) {
-    return NextResponse.json(
-      { error: "Missing chainId" },
-      { status: 400 }
-    );
-  }
-
   try {
-    const webhooks = await getWebHooksByUserAndChain(user.id, chainId);
+    // Omitting chainId returns every webhook the user has, grouped client-side
+    // (powers the dashboard). With chainId, returns just that chain's webhooks.
+    const webhooks = chainId
+      ? await getWebHooksByUserAndChain(user.id, chainId)
+      : await getWebHooksByUserId(user.id);
     return NextResponse.json(webhooks.map(serializeWebhook));
   } catch (error) {
     return NextResponse.json(
@@ -50,8 +59,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const limit = rateLimit(
+    `webhooks:create:${user.id}`,
+    CREATE_RATE_LIMIT,
+    CREATE_RATE_WINDOW_MS
+  );
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: "Too many webhook changes. Try again shortly." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } }
+    );
+  }
+
   const body = await req.json();
-  const { chainId, label, url, notificationType, notifyBeforeUpgrade } = body;
+  const { chainId, label, url, notificationType } = body;
 
   if (!chainId || !label || !url || !notificationType) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -69,17 +90,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unsupported notification trigger" }, { status: 400 });
   }
 
-  if (
-    notificationType === "before-upgrade" &&
-    !isNotifyBeforeWindow(notifyBeforeUpgrade)
-  ) {
-    return NextResponse.json(
-      { error: "Unsupported notification window" },
-      { status: 400 }
-    );
-  }
-
-  if (notificationType !== "before-upgrade" && notifyBeforeUpgrade) {
+  // Resolve the lead time (in minutes) for "before-upgrade" alerts, accepting a
+  // numeric value or a legacy "Xm/Xh/Xd/Xw" token for backward compatibility.
+  let notifyBeforeMinutes: number | null = null;
+  if (notificationType === "before-upgrade") {
+    if (typeof body.notifyBeforeMinutes === "number") {
+      notifyBeforeMinutes = body.notifyBeforeMinutes;
+    } else if (typeof body.notifyBeforeUpgrade === "string") {
+      notifyBeforeMinutes = parseWindowToMinutes(body.notifyBeforeUpgrade);
+    }
+    if (!isValidNotifyBeforeMinutes(notifyBeforeMinutes)) {
+      return NextResponse.json(
+        { error: "Choose a lead time between 5 minutes and 30 days." },
+        { status: 400 }
+      );
+    }
+  } else if (body.notifyBeforeMinutes != null || body.notifyBeforeUpgrade != null) {
     return NextResponse.json(
       { error: "Notification window only applies before an upgrade" },
       { status: 400 }
@@ -96,10 +122,19 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const existing = await getWebHooksByUserAndChain(user.id, chainId);
+    const [existing, total] = await Promise.all([
+      getWebHooksByUserAndChain(user.id, chainId),
+      countWebHooksByUserId(user.id),
+    ]);
     if (existing.length >= MAX_WEBHOOKS_PER_CHAIN) {
       return NextResponse.json(
-        { error: `Maximum of ${MAX_WEBHOOKS_PER_CHAIN} webhooks reached.` },
+        { error: `Maximum of ${MAX_WEBHOOKS_PER_CHAIN} alerts per chain reached.` },
+        { status: 400 }
+      );
+    }
+    if (total >= MAX_WEBHOOKS_PER_USER) {
+      return NextResponse.json(
+        { error: `Maximum of ${MAX_WEBHOOKS_PER_USER} alerts reached.` },
         { status: 400 }
       );
     }
@@ -110,7 +145,7 @@ export async function POST(req: NextRequest) {
       label,
       url,
       notificationType,
-      notificationType === "before-upgrade" ? notifyBeforeUpgrade : undefined
+      notifyBeforeMinutes
     );
     return NextResponse.json(serializeWebhook(webhook));
   } catch (error) {
@@ -152,14 +187,17 @@ function serializeWebhook(webhook: {
   chainId: string;
   notificationType: string;
   notifyBeforeUpgrade: string | null;
+  notifyBeforeMinutes: number | null;
 }) {
+  const minutes = toNotifyMinutes(webhook);
   return {
     id: webhook.id,
     chainId: webhook.chainId,
     label: webhook.label,
     notificationType: webhook.notificationType,
-    notifyBeforeUpgrade: webhook.notifyBeforeUpgrade,
-    maskedUrl: maskWebhookUrl(webhook.url),
+    notifyBeforeMinutes: minutes,
+    notifyBeforeLabel: minutes != null ? formatNotifyBefore(minutes) : null,
+    maskedUrl: maskWebhookUrl(decryptSecret(webhook.url)),
   };
 }
 

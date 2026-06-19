@@ -27,7 +27,8 @@ model WebHook {
   chainId             String
   label               String
   notificationType    String
-  notifyBeforeUpgrade String?
+  notifyBeforeUpgrade String? // legacy fixed-window token, kept for transition
+  notifyBeforeMinutes Int? // flexible lead time, in minutes
   url                 String
 
   user       User              @relation(fields: [userId], references: [id])

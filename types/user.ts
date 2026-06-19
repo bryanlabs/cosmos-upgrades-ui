@@ -5,7 +5,8 @@ interface Webhook {
   maskedUrl: string;
   label: string;
   notificationType: string;
-  notifyBeforeUpgrade: string | null;
+  notifyBeforeMinutes: number | null;
+  notifyBeforeLabel: string | null;
 }
 interface User {
   id: number;

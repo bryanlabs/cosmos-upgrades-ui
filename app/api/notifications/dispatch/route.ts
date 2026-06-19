@@ -9,10 +9,14 @@ import {
   buildUpgradeMessage,
   buildWebhookEventKey,
   isNotificationType,
-  isNotifyBeforeWindow,
   isWebhookProvider,
   sendWebhook,
+  toNotifyMinutes,
 } from "@/lib/webhook-delivery";
+import { decryptSecret, timingSafeEqualStr } from "@/lib/crypto";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const API_BASE_URL =
   process.env.COSMOS_UPGRADES_API_BASE_URL ||
@@ -27,8 +31,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const headerToken = req.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-  if (headerToken !== dispatchToken) {
+  const headerToken = req.headers
+    .get("authorization")
+    ?.replace(/^Bearer\s+/i, "");
+  if (!headerToken || !timingSafeEqualStr(headerToken, dispatchToken)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -57,15 +63,23 @@ export async function POST(req: NextRequest) {
         continue;
       }
 
+      const notifyBeforeMinutes = toNotifyMinutes(webhook);
       if (
         webhook.notificationType === "before-upgrade" &&
-        !isNotifyBeforeWindow(webhook.notifyBeforeUpgrade)
+        notifyBeforeMinutes == null
       ) {
         summary.skipped += 1;
         continue;
       }
 
-      if (!shouldDispatch(chain, webhook.notificationType, webhook.notifyBeforeUpgrade, now)) {
+      if (
+        !shouldDispatch(
+          chain,
+          webhook.notificationType,
+          notifyBeforeMinutes,
+          now
+        )
+      ) {
         summary.skipped += 1;
         continue;
       }
@@ -73,7 +87,7 @@ export async function POST(req: NextRequest) {
       const eventKey = buildWebhookEventKey(
         chain,
         webhook.notificationType,
-        webhook.notifyBeforeUpgrade
+        webhook.notificationType === "before-upgrade" ? notifyBeforeMinutes : null
       );
 
       if (await hasWebhookDelivery(webhook.id, eventKey)) {
@@ -83,7 +97,7 @@ export async function POST(req: NextRequest) {
 
       try {
         const result = await sendWebhook(
-          { label: webhook.label, url: webhook.url },
+          { label: webhook.label, url: decryptSecret(webhook.url) },
           buildUpgradeMessage(chain, webhook.notificationType),
           chain
         );
@@ -136,7 +150,7 @@ async function fetchJson(url: string): Promise<ChainUpgradeStatus[]> {
 function shouldDispatch(
   chain: ChainUpgradeStatus,
   notificationType: string,
-  notifyBeforeUpgrade: string | null,
+  notifyBeforeMinutes: number | null,
   now: number
 ) {
   if (notificationType === "upgrade-proposed") {
@@ -147,7 +161,8 @@ function shouldDispatch(
     return chain.source !== "active_upgrade_proposals";
   }
 
-  if (!chain.estimated_upgrade_time || !notifyBeforeUpgrade) {
+  // before-upgrade
+  if (!chain.estimated_upgrade_time || notifyBeforeMinutes == null) {
     return false;
   }
 
@@ -156,14 +171,9 @@ function shouldDispatch(
     return false;
   }
 
-  const windowMs = parseWindowMs(notifyBeforeUpgrade);
+  // Fire once the upgrade is within the lead-time window. The delivery dedup
+  // (eventKey) keeps a long window (days/weeks) from re-firing every 5 minutes;
+  // an alert added when already inside its window fires on the next run.
+  const windowMs = notifyBeforeMinutes * 60_000;
   return targetTime - now <= windowMs;
-}
-
-function parseWindowMs(value: string) {
-  const match = value.match(/^(\d+)(m|h)$/);
-  if (!match) return 0;
-
-  const amount = Number(match[1]);
-  return match[2] === "h" ? amount * 60 * 60 * 1000 : amount * 60 * 1000;
 }

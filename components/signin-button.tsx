@@ -21,7 +21,8 @@ export function SignInButton() {
   const handleSignOut = async () => {
     await signOut({ redirect: false, callbackUrl: "/" });
     const logoutUrl = new URL(
-      "https://authentik.media.bryanlabs.net/application/o/upgrade-hub/end-session/"
+      process.env.NEXT_PUBLIC_AUTHENTIK_END_SESSION_URL ||
+        "https://authentik.media.bryanlabs.net/application/o/upgrade-hub/end-session/"
     );
     logoutUrl.searchParams.set("post_logout_redirect_uri", window.location.origin + "/");
     window.location.assign(logoutUrl.toString());

@@ -89,12 +89,6 @@ export const CosmovisorDialog = ({
               </span>
             </div>
           )}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <span className="text-left font-medium">Height:</span>
-            <span className="col-span-3 font-mono text-sm">
-              {cosmovisorInfo.height}
-            </span>
-          </div>
           <div className="grid grid-cols-4 gap-4">
             <span className="font-medium">Binaries:</span>
             <div className="col-span-3 flex flex-col gap-3">
@@ -103,7 +97,7 @@ export const CosmovisorDialog = ({
                   <Link
                     key={label}
                     href={url}
-                    className="text-blue-600 hover:underline break-all flex gap-2"
+                    className="text-primary hover:underline break-all flex gap-2"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -119,13 +113,13 @@ export const CosmovisorDialog = ({
                   </Link>
                 ))
               ) : (
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-muted-foreground">
                   No binaries specified in the plan.
                 </span>
               )}
             </div>
             {parseError && (
-              <p className="text-xs text-red-500">
+              <p className="text-xs text-destructive">
                 Error parsing binary details.
               </p>
             )}

@@ -1,7 +1,11 @@
 import NextAuth from "next-auth";
 import type { NextAuthConfig } from "next-auth";
 import type { Provider } from "next-auth/providers";
+import Credentials from "next-auth/providers/credentials";
+import { cookies } from "next/headers";
 import { getOrCreateAuthUser } from "@/lib/prisma";
+import { verifyWalletLogin } from "@/lib/cosmos-auth";
+import { buildLoginMessage } from "@/lib/wallet/message";
 
 type AuthentikProfile = {
   sub?: string;
@@ -16,26 +20,76 @@ const authentikIssuer = process.env.AUTH_AUTHENTIK_ISSUER;
 const authentikClientId = process.env.AUTH_AUTHENTIK_ID;
 const authentikClientSecret = process.env.AUTH_AUTHENTIK_SECRET;
 
-const providers: Provider[] =
+// Apple/Google sign-in via Authentik (OIDC). Only enabled when configured.
+const authentikProvider: Provider | null =
   authentikIssuer && authentikClientId && authentikClientSecret
-    ? [
-        {
-          id: "authentik",
-          name: "Apple or Google",
-          type: "oidc",
-          issuer: authentikIssuer,
-          clientId: authentikClientId,
-          clientSecret: authentikClientSecret,
-          authorization: {
-            params: {
-              scope: "openid email profile",
-              // Re-run Authentik's source picker instead of silently reusing SSO.
-              prompt: "login",
-            },
+    ? {
+        id: "authentik",
+        name: "Apple or Google",
+        type: "oidc",
+        issuer: authentikIssuer,
+        clientId: authentikClientId,
+        clientSecret: authentikClientSecret,
+        authorization: {
+          params: {
+            scope: "openid email profile",
+            // Re-run Authentik's source picker instead of silently reusing SSO.
+            prompt: "login",
           },
         },
-      ]
-    : [];
+      }
+    : null;
+
+// Sign-In With Cosmos: the browser proves control of a wallet address by
+// signing a server-issued nonce (ADR-036). We verify the signature server-side
+// and mint a session. No wallet SDK ships to the browser.
+const walletProvider = Credentials({
+  id: "wallet",
+  name: "Cosmos Wallet",
+  credentials: {
+    address: {},
+    pubKey: {},
+    signature: {},
+    nonce: {},
+  },
+  authorize: async (credentials) => {
+    const address = typeof credentials?.address === "string" ? credentials.address : "";
+    const pubKey = typeof credentials?.pubKey === "string" ? credentials.pubKey : "";
+    const signature = typeof credentials?.signature === "string" ? credentials.signature : "";
+    const nonce = typeof credentials?.nonce === "string" ? credentials.nonce : "";
+    if (!address || !pubKey || !signature || !nonce) return null;
+
+    // Single-use: the signed nonce must match the cookie we issued, then burn it.
+    const cookieStore = await cookies();
+    const expectedNonce = cookieStore.get("wallet_nonce")?.value;
+    try {
+      cookieStore.delete("wallet_nonce");
+    } catch {
+      // cookie store may be read-only in some contexts; nonce still expires.
+    }
+    if (!expectedNonce || expectedNonce !== nonce) return null;
+
+    const ok = await verifyWalletLogin({
+      address,
+      pubKeyB64: pubKey,
+      signatureB64: signature,
+      message: buildLoginMessage(address, nonce),
+    });
+    if (!ok) return null;
+
+    const user = await getOrCreateAuthUser({
+      provider: "wallet",
+      subject: address,
+      name: address,
+    });
+    return { id: String(user.id), name: user.name ?? address, walletAddress: address };
+  },
+});
+
+const providers: Provider[] = [
+  walletProvider,
+  ...(authentikProvider ? [authentikProvider] : []),
+];
 
 export const authConfig = {
   providers,
@@ -48,7 +102,7 @@ export const authConfig = {
     signIn: "/",
   },
   callbacks: {
-    async jwt({ token, account, profile }) {
+    async jwt({ token, account, profile, user }) {
       if (account?.provider === "authentik") {
         const authentikProfile = profile as AuthentikProfile | undefined;
         const subject =
@@ -56,7 +110,7 @@ export const authConfig = {
           (typeof authentikProfile?.sub === "string" ? authentikProfile.sub : undefined);
 
         if (subject) {
-          const user = await getOrCreateAuthUser({
+          const dbUser = await getOrCreateAuthUser({
             provider: account.provider,
             subject,
             email:
@@ -79,8 +133,8 @@ export const authConfig = {
                   : null,
           });
 
-          token.appUserId = user.id;
-          token.identityKey = user.wallet;
+          token.appUserId = dbUser.id;
+          token.identityKey = dbUser.wallet;
           token.provider = account.provider;
           token.authSource =
             typeof authentikProfile?.authentik_source === "string"
@@ -92,6 +146,15 @@ export const authConfig = {
               )
             : undefined;
         }
+      }
+
+      if (user && (account?.provider === "wallet" || account?.type === "credentials")) {
+        const walletUser = user as { id?: string | number; walletAddress?: string };
+        token.appUserId =
+          typeof walletUser.id === "string" ? Number(walletUser.id) : walletUser.id;
+        token.identityKey = walletUser.walletAddress;
+        token.provider = "wallet";
+        token.authSource = "wallet";
       }
 
       return token;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,49 +9,59 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { supportedWallets } from "@/lib/wallet";
-import { getAvailableWallets, useConnect, WalletType } from "graz";
-import { WalletConnect } from "./icons";
-import { isMobile } from "react-device-detect";
-import { cosmoshub } from "graz/chains";
+import { Button } from "@/components/ui/button";
+import { KeplrIcon, LeapIcon } from "./icons";
+import { ShieldCheck } from "lucide-react";
 import { signIn } from "next-auth/react";
-import { ShieldCheck, Wallet } from "lucide-react";
+import { isWalletInstalled, walletLogin, type WalletKind } from "@/lib/wallet/client";
+import { toast } from "sonner";
 
-export function SignInDialog({ children }: { children: React.ReactNode }) {
-  const wallets = getAvailableWallets();
-  const isWalletInstalled = (wallet: WalletType) => wallets && wallets[wallet];
-  const { connect } = useConnect();
+const WALLETS: {
+  kind: WalletKind;
+  name: string;
+  icon: ReactNode;
+  install: string;
+}[] = [
+  { kind: "keplr", name: "Keplr", icon: <KeplrIcon />, install: "https://www.keplr.app/download" },
+  { kind: "leap", name: "Leap", icon: <LeapIcon />, install: "https://www.leapwallet.io/#download" },
+];
 
-  const handleConnect = async (wallet: WalletType) => {
-    connect({ chainId: cosmoshub.chainId, walletType: wallet });
-  };
+export function SignInDialog({ children }: { children: ReactNode }) {
+  const [installed, setInstalled] = useState<Record<WalletKind, boolean>>({
+    keplr: false,
+    leap: false,
+  });
+  const [busy, setBusy] = useState<WalletKind | null>(null);
+
+  // Wallet detection touches window, so resolve it after mount to avoid a
+  // hydration mismatch.
+  useEffect(() => {
+    setInstalled({
+      keplr: isWalletInstalled("keplr"),
+      leap: isWalletInstalled("leap"),
+    });
+  }, []);
 
   const handleAccountSignIn = () => {
-    signIn(
-      "authentik",
-      { callbackUrl: window.location.href },
-      { prompt: "login" }
-    );
+    signIn("authentik", { callbackUrl: window.location.href }, { prompt: "login" });
   };
 
-  // Filter wallets for mobile and desktop
-  const desktopWallets = supportedWallets.filter(
-    (wallet) =>
-      wallet.walletType === WalletType.KEPLR ||
-      wallet.walletType === WalletType.LEAP ||
-      wallet.walletType === WalletType.METAMASK_SNAP_LEAP
-  );
-
-  const mobileWallets = supportedWallets.filter(
-    (wallet) =>
-      wallet.walletType === WalletType.WC_KEPLR_MOBILE ||
-      wallet.walletType === WalletType.WC_LEAP_MOBILE ||
-      wallet.walletType === WalletType.WC_COSMOSTATION_MOBILE
-  );
-
-  const walletConnect = supportedWallets.find(
-    (wallet) => wallet.walletType === WalletType.WALLETCONNECT
-  );
+  const handleWallet = async (kind: WalletKind) => {
+    setBusy(kind);
+    try {
+      const credentials = await walletLogin(kind);
+      const res = await signIn("wallet", { ...credentials, redirect: false });
+      if (!res || res.error) {
+        throw new Error("Sign-in was rejected.");
+      }
+      toast.success("Signed in.");
+      window.location.reload();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Wallet sign-in failed.");
+    } finally {
+      setBusy(null);
+    }
+  };
 
   return (
     <Dialog>
@@ -76,40 +86,26 @@ export function SignInDialog({ children }: { children: React.ReactNode }) {
             <span className="h-px flex-1 bg-border" />
           </div>
 
-          {walletConnect && isWalletInstalled(WalletType.WALLETCONNECT) && (
+          {WALLETS.map((wallet) => (
             <Button
+              key={wallet.kind}
               variant="outline"
-              onClick={() => handleConnect(WalletType.WALLETCONNECT)}
+              className="gap-2"
+              disabled={busy !== null}
+              onClick={() =>
+                installed[wallet.kind]
+                  ? handleWallet(wallet.kind)
+                  : window.open(wallet.install, "_blank", "noopener,noreferrer")
+              }
             >
-              <WalletConnect /> Connect with WalletConnect
+              {wallet.icon}
+              {busy === wallet.kind
+                ? "Check your wallet..."
+                : installed[wallet.kind]
+                  ? `Connect with ${wallet.name}`
+                  : `Install ${wallet.name}`}
             </Button>
-          )}
-
-          {!isMobile &&
-            desktopWallets.map((wallet) => (
-              <Button
-                variant="outline"
-                onClick={() => handleConnect(wallet.walletType)}
-                key={wallet.walletType}
-              >
-                {wallet.icon || <Wallet className="h-4 w-4" />}{" "}
-                {isWalletInstalled(wallet.walletType)
-                  ? "Connect with"
-                  : "Install"}{" "}
-                {wallet.name}
-              </Button>
-            ))}
-
-          {isMobile &&
-            mobileWallets.map((wallet) => (
-              <Button
-                variant="outline"
-                onClick={() => handleConnect(wallet.walletType)}
-                key={wallet.walletType}
-              >
-                {wallet.icon} {wallet.name}
-              </Button>
-            ))}
+          ))}
         </div>
       </DialogContent>
     </Dialog>

@@ -15,7 +15,7 @@ interface AddWebhookPayload {
   url: string;
   label: string;
   notificationType: string;
-  notifyBeforeUpgrade: string;
+  notifyBeforeMinutes: number | null;
 }
 
 export const useWebhooks = ({ chainId, isAuthenticated }: UseWebhooksProps) => {
@@ -51,11 +51,7 @@ export const useWebhooks = ({ chainId, isAuthenticated }: UseWebhooksProps) => {
         return;
       }
 
-      // Basic validation (more robust validation happens in the util/API)
-      if (webhooks.length >= 4) {
-        setError(new Error("Maximum of 4 webhooks reached.")); // Or use toast
-        return;
-      }
+      // Basic validation (the per-chain/per-user caps are enforced by the API).
       if (!payload.url || !payload.label || !payload.notificationType) {
         setError(new Error("Missing required webhook information.")); // Or use toast
         return;
@@ -69,7 +65,7 @@ export const useWebhooks = ({ chainId, isAuthenticated }: UseWebhooksProps) => {
           url: payload.url,
           label: payload.label,
           notificationType: payload.notificationType,
-          notifyBeforeUpgrade: payload.notifyBeforeUpgrade,
+          notifyBeforeMinutes: payload.notifyBeforeMinutes,
         });
         await fetchWebhooks(); // Refetch after adding
       } catch (err) {
@@ -81,7 +77,7 @@ export const useWebhooks = ({ chainId, isAuthenticated }: UseWebhooksProps) => {
         setIsLoading(false);
       }
     },
-    [isAuthenticated, chainId, fetchWebhooks, webhooks.length]
+    [isAuthenticated, chainId, fetchWebhooks]
   );
 
   const removeWebhook = useCallback(

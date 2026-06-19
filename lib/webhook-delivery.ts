@@ -6,7 +6,36 @@ export const NOTIFICATION_TYPES = [
   "upgrade-planned",
   "before-upgrade",
 ] as const;
+
+// Legacy fixed lead-time tokens. Retained so rows written before flexible lead
+// times (stored as the string `notifyBeforeUpgrade`) still parse. New rows use
+// the integer `notifyBeforeMinutes` instead. See toNotifyMinutes().
 export const NOTIFY_BEFORE_WINDOWS = ["15m", "60m", "8h", "24h"] as const;
+
+// Flexible lead times, stored as an integer number of minutes.
+export const NOTIFY_BEFORE_MIN = 5; // floor: the dispatch cron runs every 5 min
+export const NOTIFY_BEFORE_MAX = 30 * 24 * 60; // 30 days
+export const NOTIFY_BEFORE_PRESETS = [
+  { label: "15 minutes", minutes: 15 },
+  { label: "1 hour", minutes: 60 },
+  { label: "8 hours", minutes: 480 },
+  { label: "24 hours", minutes: 1440 },
+  { label: "3 days", minutes: 4320 },
+  { label: "7 days", minutes: 10080 },
+  { label: "14 days", minutes: 20160 },
+] as const;
+
+const UNIT_TO_MINUTES: Record<string, number> = {
+  m: 1,
+  h: 60,
+  d: 60 * 24,
+  w: 60 * 24 * 7,
+};
+
+const OUTBOUND_TIMEOUT_MS = 10_000;
+const MAX_RETRIES = 2;
+const MAX_RETRY_DELAY_MS = 5_000;
+const MAX_WEBHOOK_URL_LENGTH = 2048;
 
 export type WebhookProvider = (typeof WEBHOOK_PROVIDERS)[number];
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
@@ -46,7 +75,63 @@ export function isNotifyBeforeWindow(
   );
 }
 
+export function isValidNotifyBeforeMinutes(value: unknown): value is number {
+  return (
+    typeof value === "number" &&
+    Number.isInteger(value) &&
+    value >= NOTIFY_BEFORE_MIN &&
+    value <= NOTIFY_BEFORE_MAX
+  );
+}
+
+// Parse a compact lead-time token ("15m", "8h", "3d", "2w") into minutes.
+export function parseWindowToMinutes(value: string): number | null {
+  const match = /^(\d+)(m|h|d|w)$/.exec(value.trim());
+  if (!match) return null;
+  const amount = Number(match[1]);
+  if (!Number.isFinite(amount)) return null;
+  return amount * UNIT_TO_MINUTES[match[2]];
+}
+
+// Resolve a webhook's lead time to a canonical integer of minutes, preferring
+// the new column and falling back to the legacy string token.
+export function toNotifyMinutes(webhook: {
+  notifyBeforeMinutes?: number | null;
+  notifyBeforeUpgrade?: string | null;
+}): number | null {
+  if (isValidNotifyBeforeMinutes(webhook.notifyBeforeMinutes)) {
+    return webhook.notifyBeforeMinutes;
+  }
+  if (webhook.notifyBeforeUpgrade) {
+    const parsed = parseWindowToMinutes(webhook.notifyBeforeUpgrade);
+    if (parsed != null && isValidNotifyBeforeMinutes(parsed)) return parsed;
+  }
+  return null;
+}
+
+export function formatNotifyBefore(minutes: number): string {
+  const week = 60 * 24 * 7;
+  const day = 60 * 24;
+  if (minutes % week === 0) {
+    const value = minutes / week;
+    return `${value} week${value === 1 ? "" : "s"}`;
+  }
+  if (minutes % day === 0) {
+    const value = minutes / day;
+    return `${value} day${value === 1 ? "" : "s"}`;
+  }
+  if (minutes % 60 === 0) {
+    const value = minutes / 60;
+    return `${value} hour${value === 1 ? "" : "s"}`;
+  }
+  return `${minutes} minute${minutes === 1 ? "" : "s"}`;
+}
+
 export function validateWebhookUrl(provider: WebhookProvider, rawUrl: string) {
+  if (typeof rawUrl !== "string" || rawUrl.length > MAX_WEBHOOK_URL_LENGTH) {
+    throw new Error("Webhook URL is invalid or too long.");
+  }
+
   let parsed: URL;
   try {
     parsed = new URL(rawUrl);
@@ -56,6 +141,11 @@ export function validateWebhookUrl(provider: WebhookProvider, rawUrl: string) {
 
   if (parsed.protocol !== "https:") {
     throw new Error("Webhook URL must use HTTPS.");
+  }
+
+  // Only the default HTTPS port is allowed; a custom port is a probing vector.
+  if (parsed.port && parsed.port !== "443") {
+    throw new Error("Webhook URL must use the default HTTPS port.");
   }
 
   if (parsed.username || parsed.password) {
@@ -123,18 +213,45 @@ export async function sendWebhook(
     chain
   );
 
-  const response = await fetch(targetUrl.toString(), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  const responseText = await response.text();
-
-  return {
-    ok: response.ok,
-    status: response.status,
-    responseText: responseText.slice(0, 500),
+  let lastResult: DeliveryResult = {
+    ok: false,
+    status: 0,
+    responseText: "",
   };
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), OUTBOUND_TIMEOUT_MS);
+    let response: Response;
+    try {
+      response = await fetch(targetUrl.toString(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        redirect: "error", // a webhook endpoint never legitimately redirects
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    const responseText = (await response.text()).slice(0, 500);
+    lastResult = { ok: response.ok, status: response.status, responseText };
+
+    // Only 429s are worth retrying inline; everything else is returned (and, on
+    // failure, retried by the next 5-minute dispatch run).
+    if (response.status !== 429 || attempt === MAX_RETRIES) {
+      return lastResult;
+    }
+
+    const delay = Math.min(
+      parseRetryAfterMs(response, responseText),
+      MAX_RETRY_DELAY_MS
+    );
+    await sleep(delay);
+  }
+
+  return lastResult;
 }
 
 export function buildUpgradeMessage(
@@ -162,16 +279,24 @@ export function buildUpgradeMessage(
   )}`;
 }
 
+// One delivery per (webhook, event). The lead time is folded in as canonical
+// integer minutes so a re-scheduled upgrade (new height/name) re-alerts while a
+// pure ETA wobble at the same height does not.
+//
+// Migration note: deliveries recorded before flexible lead times keyed the
+// segment as the legacy token ("24h"); new evaluations key it as minutes
+// ("1440"). A before-upgrade alert that already fired for an in-flight upgrade
+// may therefore re-send once at rollout. This is bounded and harmless.
 export function buildWebhookEventKey(
   chain: ChainUpgradeStatus,
   notificationType: NotificationType,
-  notifyBeforeUpgrade?: string | null
+  notifyBeforeMinutes?: number | null
 ) {
   return [
     chain.network,
     chain.type,
     notificationType,
-    notifyBeforeUpgrade || "now",
+    notifyBeforeMinutes ?? "now",
     chain.upgrade_block_height || "unknown-height",
     chain.upgrade_name || "unknown-upgrade",
     chain.source || "unknown-source",
@@ -185,37 +310,48 @@ function buildProviderPayload(
   chain?: ChainUpgradeStatus
 ) {
   if (provider === "discord") {
+    const title = chain
+      ? `${formatChainName(chain.network)} upgrade`
+      : "Cosmos Upgrade Hub";
     return {
       targetUrl: url,
       body: {
-        content: message,
-        embeds: chain
-          ? [
-              {
-                title: `${formatChainName(chain.network)} upgrade`,
-                description: message,
-                color: 0x60a5fa,
-              },
-            ]
-          : undefined,
+        // Never let a chain name resolve to an @everyone/@here/role mention.
+        allowed_mentions: { parse: [] },
+        embeds: [
+          {
+            title,
+            description: message,
+            color: 0x60a5fa,
+          },
+        ],
       },
     };
   }
 
   if (provider === "slack") {
+    const [titleLine, ...rest] = message.split("\n");
+    const bodyText = rest
+      .map((line) => escapeSlackMrkdwn(line).replace(/^([^:]+):/, "*$1:*"))
+      .join("\n");
     return {
       targetUrl: url,
       body: {
-        text: message,
+        text: message, // notification/accessibility fallback
         blocks: [
+          {
+            type: "header",
+            text: {
+              type: "plain_text",
+              text: titleLine.slice(0, 150),
+              emoji: true,
+            },
+          },
           {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: message
-                .split("\n")
-                .map((line) => line.replace(/^([^:]+):/, "*$1:*"))
-                .join("\n"),
+              text: bodyText || escapeSlackMrkdwn(titleLine),
             },
           },
         ],
@@ -229,10 +365,40 @@ function buildProviderPayload(
     targetUrl: url,
     body: {
       chat_id: chatId,
+      // Plain text on purpose: avoids MarkdownV2/HTML escaping pitfalls.
       text: message,
       disable_web_page_preview: true,
     },
   };
+}
+
+function parseRetryAfterMs(response: Response, responseText: string): number {
+  const header = response.headers.get("retry-after");
+  if (header) {
+    const seconds = Number(header);
+    if (Number.isFinite(seconds)) return seconds * 1000;
+    const date = Date.parse(header);
+    if (Number.isFinite(date)) return Math.max(0, date - Date.now());
+  }
+  // Discord: { retry_after: <seconds> }; Telegram: { parameters: { retry_after } }.
+  try {
+    const parsed = JSON.parse(responseText);
+    const seconds = parsed?.retry_after ?? parsed?.parameters?.retry_after;
+    if (seconds != null && Number.isFinite(Number(seconds))) {
+      return Number(seconds) * 1000;
+    }
+  } catch {
+    // response body was not JSON; fall through to default
+  }
+  return 1000;
+}
+
+function escapeSlackMrkdwn(text: string) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function formatChainName(network: string) {

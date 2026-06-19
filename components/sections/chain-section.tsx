@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useAllChainData } from "@/hooks/useChainData";
-import { ChainCard } from "@/components/chain-card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -12,12 +12,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChainDetailDialog } from "@/components/chain-detail-dialog";
-import { ChainUpgradeStatus } from "@/types/chain";
 import { useFavoriteChains } from "@/hooks/useFavoriteChains";
-import { CosmovisorDialog } from "@/components/cosmovisor-dialog";
-import { useCosmovisorInfo } from "@/hooks/useCosmosvisorInfo";
-import { Search, Star } from "lucide-react";
+import { ChainGrid } from "@/components/sections/chain-grid";
+import { EmptyState } from "@/components/dashboard/empty-state";
+import { ChevronLeft, ChevronRight, Search, SearchX, Star } from "lucide-react";
+
+const PAGE_SIZE = 24;
 
 export const ChainSection = () => {
   const {
@@ -34,9 +34,7 @@ export const ChainSection = () => {
   } = useFavoriteChains();
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<"all" | "upgraded">(
-    "upgraded"
-  );
+  const [filterType, setFilterType] = useState<"all" | "upgraded">("upgraded");
   const [networkTypeFilter, setNetworkTypeFilter] = useState<
     "all" | "mainnet" | "testnet"
   >("all");
@@ -46,31 +44,6 @@ export const ChainSection = () => {
   const [sortBy, setSortBy] = useState<"default" | "time_asc" | "alpha_asc">(
     "default"
   );
-
-  const [selectedChain, setSelectedChain] = useState<ChainUpgradeStatus | null>(
-    null
-  );
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isCosmovisorDialogOpen, setIsCosmovisorDialogOpen] = useState(false);
-
-  const handleCardClick = (chain: ChainUpgradeStatus) => {
-    setSelectedChain(chain);
-    setIsDialogOpen(true);
-  };
-
-  const handleCosmovisorOpen = (chain: ChainUpgradeStatus) => {
-    setSelectedChain(chain);
-    setIsCosmovisorDialogOpen(true);
-  };
-
-  const handleCosmovisorClose = () => {
-    setIsCosmovisorDialogOpen(false);
-  };
-
-  const handleOpenChange = (open: boolean) => {
-    setIsDialogOpen(open);
-    if (!open) setSelectedChain(null);
-  };
 
   const filteredAndSortedChains = useMemo(() => {
     const filtered = (allChains ?? [])
@@ -133,6 +106,27 @@ export const ChainSection = () => {
     sortBy,
   ]);
 
+  const [page, setPage] = useState(1);
+
+  // Reset to the first page whenever the result set changes.
+  useEffect(() => {
+    setPage(1);
+  }, [searchTerm, filterType, networkTypeFilter, favoriteFilter, sortBy]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredAndSortedChains.length / PAGE_SIZE)
+  );
+  const currentPage = Math.min(page, totalPages);
+  const pageChains = useMemo(
+    () =>
+      filteredAndSortedChains.slice(
+        (currentPage - 1) * PAGE_SIZE,
+        currentPage * PAGE_SIZE
+      ),
+    [filteredAndSortedChains, currentPage]
+  );
+
   const totalChains = allChains?.length ?? 0;
 
   if (error) {
@@ -164,6 +158,7 @@ export const ChainSection = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="h-11 pl-9"
+              aria-label="Search chains"
               disabled={isLoading}
             />
           </div>
@@ -174,7 +169,7 @@ export const ChainSection = () => {
               onValueChange={(v) => setFilterType(v as "all" | "upgraded")}
               disabled={isLoadingChains}
             >
-              <SelectTrigger className="h-10 w-full lg:w-[140px]">
+              <SelectTrigger className="h-10 w-full lg:w-[140px]" aria-label="Status filter">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -190,7 +185,7 @@ export const ChainSection = () => {
               }
               disabled={isLoadingChains}
             >
-              <SelectTrigger className="h-10 w-full lg:w-[145px]">
+              <SelectTrigger className="h-10 w-full lg:w-[145px]" aria-label="Network type filter">
                 <SelectValue placeholder="Network Type" />
               </SelectTrigger>
               <SelectContent>
@@ -203,12 +198,10 @@ export const ChainSection = () => {
             {isConnected && (
               <Select
                 value={favoriteFilter}
-                onValueChange={(v) =>
-                  setFavoriteFilter(v as "all" | "favorites")
-                }
+                onValueChange={(v) => setFavoriteFilter(v as "all" | "favorites")}
                 disabled={isLoading}
               >
-                <SelectTrigger className="h-10 w-full lg:w-[145px]">
+                <SelectTrigger className="h-10 w-full lg:w-[145px]" aria-label="Watchlist filter">
                   <SelectValue placeholder="Watchlist" />
                 </SelectTrigger>
                 <SelectContent>
@@ -225,7 +218,7 @@ export const ChainSection = () => {
               }
               disabled={isLoadingChains}
             >
-              <SelectTrigger className="h-10 w-full lg:w-[180px]">
+              <SelectTrigger className="h-10 w-full lg:w-[180px]" aria-label="Sort order">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
@@ -257,74 +250,50 @@ export const ChainSection = () => {
             <Skeleton key={index} className="h-[200px] w-full rounded-lg" />
           ))}
         </div>
-      ) : (
-        <div className="space-y-6 pt-4">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {filteredAndSortedChains.map((chain) => (
-              <div
-                key={chain.network}
-                onClick={() => handleCardClick(chain)}
-                className="cursor-pointer"
+      ) : filteredAndSortedChains.length > 0 ? (
+        <div className="space-y-5 pt-4">
+          <ChainGrid
+            chains={pageChains}
+            favoritesSet={favoritesSet}
+            updatingFavoriteChainId={updatingFavoriteChainId}
+            onToggleFavorite={handleToggleFavorite}
+            isConnected={isConnected}
+          />
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage <= 1}
+                className="gap-1"
               >
-                <ChainCard
-                  data={chain}
-                  isFavorite={favoritesSet.has(chain.network)}
-                  onToggleFavorite={handleToggleFavorite}
-                  isUpdatingFavorite={updatingFavoriteChainId === chain.network}
-                  isConnected={isConnected}
-                  onCosmovisorIconClick={handleCosmovisorOpen}
-                />
-              </div>
-            ))}
-          </div>
-          {filteredAndSortedChains.length === 0 && (
-            <div className="rounded-lg border border-border bg-card p-8 text-center text-muted-foreground">
-              No chains found matching your filters.
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                Page {currentPage} of {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage >= totalPages}
+                className="gap-1"
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
           )}
         </div>
-      )}
-
-      {/* Chain Detail Dialog */}
-      <ChainDetailDialog
-        isOpen={isDialogOpen}
-        onClose={() => handleOpenChange(false)}
-        chain={selectedChain}
-      />
-
-      {/* Cosmovisor Dialog */}
-      {selectedChain && isCosmovisorDialogOpen && (
-        <RenderCosmovisorDialog
-          isOpen={isCosmovisorDialogOpen}
-          onClose={handleCosmovisorClose}
-          chain={selectedChain}
+      ) : (
+        <EmptyState
+          icon={<SearchX className="h-6 w-6" />}
+          title="No chains found"
+          description="No chains match your current search and filters."
         />
       )}
     </div>
-  );
-};
-
-// Helper component to ensure hook is called conditionally but correctly
-const RenderCosmovisorDialog = ({
-  isOpen,
-  onClose,
-  chain,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  chain: ChainUpgradeStatus;
-}) => {
-  const cosmovisorInfo = useCosmovisorInfo(chain);
-  const logoUrl = chain?.logo_urls?.png || chain?.logo_urls?.svg;
-
-  return (
-    <CosmovisorDialog
-      isOpen={isOpen}
-      onClose={onClose}
-      cosmovisorInfo={cosmovisorInfo}
-      estimatedUpgradeTime={chain.estimated_upgrade_time || undefined}
-      upgradeFound={chain.upgrade_found}
-      chainLogoUrl={logoUrl}
-    />
   );
 };
