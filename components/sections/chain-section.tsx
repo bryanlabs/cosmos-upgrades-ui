@@ -21,7 +21,7 @@ const PAGE_SIZE = 24;
 
 export const ChainSection = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState<"all" | "upgraded">("upgraded");
+  const [filterType, setFilterType] = useState<"all" | "upgraded">("all");
   const [networkTypeFilter, setNetworkTypeFilter] = useState<
     "all" | "mainnet" | "testnet"
   >("all");
@@ -32,7 +32,7 @@ export const ChainSection = () => {
     "all"
   );
   const [sortBy, setSortBy] = useState<"default" | "time_asc" | "alpha_asc">(
-    "default"
+    "time_asc"
   );
   const {
     data: allChains,
