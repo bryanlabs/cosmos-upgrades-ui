@@ -16,9 +16,6 @@ COPY package*.json ./
 # Use --ignore-scripts to skip native module compilation during initial install
 RUN npm ci --ignore-scripts
 
-# Manually run the graz generation script that would normally run during postinstall
-RUN npx graz generate -g
-
 # Copy source code
 COPY . .
 
