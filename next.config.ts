@@ -59,17 +59,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async rewrites() {
-    const apiBase =
-      process.env.COSMOS_UPGRADES_API_BASE_URL ||
-      "https://cosmos-upgrades.bryanlabs.net";
-    return [
-      {
-        source: "/api/cosmos-upgrades/:path*",
-        destination: `${apiBase}/:path*`,
-      },
-    ];
-  },
 };
 
 export default nextConfig;
