@@ -38,6 +38,9 @@ export const ChainSection = () => {
   const [networkTypeFilter, setNetworkTypeFilter] = useState<
     "all" | "mainnet" | "testnet"
   >("all");
+  const [healthFilter, setHealthFilter] = useState<"reachable" | "all">(
+    "reachable"
+  );
   const [favoriteFilter, setFavoriteFilter] = useState<"all" | "favorites">(
     "all"
   );
@@ -67,6 +70,9 @@ export const ChainSection = () => {
       )
       .filter((chain) =>
         networkTypeFilter === "all" ? true : chain.type === networkTypeFilter
+      )
+      .filter((chain) =>
+        healthFilter === "reachable" ? isReachableChain(chain) : true
       )
       .filter((chain) =>
         favoriteFilter === "favorites"
@@ -100,6 +106,7 @@ export const ChainSection = () => {
     searchTerm,
     filterType,
     networkTypeFilter,
+    healthFilter,
     favoritesSet,
     favoriteFilter,
     isConnected,
@@ -111,7 +118,14 @@ export const ChainSection = () => {
   // Reset to the first page whenever the result set changes.
   useEffect(() => {
     setPage(1);
-  }, [searchTerm, filterType, networkTypeFilter, favoriteFilter, sortBy]);
+  }, [
+    searchTerm,
+    filterType,
+    networkTypeFilter,
+    healthFilter,
+    favoriteFilter,
+    sortBy,
+  ]);
 
   const totalPages = Math.max(
     1,
@@ -192,6 +206,20 @@ export const ChainSection = () => {
                 <SelectItem value="all">All Networks</SelectItem>
                 <SelectItem value="mainnet">Mainnet</SelectItem>
                 <SelectItem value="testnet">Testnet</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={healthFilter}
+              onValueChange={(v) => setHealthFilter(v as "reachable" | "all")}
+              disabled={isLoadingChains}
+            >
+              <SelectTrigger className="h-10 w-full lg:w-[145px]" aria-label="Chain health filter">
+                <SelectValue placeholder="Health" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="reachable">Reachable</SelectItem>
+                <SelectItem value="all">All Registry</SelectItem>
               </SelectContent>
             </Select>
 
@@ -297,3 +325,15 @@ export const ChainSection = () => {
     </div>
   );
 };
+
+function isReachableChain(chain: {
+  latest_block_height: number | null;
+  upgrade_found: boolean;
+}) {
+  return (
+    chain.upgrade_found ||
+    (typeof chain.latest_block_height === "number" &&
+      Number.isFinite(chain.latest_block_height) &&
+      chain.latest_block_height >= 0)
+  );
+}
