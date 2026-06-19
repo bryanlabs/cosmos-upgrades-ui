@@ -70,7 +70,7 @@ export function SignInDialog({ children }: { children: ReactNode }) {
         <DialogHeader>
           <DialogTitle>Sign in</DialogTitle>
           <DialogDescription>
-            Use Apple, Google, or a Cosmos wallet to save watchlists and
+            Use Apple, Google, or a Cosmos wallet to save watched chains and
             notifications.
           </DialogDescription>
         </DialogHeader>

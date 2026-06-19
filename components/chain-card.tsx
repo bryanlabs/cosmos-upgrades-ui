@@ -5,11 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import {
   CalendarClock,
   Copy,
+  Eye,
   ExternalLink,
   Gauge,
   LinkIcon,
   Rocket,
-  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -90,7 +90,7 @@ const ChainCardComponent = ({
         )
       : 0;
 
-  const handleStarClick = () => {
+  const handleWatchClick = () => {
     if (isConnected) onToggleFavorite(data.network);
   };
 
@@ -192,31 +192,35 @@ const ChainCardComponent = ({
                   size="icon"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleStarClick();
+                    handleWatchClick();
                   }}
-                  className="h-8 w-8 rounded-md"
-                  aria-label={isFavorite ? "Remove from watchlist" : "Add to watchlist"}
+                  className={cn(
+                    "h-8 w-8 rounded-md",
+                    isFavorite && "bg-primary/10 text-primary"
+                  )}
+                  aria-label={isFavorite ? "Unwatch chain" : "Watch chain"}
+                  aria-pressed={isFavorite}
                 >
-                  <Star
+                  <Eye
                     className={cn(
                       "h-4 w-4 transition-colors",
                       isUpdatingFavorite
                         ? "animate-pulse text-muted-foreground"
                         : isFavorite
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "text-muted-foreground hover:text-yellow-400"
+                          ? "text-primary"
+                          : "text-muted-foreground hover:text-primary"
                     )}
                   />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
                 {!isConnected
-                  ? "Sign in to manage watchlist"
+                  ? "Sign in to watch chains"
                   : isUpdatingFavorite
                     ? "Updating..."
                     : isFavorite
-                      ? "Remove from watchlist"
-                      : "Add to watchlist"}
+                      ? "Unwatch chain"
+                      : "Watch chain"}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

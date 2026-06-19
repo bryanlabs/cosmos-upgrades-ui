@@ -15,7 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useFavoriteChains } from "@/hooks/useFavoriteChains";
 import { ChainGrid } from "@/components/sections/chain-grid";
 import { EmptyState } from "@/components/dashboard/empty-state";
-import { ChevronLeft, ChevronRight, Search, SearchX, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, Search, SearchX } from "lucide-react";
 
 const PAGE_SIZE = 24;
 
@@ -158,7 +158,7 @@ export const ChainSection = () => {
         <h2 className="text-2xl font-bold text-foreground">Upgrade tracker</h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
           Search active upgrade signals, open a chain for notification setup, or
-          star networks after signing in.
+          watch chains after signing in.
         </p>
       </div>
 
@@ -228,12 +228,12 @@ export const ChainSection = () => {
                 onValueChange={(v) => setFavoriteFilter(v as "all" | "favorites")}
                 disabled={isLoading}
               >
-                <SelectTrigger className="h-10 w-full lg:w-[145px]" aria-label="Watchlist filter">
-                  <SelectValue placeholder="Watchlist" />
+                <SelectTrigger className="h-10 w-full lg:w-[145px]" aria-label="Watched chains filter">
+                  <SelectValue placeholder="Watched" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Chains</SelectItem>
-                  <SelectItem value="favorites">Favorites</SelectItem>
+                  <SelectItem value="favorites">Watched</SelectItem>
                 </SelectContent>
               </Select>
             )}
@@ -262,11 +262,11 @@ export const ChainSection = () => {
           </span>
           {isConnected ? (
             <span className="inline-flex items-center gap-1">
-              <Star className="h-3.5 w-3.5 text-yellow-400" />
+              <Eye className="h-3.5 w-3.5 text-primary" />
               {favoritesSet.size} watched
             </span>
           ) : (
-            <span>Sign in to save a watchlist.</span>
+            <span>Sign in to watch chains.</span>
           )}
         </div>
       </div>

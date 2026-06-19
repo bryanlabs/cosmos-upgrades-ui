@@ -37,7 +37,7 @@ export const openApiSpec = {
         tags: ["Upgrade data"],
         summary: "Combined upgrade data",
         description:
-          "Preferred endpoint for new tooling. Returns one flat array across mainnets and testnets, with optional filters. By default, only chains with a currently reachable RPC/latest block are returned; pass health=all for raw registry or watchlist views.",
+          "Preferred endpoint for new tooling. Returns one flat array across mainnets and testnets, with optional filters. By default, only chains with a currently reachable RPC/latest block are returned; pass health=all for raw registry or watched-chain views.",
         parameters: [
           {
             name: "type",

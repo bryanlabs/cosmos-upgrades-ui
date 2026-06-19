@@ -18,10 +18,10 @@ export default function DashboardPage() {
               Your dashboard
             </div>
             <h1 className="mb-3 text-4xl font-bold leading-tight text-white md:text-5xl">
-              Watchlist &amp; webhooks
+              Watched chains &amp; webhooks
             </h1>
             <p className="max-w-2xl text-base leading-7 text-slate-300">
-              Everything you track in one place: your starred chains and every
+              Everything you track in one place: your watched chains and every
               upgrade webhook you have configured.
             </p>
           </div>

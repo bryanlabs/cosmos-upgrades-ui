@@ -45,14 +45,14 @@ export const useFavoriteChains = () => {
   const handleToggleFavorite = useCallback(
     async (chainId: string) => {
       if (!isConnected) {
-        toast.info("Please sign in to manage favorites.");
+        toast.info("Please sign in to watch chains.");
         return;
       }
 
       const isCurrentlyFavorite = favoritesSet.has(chainId);
       const method = isCurrentlyFavorite ? "DELETE" : "POST";
       const optimisticAction = isCurrentlyFavorite ? "Removing" : "Adding";
-      const successAction = isCurrentlyFavorite ? "removed from" : "added to";
+      const successAction = isCurrentlyFavorite ? "unwatched" : "watched";
 
       setUpdatingFavoriteChainId(chainId);
 
@@ -73,12 +73,12 @@ export const useFavoriteChains = () => {
         if (!response.ok) {
           throw new Error(
             result.error ||
-              `Failed to ${method === "POST" ? "add" : "remove"} favorite`
+              `Failed to ${method === "POST" ? "watch" : "unwatch"} chain`
           );
         }
 
         setFavoriteChains(Array.isArray(result) ? result : []);
-        toast.success(`${chainId} ${successAction} favorites!`);
+        toast.success(`${chainId} ${successAction}.`);
       } catch (err) {
         console.error(`Error ${optimisticAction.toLowerCase()} favorite:`, err);
         toast.error(

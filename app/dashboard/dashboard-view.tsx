@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
-import { LogIn, Send, Star } from "lucide-react";
+import { Eye, LogIn, Send } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,7 @@ export function DashboardView() {
       <EmptyState
         icon={<LogIn className="h-6 w-6" />}
         title="Sign in to see your dashboard"
-        description="Your watchlist and upgrade webhooks are tied to your account."
+        description="Your watched chains and upgrade webhooks are tied to your account."
         action={
           <SignInDialog>
             <Button className="gap-2">
@@ -68,7 +68,7 @@ export function DashboardView() {
           <Send className="h-4 w-4" /> Webhooks
         </TabsTrigger>
         <TabsTrigger value="watchlist" className="gap-2">
-          <Star className="h-4 w-4" /> Watchlist
+          <Eye className="h-4 w-4" /> Watched
         </TabsTrigger>
       </TabsList>
       <TabsContent value="webhooks">
@@ -105,9 +105,9 @@ function WatchlistPanel() {
   if (favoriteChains.length === 0) {
     return (
       <EmptyState
-        icon={<Star className="h-6 w-6" />}
-        title="No chains in your watchlist"
-        description="Star chains on the explorer to keep an eye on them here."
+        icon={<Eye className="h-6 w-6" />}
+        title="No watched chains"
+        description="Watch chains from the explorer to keep them here."
       />
     );
   }
