@@ -262,7 +262,7 @@ export const ChainSection = () => {
           </span>
           {isConnected ? (
             <span className="inline-flex items-center gap-1">
-              <Eye className="h-3.5 w-3.5 text-primary" />
+              <Eye className="h-3.5 w-3.5 text-yellow-300" />
               {favoritesSet.size} watched
             </span>
           ) : (

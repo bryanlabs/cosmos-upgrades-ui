@@ -195,8 +195,10 @@ const ChainCardComponent = ({
                     handleWatchClick();
                   }}
                   className={cn(
-                    "h-8 w-8 rounded-md",
-                    isFavorite && "bg-primary/10 text-primary"
+                    "h-8 w-8 rounded-md border border-transparent",
+                    isFavorite
+                      ? "border-yellow-400/40 bg-yellow-400/15 text-yellow-300 shadow-[0_0_0_1px_rgba(250,204,21,0.12)] hover:bg-yellow-400/20 hover:text-yellow-200"
+                      : "text-muted-foreground hover:bg-yellow-400/10 hover:text-yellow-300"
                   )}
                   aria-label={isFavorite ? "Unwatch chain" : "Watch chain"}
                   aria-pressed={isFavorite}
@@ -207,8 +209,8 @@ const ChainCardComponent = ({
                       isUpdatingFavorite
                         ? "animate-pulse text-muted-foreground"
                         : isFavorite
-                          ? "text-primary"
-                          : "text-muted-foreground hover:text-primary"
+                          ? "text-yellow-300"
+                          : "text-muted-foreground"
                     )}
                   />
                 </Button>
