@@ -62,7 +62,12 @@ export function ApiExplorer() {
           />
           <ExampleBlock
             title="Inspect one chain"
-            command={`curl -s '${API_BASE}/chains?network=passage' | jq '.[0]'`}
+            command={`curl -s '${API_BASE}/chains?health=all&network=passage' | jq '.[0]'`}
+          />
+          <ExampleBlock
+            title="Find unreachable registry entries"
+            command={`curl -s '${API_BASE}/chains?health=unreachable&limit=10' \\
+  | jq '.[] | {network, error, scan_status: .scan_status}'`}
           />
           <ExampleBlock
             title="Service health"

@@ -4,6 +4,11 @@ import { useMemo } from "react";
 
 // Assuming the API returns an array of ChainUpgradeStatus objects
 type ChainDataResponse = ChainUpgradeStatus[];
+type ChainHealthMode = "reachable" | "unreachable" | "all";
+
+type UseAllChainDataOptions = {
+  health?: ChainHealthMode;
+};
 
 const MOCK_ENABLED = process.env.NEXT_PUBLIC_MOCK_ENABLED === "true";
 const MAINNETS_URL = MOCK_ENABLED
@@ -13,6 +18,12 @@ const TESTNETS_URL = MOCK_ENABLED
   ? "/mocks/testnet-mock.json"
   : "/api/cosmos-upgrades/testnets";
 const CHAINS_URL = MOCK_ENABLED ? null : "/api/cosmos-upgrades/chains";
+
+function withHealthParam(url: string, health: ChainHealthMode) {
+  if (MOCK_ENABLED) return url;
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}health=${encodeURIComponent(health)}`;
+}
 
 /**
  * Fetches data from a given URL and expects an array response.
@@ -74,10 +85,14 @@ export function useTestnetsData() {
  * Hook to fetch both mainnet and testnet data using React Query
  * and combine them.
  */
-export function useAllChainData() {
+export function useAllChainData(options: UseAllChainDataOptions = {}) {
+  const health = options.health ?? "reachable";
+  const combinedUrl = CHAINS_URL
+    ? withHealthParam(CHAINS_URL, health)
+    : MAINNETS_URL;
   const combinedResult = useQuery<ChainDataResponse, Error>({
-    queryKey: ["chains"],
-    queryFn: () => fetchChainData(CHAINS_URL || MAINNETS_URL),
+    queryKey: ["chains", health],
+    queryFn: () => fetchChainData(combinedUrl),
     enabled: Boolean(CHAINS_URL),
     staleTime: 60_000,
     refetchInterval: 60_000,

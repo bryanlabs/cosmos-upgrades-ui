@@ -61,7 +61,7 @@ type EditState = {
 
 export function WebhooksPanel({ enabled }: { enabled: boolean }) {
   const { data, isLoading } = useUserWebhooks(enabled);
-  const { data: allChains } = useAllChainData();
+  const { data: allChains } = useAllChainData({ health: "all" });
   const queryClient = useQueryClient();
   const [now, setNow] = useState(Date.now());
   const [sortMode, setSortMode] = useState<SortMode>("chain");

@@ -37,13 +37,24 @@ export const openApiSpec = {
         tags: ["Upgrade data"],
         summary: "Combined upgrade data",
         description:
-          "Preferred endpoint for new tooling. Returns one flat array across mainnets and testnets, with optional filters. An optional X-API-Key header raises the free-tier result limit.",
+          "Preferred endpoint for new tooling. Returns one flat array across mainnets and testnets, with optional filters. By default, only chains with a currently reachable RPC/latest block are returned; pass health=all for raw registry or watchlist views.",
         parameters: [
           {
             name: "type",
             in: "query",
             description: "Restrict results to mainnet or testnet chains.",
             schema: { type: "string", enum: ["mainnet", "testnet"] },
+          },
+          {
+            name: "health",
+            in: "query",
+            description:
+              "Filter by scan reachability. Defaults to reachable. Use all for registry/debug views.",
+            schema: {
+              type: "string",
+              enum: ["reachable", "unreachable", "all"],
+              default: "reachable",
+            },
           },
           {
             name: "upgrade_found",
@@ -92,6 +103,18 @@ export const openApiSpec = {
         tags: ["Compatibility"],
         summary: "Mainnet upgrade scan",
         description: "Compatibility endpoint returning mainnet scan results only.",
+        parameters: [
+          {
+            name: "health",
+            in: "query",
+            description: "Filter by scan reachability. Defaults to reachable.",
+            schema: {
+              type: "string",
+              enum: ["reachable", "unreachable", "all"],
+              default: "reachable",
+            },
+          },
+        ],
         responses: {
           "200": {
             description: "Mainnet upgrade records.",
@@ -112,6 +135,18 @@ export const openApiSpec = {
         tags: ["Compatibility"],
         summary: "Testnet upgrade scan",
         description: "Compatibility endpoint returning testnet scan results only.",
+        parameters: [
+          {
+            name: "health",
+            in: "query",
+            description: "Filter by scan reachability. Defaults to reachable.",
+            schema: {
+              type: "string",
+              enum: ["reachable", "unreachable", "all"],
+              default: "reachable",
+            },
+          },
+        ],
         responses: {
           "200": {
             description: "Testnet upgrade records.",
@@ -225,6 +260,16 @@ export const openApiSpec = {
           latest_block_height: {
             type: ["integer", "null"],
             description: "Latest observed block height.",
+          },
+          is_reachable: {
+            type: "boolean",
+            description: "True when the scan reached an RPC and read a current block height.",
+          },
+          scan_status: {
+            type: "string",
+            enum: ["reachable", "partial", "unreachable"],
+            description:
+              "reachable means RPC and REST scan completed; partial means latest block was read but upgrade detection could not run; unreachable means no valid block height was read.",
           },
           upgrade_found: {
             type: "boolean",

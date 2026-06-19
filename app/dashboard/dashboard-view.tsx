@@ -82,7 +82,9 @@ export function DashboardView() {
 }
 
 function WatchlistPanel() {
-  const { data: allChains, isLoading: isLoadingChains } = useAllChainData();
+  const { data: allChains, isLoading: isLoadingChains } = useAllChainData({
+    health: "all",
+  });
   const {
     favoritesSet,
     isLoadingFavorites,

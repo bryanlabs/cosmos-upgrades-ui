@@ -20,19 +20,6 @@ import { ChevronLeft, ChevronRight, Search, SearchX, Star } from "lucide-react";
 const PAGE_SIZE = 24;
 
 export const ChainSection = () => {
-  const {
-    data: allChains,
-    isLoading: isLoadingChains,
-    error,
-  } = useAllChainData();
-  const {
-    favoritesSet,
-    isLoadingFavorites,
-    updatingFavoriteChainId,
-    handleToggleFavorite,
-    isConnected,
-  } = useFavoriteChains();
-
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState<"all" | "upgraded">("upgraded");
   const [networkTypeFilter, setNetworkTypeFilter] = useState<
@@ -47,6 +34,18 @@ export const ChainSection = () => {
   const [sortBy, setSortBy] = useState<"default" | "time_asc" | "alpha_asc">(
     "default"
   );
+  const {
+    data: allChains,
+    isLoading: isLoadingChains,
+    error,
+  } = useAllChainData({ health: healthFilter });
+  const {
+    favoritesSet,
+    isLoadingFavorites,
+    updatingFavoriteChainId,
+    handleToggleFavorite,
+    isConnected,
+  } = useFavoriteChains();
 
   const filteredAndSortedChains = useMemo(() => {
     const filtered = (allChains ?? [])
@@ -328,10 +327,10 @@ export const ChainSection = () => {
 
 function isReachableChain(chain: {
   latest_block_height: number | null;
-  upgrade_found: boolean;
+  is_reachable?: boolean;
 }) {
   return (
-    chain.upgrade_found ||
+    chain.is_reachable === true ||
     (typeof chain.latest_block_height === "number" &&
       Number.isFinite(chain.latest_block_height) &&
       chain.latest_block_height >= 0)

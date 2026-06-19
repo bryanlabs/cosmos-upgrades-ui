@@ -15,14 +15,10 @@ type ExtendedBadgeProps = {
   className?: string;
 };
 
-// Tailwind color classes for reference (similar to chain type badges)
-// Yellow: bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-200 dark:border-yellow-700
-// Green: bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-200 dark:border-green-700
-
 export const getBadgeProps = (
   statusData: ChainUpgradeStatus
 ): ExtendedBadgeProps => {
-  if (!statusData.rpc_server) {
+  if (!statusData.rpc_server || statusData.scan_status === "partial") {
     return {
       text: "Unknown",
       variant: "secondary",
@@ -37,7 +33,7 @@ export const getBadgeProps = (
       Icon: CheckCircle,
       link: null,
       className:
-        "bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-200 dark:border-green-700",
+        "border-primary/40 bg-primary/10 text-primary",
     };
   }
   if (statusData.source === "active_upgrade_proposals") {

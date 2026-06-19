@@ -261,7 +261,7 @@ const ChainCardComponent = ({
           </div>
         ) : (
           <div className="rounded-lg border border-border/80 bg-background/35 p-3 text-sm text-muted-foreground">
-            No scheduled upgrade detected in the latest scan.
+            {formatNoUpgradeMessage(data)}
           </div>
         )}
       </CardContent>
@@ -394,6 +394,16 @@ const formatCountdown = (
     `${seconds}s`,
   ].filter(Boolean);
   return parts.join(" ");
+};
+
+const formatNoUpgradeMessage = (data: ChainUpgradeStatus) => {
+  if (!data.rpc_server || data.scan_status === "unreachable") {
+    return "Latest scan could not reach a healthy RPC endpoint.";
+  }
+  if (!data.rest_server || data.scan_status === "partial") {
+    return "Upgrade detection unavailable; no healthy REST endpoint responded.";
+  }
+  return "No scheduled upgrade detected in the latest scan.";
 };
 
 const formatSource = (source: string) =>

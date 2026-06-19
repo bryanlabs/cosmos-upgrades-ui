@@ -14,6 +14,8 @@ type ChainUpgradeStatus = {
   rpc_server: string;
   rest_server: string;
   latest_block_height: number | null;
+  is_reachable?: boolean;
+  scan_status?: "reachable" | "partial" | "unreachable" | string;
   upgrade_found: boolean;
   upgrade_name: string;
   source: string;
