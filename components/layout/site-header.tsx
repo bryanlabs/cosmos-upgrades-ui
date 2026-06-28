@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import { cn } from "@/lib/utils";
 import SignInButton from "@/components/signin-button";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { NAV_ITEMS, isActivePath } from "@/components/layout/nav-config";
 
@@ -21,26 +21,6 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/95 backdrop-blur-md">
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
-          <Link
-            href="/"
-            className="flex items-center gap-3 transition-opacity hover:opacity-90"
-          >
-            <Image
-              src="/bryanlabs-logo-transparent.png"
-              alt="BryanLabs Logo"
-              width={40}
-              height={40}
-              priority
-              className="h-10 w-10"
-            />
-            <span className="text-2xl">
-              <span className="bg-gradient-to-r from-[#60a5fa] to-[#8b5cf6] bg-clip-text font-bold text-transparent">
-                Bryan
-              </span>
-              <span className="font-light text-[#e0e7ff]">Labs</span>
-            </span>
-          </Link>
-
           <nav className="hidden items-center gap-1 md:flex">
             {items.map((item) => {
               const active = isActivePath(pathname, item.href);
@@ -66,6 +46,7 @@ export function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <div className="hidden md:block">
             <SignInButton />
           </div>

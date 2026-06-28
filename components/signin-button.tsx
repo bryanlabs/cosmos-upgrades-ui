@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { SignInDialog } from "./signin-dialog";
 import { signOut, useSession } from "next-auth/react";
-import { LogIn, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 export function SignInButton() {
   const { data: session, status } = useSession();
@@ -32,9 +32,8 @@ export function SignInButton() {
     <>
       {status !== "authenticated" && (
         <SignInDialog>
-          <Button variant="secondary" className="gap-2">
-            <LogIn className="h-4 w-4" />
-            Sign in
+          <Button className="rounded-lg bg-primary text-white hover:bg-primary/90">
+            Login
           </Button>
         </SignInDialog>
       )}

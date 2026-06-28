@@ -11,8 +11,8 @@ export default function Home() {
               Live Cosmos upgrade monitoring
             </div>
             <h1 className="mb-3 text-4xl font-bold leading-tight text-white md:text-5xl">
-              <span className="text-primary">Upgrade</span> coordination for
-              Cosmos validators
+              <span className="text-primary">Upgrade</span> coordination for{" "}
+              <span className="whitespace-nowrap">Cosmos validators</span>
             </h1>
             <p className="max-w-2xl text-base leading-7 text-slate-300">
               Track scheduled governance upgrades, countdowns, explorer links,
